@@ -1,0 +1,69 @@
+{
+  "HomePage": {
+    "elementsCard": "div.card:has-text('Elements')"
+  },
+
+  "TextBoxPage": {
+    "fullNameInput": "#userName",
+    "emailInput": "#userEmail",
+    "currentAddress": "#currentAddress",
+    "permanentAddress": "#permanentAddress",
+    "submitBtn": "#submit",
+    "outputPanel": "#output"
+  },
+
+  "CheckBoxPage": {
+    "homeSwitcher": "div[role='treeitem']:has([title='Home']) .rc-tree-switcher",
+    "desktopSwitcher": "div[role='treeitem']:has([title='Desktop']) .rc-tree-switcher",
+    "documentsSwitcher": "div[role='treeitem']:has([title='Documents']) .rc-tree-switcher",
+    "homeCheckbox": "span[aria-label='Select Home']",
+    "desktopCheckbox": "span[aria-label='Select Desktop']",
+    "desktopNode": "span[title='Desktop']",
+    "resultText": "#result"
+  },
+
+  "RadioButtonPage": {
+    "yesRadio": "label[for='yesRadio']",
+    "impressiveRadio": "label[for='impressiveRadio']",
+    "resultText": ".text-success"
+  },
+
+  "ButtonsPage": {
+    "doubleClickBtn": "#doubleClickBtn",
+    "rightClickBtn": "#rightClickBtn",
+    "dynamicClickBtn": "button.btn.btn-primary:not(#doubleClickBtn):not(#rightClickBtn)",
+    "doubleClickMessage": "#doubleClickMessage",
+    "rightClickMessage": "#rightClickMessage",
+    "dynamicClickMessage": "#dynamicClickMessage"
+  },
+
+  "LinksPage": {
+    "homeLink": "#simpleLink",
+    "createdLink": "#created",
+    "responseMessage": "#linkResponse"
+  },
+
+  "WebTablePage": {
+    "addBtn": "#addNewRecordButton",
+    "searchBox": "#searchBox",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "email": "#userEmail",
+    "age": "#age",
+    "salary": "#salary",
+    "department": "#department",
+    "submitBtn": "#submit",
+    "table": "table",
+    "tableBody": "table tbody",
+    "rows": "table tbody tr",
+    "firstRow": "table tbody tr:first-child",
+    "firstNameCell": "table tbody tr:first-child td:nth-child(1)",
+    "editBtn": "#edit-record-1",
+    "deleteBtn": "#delete-record-1",
+    "noRowsFound": ".rt-noData",
+    "allFirstName": "table tbody tr td:first-child",
+    "firstFirstName": "table tbody tr:first-child td:first-child",
+    "lastFirstName": "table tbody tr:last-child td:first-child",
+    "lastSalary": "table tbody tr:last-child td:nth-child(5)"
+  }
+}

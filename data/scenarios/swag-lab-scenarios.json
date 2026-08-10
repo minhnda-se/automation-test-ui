@@ -1,0 +1,672 @@
+{
+  "scenario": "Swag Labs E2E Test Scenarios",
+  "config": {
+    "locatorFile": "swag-lab.json"
+  },
+  "testCases": [
+    {
+      "testId": "TC_01",
+      "testName": "[Auth] Đăng nhập thành công với tài khoản Standard",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "verify_visible", "page": "InventoryPage", "element": "cartIcon" }
+      ]
+    },
+    {
+      "testId": "TC_02",
+      "testName": "[Auth] Đăng nhập thành công với tài khoản Problem",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "problem_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "verify_visible", "page": "InventoryPage", "element": "cartIcon" }
+      ]
+    },
+    {
+      "testId": "TC_03",
+      "testName": "[Auth] Đăng nhập thất bại do tài khoản bị khóa",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "locked_out_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        {
+          "action": "verify_text",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Epic sadface: Sorry, this user has been locked out."
+        }
+      ]
+    },
+    {
+      "testId": "TC_04",
+      "testName": "[Auth] Đăng nhập thất bại do sai mật khẩu",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        { "action": "fill", "page": "LoginPage", "element": "passwordInput", "data": "wrong_pass" },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        {
+          "action": "verify_text",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Epic sadface: Username and password do not match any user in this service"
+        }
+      ]
+    },
+    {
+      "testId": "TC_05",
+      "testName": "[Auth] Báo lỗi khi bỏ trống Username",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        {
+          "action": "verify_text",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Epic sadface: Username is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_06",
+      "testName": "[Auth] Báo lỗi khi bỏ trống Password",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        {
+          "action": "verify_text",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Epic sadface: Password is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_07",
+      "testName": "[Auth] Báo lỗi khi bỏ trống cả Username và Password",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        {
+          "action": "verify_text",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Epic sadface: Username is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_08",
+      "testName": "[Inventory] Thêm Balo vào giỏ hàng và kiểm tra Badge",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "verify_text", "page": "InventoryPage", "element": "cartBadge", "data": "1" },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "backpackRemoveBtn",
+          "data": "Remove"
+        }
+      ]
+    },
+    {
+      "testId": "TC_09",
+      "testName": "[Inventory] Thêm Đèn pin xe đạp vào giỏ hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "bikeLightAddBtn" },
+        { "action": "verify_text", "page": "InventoryPage", "element": "cartBadge", "data": "1" }
+      ]
+    },
+    {
+      "testId": "TC_10",
+      "testName": "[Inventory] Thêm và xóa sản phẩm trực tiếp từ trang chủ",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackRemoveBtn" },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "backpackAddBtn",
+          "data": "Add to cart"
+        }
+      ]
+    },
+    {
+      "testId": "TC_11",
+      "testName": "[Nav] Đăng xuất hệ thống qua Hamburger Menu",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "menuBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "logoutLink" },
+        { "action": "verify_visible", "page": "LoginPage", "element": "loginBtn" }
+      ]
+    },
+    {
+      "testId": "TC_12",
+      "testName": "[Cart] Xem sản phẩm trong giỏ hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        {
+          "action": "verify_text",
+          "page": "CartPage",
+          "element": "cartItemName",
+          "data": "Sauce Labs Backpack"
+        }
+      ]
+    },
+    {
+      "testId": "TC_13",
+      "testName": "[Cart] Chức năng Continue Shopping từ giỏ hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "continueShoppingBtn" },
+        { "action": "verify_visible", "page": "InventoryPage", "element": "backpackAddBtn" }
+      ]
+    },
+    {
+      "testId": "TC_14",
+      "testName": "[Checkout] Điều hướng từ Giỏ hàng sang màn hình Checkout Info",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "verify_visible", "page": "CheckoutPage", "element": "firstNameInput" }
+      ]
+    },
+    {
+      "testId": "TC_15",
+      "testName": "[Checkout Val] Báo lỗi khi bỏ trống First Name",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        {
+          "action": "verify_text",
+          "page": "CheckoutPage",
+          "element": "errorMessage",
+          "data": "Error: First Name is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_16",
+      "testName": "[Checkout Val] Báo lỗi khi bỏ trống Last Name",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        {
+          "action": "verify_text",
+          "page": "CheckoutPage",
+          "element": "errorMessage",
+          "data": "Error: Last Name is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_17",
+      "testName": "[Checkout Val] Báo lỗi khi bỏ trống Postal Code",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        {
+          "action": "verify_text",
+          "page": "CheckoutPage",
+          "element": "errorMessage",
+          "data": "Error: Postal Code is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_18",
+      "testName": "[Checkout Val] Báo lỗi ưu tiên First Name khi bỏ trống toàn bộ",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        {
+          "action": "verify_text",
+          "page": "CheckoutPage",
+          "element": "errorMessage",
+          "data": "Error: First Name is required"
+        }
+      ]
+    },
+    {
+      "testId": "TC_19",
+      "testName": "[Checkout Nav] Nút Cancel tại màn hình Info đưa về Cart",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "click", "page": "CheckoutPage", "element": "cancelBtn" },
+        { "action": "verify_visible", "page": "CartPage", "element": "checkoutBtn" }
+      ]
+    },
+    {
+      "testId": "TC_20",
+      "testName": "[Checkout E2E] Điều hướng thành công đến màn hình Overview",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        {
+          "action": "verify_text",
+          "page": "OverviewPage",
+          "element": "title",
+          "data": "Checkout: Overview"
+        }
+      ]
+    },
+    {
+      "testId": "TC_21",
+      "testName": "[Checkout Nav] Nút Cancel tại màn hình Overview đưa về Inventory",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        { "action": "click", "page": "OverviewPage", "element": "cancelBtn" },
+        { "action": "verify_visible", "page": "InventoryPage", "element": "cartIcon" }
+      ]
+    },
+    {
+      "testId": "TC_22",
+      "testName": "[Checkout E2E] Hoàn tất luồng thanh toán (Finish Order)",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        { "action": "click", "page": "OverviewPage", "element": "finishBtn" },
+        {
+          "action": "verify_text",
+          "page": "CompletePage",
+          "element": "completeHeader",
+          "data": "Thank you for your order!"
+        }
+      ]
+    },
+    {
+      "testId": "TC_23",
+      "testName": "[Complete Nav] Nút Back Home đưa về Inventory sau khi hoàn tất mua hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        { "action": "click", "page": "OverviewPage", "element": "finishBtn" },
+        { "action": "click", "page": "CompletePage", "element": "backHomeBtn" },
+        { "action": "verify_visible", "page": "InventoryPage", "element": "cartIcon" }
+      ]
+    },
+    {
+      "testId": "TC_24",
+      "testName": "[E2E] Thực hiện mua 2 sản phẩm liên tiếp",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "LoginPage", "element": "loginBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "backpackAddBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "bikeLightAddBtn" },
+        { "action": "verify_text", "page": "InventoryPage", "element": "cartBadge", "data": "2" },
+        { "action": "click", "page": "InventoryPage", "element": "cartIcon" },
+        { "action": "click", "page": "CartPage", "element": "checkoutBtn" },
+        { "action": "fill", "page": "CheckoutPage", "element": "firstNameInput", "data": "Anh" },
+        { "action": "fill", "page": "CheckoutPage", "element": "lastNameInput", "data": "Minh" },
+        {
+          "action": "fill",
+          "page": "CheckoutPage",
+          "element": "postalCodeInput",
+          "data": "700000"
+        },
+        { "action": "click", "page": "CheckoutPage", "element": "continueBtn" },
+        { "action": "click", "page": "OverviewPage", "element": "finishBtn" },
+        {
+          "action": "verify_text",
+          "page": "CompletePage",
+          "element": "completeHeader",
+          "data": "Thank you for your order!"
+        }
+      ]
+    }
+  ]
+}

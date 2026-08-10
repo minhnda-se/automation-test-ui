@@ -1,0 +1,336 @@
+{
+  "scenario": "Demoblaze E2E Test Scenarios",
+  "config": {
+    "locatorFile": "demoblaze.json"
+  },
+  "testCases": [
+    {
+      "testId": "DB_NEW_01",
+      "testName": "[Register] Đăng ký tài khoản ngẫu nhiên mới 100%",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
+
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "signupUsername",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "signupPassword",
+          "data": "Pass_{{RANDOM_STRING}}"
+        },
+
+        { "action": "click", "page": "Demoblaze_Auth", "element": "signupBtn" }
+      ]
+    },
+    {
+      "testId": "DB_01",
+      "testName": "[Nav] Truy cập trang chủ và kiểm tra Logo",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "brandLogo" }
+      ]
+    },
+    {
+      "testId": "DB_02",
+      "testName": "[Auth] Mở modal Đăng nhập",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+        { "action": "verify_visible", "page": "Demoblaze_Auth", "element": "loginUsername" }
+      ]
+    },
+    {
+      "testId": "DB_03",
+      "testName": "[Auth] Đóng modal Đăng nhập bằng nút Close",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+        { "action": "click", "page": "Demoblaze_Auth", "element": "loginCloseBtn" }
+      ]
+    },
+    {
+      "testId": "DB_04",
+      "testName": "[Auth] Mở modal Đăng ký (Sign up)",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Auth",
+          "element": "signupUsername"
+        }
+      ]
+    },
+    {
+      "testId": "DB_05",
+      "testName": "[Auth] Đăng nhập thành công",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginUsername",
+          "data": "testuser_auto_123"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginPassword",
+          "data": "testpass"
+        },
+        { "action": "click", "page": "Demoblaze_Auth", "element": "loginBtn" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "logoutMenu" }
+      ]
+    },
+    {
+      "testId": "DB_06",
+      "testName": "[Auth] Đăng xuất thành công",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginUsername",
+          "data": "testuser_auto_123"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginPassword",
+          "data": "testpass"
+        },
+        { "action": "click", "page": "Demoblaze_Auth", "element": "loginBtn" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "logoutMenu" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "loginMenu" }
+      ]
+    },
+    {
+      "testId": "DB_07",
+      "testName": "[Category] Lọc sản phẩm theo danh mục Phones",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "categoryPhones" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "firstProduct" }
+      ]
+    },
+    {
+      "testId": "DB_08",
+      "testName": "[Category] Lọc sản phẩm theo danh mục Laptops",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "categoryLaptops" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "firstProduct" }
+      ]
+    },
+    {
+      "testId": "DB_09",
+      "testName": "[Category] Lọc sản phẩm theo danh mục Monitors",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "categoryMonitors" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "firstProduct" }
+      ]
+    },
+    {
+      "testId": "DB_10",
+      "testName": "[Product] Mở trang chi tiết sản phẩm",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Product",
+          "element": "productName"
+        }
+      ]
+    },
+    {
+      "testId": "DB_11",
+      "testName": "[Product] Nút Thêm vào giỏ hàng hiển thị",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        {
+          "action": "verify_text",
+          "page": "Demoblaze_Product",
+          "element": "addToCartBtn",
+          "data": "Add to cart"
+        }
+      ]
+    },
+    {
+      "testId": "DB_12",
+      "testName": "[Cart] Thêm sản phẩm và kiểm tra trong Giỏ hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        { "action": "click", "page": "Demoblaze_Product", "element": "addToCartBtn" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "cartMenu" },
+        { "action": "verify_visible", "page": "Demoblaze_Cart", "element": "cartItem" }
+      ]
+    },
+    {
+      "testId": "DB_13",
+      "testName": "[Cart] Xóa sản phẩm khỏi Giỏ hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        { "action": "click", "page": "Demoblaze_Product", "element": "addToCartBtn" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "cartMenu" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "deleteBtn" }
+      ]
+    },
+    {
+      "testId": "DB_14",
+      "testName": "[Checkout] Mở modal Đặt hàng (Place Order)",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        { "action": "verify_visible", "page": "Demoblaze_Order", "element": "nameInput" }
+      ]
+    },
+    {
+      "testId": "DB_15",
+      "testName": "[Checkout] Đóng modal Đặt hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        { "action": "click", "page": "Demoblaze_Order", "element": "closeBtn" }
+      ]
+    },
+    {
+      "testId": "DB_16",
+      "testName": "[Checkout E2E] Nhập thông tin Khách hàng (Tên, Quốc gia, Thành phố)",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "nameInput",
+          "data": "Automation Tester"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "countryInput",
+          "data": "Vietnam"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "cityInput",
+          "data": "HCMC"
+        }
+      ]
+    },
+    {
+      "testId": "DB_17",
+      "testName": "[Checkout E2E] Nhập thông tin Thẻ thanh toán",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "cardInput",
+          "data": "1234567890123456"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "monthInput",
+          "data": "12"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "yearInput",
+          "data": "2026"
+        }
+      ]
+    },
+    {
+      "testId": "DB_18",
+      "testName": "[Checkout E2E] Hoàn tất luồng thanh toán",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        { "action": "click", "page": "Demoblaze_Product", "element": "addToCartBtn" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "cartMenu" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "nameInput",
+          "data": "QA Engineer"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "cardInput",
+          "data": "9876543210"
+        },
+        { "action": "click", "page": "Demoblaze_Order", "element": "purchaseBtn" },
+        { "action": "verify_visible", "page": "Demoblaze_Order", "element": "successAlert" }
+      ]
+    },
+    {
+      "testId": "DB_19",
+      "testName": "[Checkout E2E] Xác nhận thông báo mua hàng thành công",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "nameInput",
+          "data": "QA Engineer"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "cardInput",
+          "data": "9876543210"
+        },
+        { "action": "click", "page": "Demoblaze_Order", "element": "purchaseBtn" },
+        {
+          "action": "verify_text",
+          "page": "Demoblaze_Order",
+          "element": "successMessage",
+          "data": "Thank you for your purchase!"
+        }
+      ]
+    },
+    {
+      "testId": "DB_20",
+      "testName": "[Checkout E2E] Đóng Popup thành công và hoàn thành",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
+        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "nameInput",
+          "data": "QA Engineer"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Order",
+          "element": "cardInput",
+          "data": "9876543210"
+        },
+        { "action": "click", "page": "Demoblaze_Order", "element": "purchaseBtn" },
+        { "action": "click", "page": "Demoblaze_Order", "element": "confirmOkBtn" }
+      ]
+    }
+  ]
+}

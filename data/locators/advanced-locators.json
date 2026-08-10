@@ -1,0 +1,19 @@
+{
+  "Demoblaze_Register": {
+    "signupMenu": "#signin2",
+    "signupUsername": "#sign-username",
+    "signupPassword": "#sign-password",
+    "signupBtn": "button[onclick='register()']"
+  },
+  "Sauce_Inventory": {
+    "username": "#user-name",
+    "password": "#password",
+    "loginBtn": "#login-button",
+    "firstProductName": ".inventory_item_name",
+    "firstProductAddBtn": ".btn_inventory",
+    "cartIcon": ".shopping_cart_link"
+  },
+  "Sauce_Cart": {
+    "cartItemName": ".inventory_item_name"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "Demoblaze_Home": {
+    "brandLogo": "#nava",
+    "loginMenu": "#login2",
+    "signupMenu": "#signin2",
+    "logoutMenu": "#logout2",
+    "welcomeUser": "#nameofuser",
+    "cartMenu": "#cartur",
+    "categoryPhones": "a[onclick=\"byCat('phone')\"]",
+    "categoryLaptops": "a[onclick=\"byCat('notebook')\"]",
+    "categoryMonitors": "a[onclick=\"byCat('monitor')\"]",
+    "firstProduct": ".hrefch >> nth=0"
+  },
+  "Demoblaze_Auth": {
+    "loginModal": "#logInModal",
+    "loginUsername": "#loginusername",
+    "loginPassword": "#loginpassword",
+    "loginBtn": "button[onclick='logIn()']",
+    "loginCloseBtn": "#logInModal .btn-secondary",
+    "signupModal": "#signInModal",
+    "signupUsername": "#sign-username",
+    "signupPassword": "#sign-password",
+    "signupBtn": "button[onclick='register()']",
+    "signupCloseBtn": "#signInModal .btn-secondary"
+  },
+  "Demoblaze_Product": {
+    "productName": ".name",
+    "productPrice": ".price-container",
+    "addToCartBtn": ".btn-success"
+  },
+  "Demoblaze_Cart": {
+    "placeOrderBtn": "button[data-target='#orderModal']",
+    "cartItem": ".success",
+    "deleteBtn": "a[onclick^='deleteItem']"
+  },
+  "Demoblaze_Order": {
+    "orderModal": "#orderModal",
+    "nameInput": "#name",
+    "countryInput": "#country",
+    "cityInput": "#city",
+    "cardInput": "#card",
+    "monthInput": "#month",
+    "yearInput": "#year",
+    "purchaseBtn": "button[onclick='purchaseOrder()']",
+    "closeBtn": "#orderModal .btn-secondary",
+    "successAlert": ".sweet-alert",
+    "successMessage": ".sweet-alert h2",
+    "confirmOkBtn": ".confirm"
+  }
+}

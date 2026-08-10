@@ -1,0 +1,281 @@
+{
+  "scenario": "DemoQA Elements Automation",
+  "config": {
+    "locatorFile": "demoqa.json"
+  },
+  "testCases": [
+    {
+      "testId": "DQ_01",
+      "testName": "[Nav] Open DemoQA Home",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com" },
+        { "action": "verify_visible", "page": "HomePage", "element": "elementsCard" }
+      ]
+    },
+    {
+      "testId": "DQ_02",
+      "testName": "[Elements] Navigate to Text Box",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/text-box" },
+        { "action": "verify_visible", "page": "TextBoxPage", "element": "fullNameInput" }
+      ]
+    },
+    {
+      "testId": "DQ_03",
+      "testName": "[TextBox] Submit valid information",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/text-box" },
+        { "action": "fill", "page": "TextBoxPage", "element": "fullNameInput", "data": "John Doe" },
+        {
+          "action": "fill",
+          "page": "TextBoxPage",
+          "element": "emailInput",
+          "data": "john@test.com"
+        },
+        {
+          "action": "fill",
+          "page": "TextBoxPage",
+          "element": "currentAddress",
+          "data": "New York"
+        },
+        {
+          "action": "fill",
+          "page": "TextBoxPage",
+          "element": "permanentAddress",
+          "data": "California"
+        },
+        { "action": "click", "page": "TextBoxPage", "element": "submitBtn" },
+        { "action": "verify_visible", "page": "TextBoxPage", "element": "outputPanel" }
+      ]
+    },
+    {
+      "testId": "DQ_04",
+      "testName": "[TextBox] Invalid email validation",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/text-box" },
+        { "action": "fill", "page": "TextBoxPage", "element": "emailInput", "data": "abc123" },
+        { "action": "click", "page": "TextBoxPage", "element": "submitBtn" },
+        {
+          "action": "verify_class_contains",
+          "page": "TextBoxPage",
+          "element": "emailInput",
+          "data": "field-error"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_05",
+      "testName": "[CheckBox] Expand Home Node",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://demoqa.com/checkbox"
+        },
+        {
+          "action": "click",
+          "page": "CheckBoxPage",
+          "element": "homeSwitcher"
+        },
+        {
+          "action": "verify_visible",
+          "page": "CheckBoxPage",
+          "element": "desktopNode"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_06",
+      "testName": "[CheckBox] Select Home Checkbox",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/checkbox" },
+        { "action": "click", "page": "CheckBoxPage", "element": "homeCheckbox" },
+        { "action": "verify_visible", "page": "CheckBoxPage", "element": "resultText" },
+        {
+          "action": "verify_text_contains",
+          "page": "CheckBoxPage",
+          "element": "resultText",
+          "data": "home"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_07",
+      "testName": "[Radio] Select Yes",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/radio-button" },
+        { "action": "click", "page": "RadioButtonPage", "element": "yesRadio" },
+        {
+          "action": "verify_text",
+          "page": "RadioButtonPage",
+          "element": "resultText",
+          "data": "Yes"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_08",
+      "testName": "[Radio] Select Impressive",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/radio-button" },
+        { "action": "click", "page": "RadioButtonPage", "element": "impressiveRadio" },
+        {
+          "action": "verify_text",
+          "page": "RadioButtonPage",
+          "element": "resultText",
+          "data": "Impressive"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_09",
+      "testName": "[Buttons] Double Click",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/buttons" },
+        { "action": "double_click", "page": "ButtonsPage", "element": "doubleClickBtn" },
+        { "action": "verify_visible", "page": "ButtonsPage", "element": "doubleClickMessage" }
+      ]
+    },
+    {
+      "testId": "DQ_10",
+      "testName": "[Buttons] Right Click",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/buttons" },
+        { "action": "right_click", "page": "ButtonsPage", "element": "rightClickBtn" },
+        { "action": "verify_visible", "page": "ButtonsPage", "element": "rightClickMessage" }
+      ]
+    },
+    {
+      "testId": "DQ_11",
+      "testName": "[Buttons] Dynamic Click",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/buttons" },
+        { "action": "click", "page": "ButtonsPage", "element": "dynamicClickBtn" },
+        { "action": "verify_visible", "page": "ButtonsPage", "element": "dynamicClickMessage" }
+      ]
+    },
+    {
+      "testId": "DQ_12",
+      "testName": "[Links] Home Link",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/links" },
+        { "action": "click", "page": "LinksPage", "element": "homeLink" },
+        { "action": "switch_new_tab" },
+        { "action": "verify_url_contains", "data": "demoqa.com" }
+      ]
+    },
+    {
+      "testId": "DQ_13",
+      "testName": "[WebTable] Add Record",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/webtables" },
+        { "action": "click", "page": "WebTablePage", "element": "addBtn" },
+        { "action": "fill", "page": "WebTablePage", "element": "firstName", "data": "John" },
+        { "action": "fill", "page": "WebTablePage", "element": "lastName", "data": "Smith" },
+        { "action": "fill", "page": "WebTablePage", "element": "email", "data": "john@test.com" },
+        { "action": "fill", "page": "WebTablePage", "element": "age", "data": "30" },
+        { "action": "fill", "page": "WebTablePage", "element": "salary", "data": "1000" },
+        { "action": "fill", "page": "WebTablePage", "element": "department", "data": "QA" },
+        { "action": "click", "page": "WebTablePage", "element": "submitBtn" },
+        {
+          "action": "verify_text_contains",
+          "page": "WebTablePage",
+          "element": "lastFirstName",
+          "data": "John"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_14",
+      "testName": "[WebTable] Search Record",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/webtables" },
+        { "action": "fill", "page": "WebTablePage", "element": "searchBox", "data": "Cierra" },
+        {
+          "action": "verify_text",
+          "page": "WebTablePage",
+          "element": "lastFirstName",
+          "data": "Cierra"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_15",
+      "testName": "[WebTable] Edit Record",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/webtables" },
+        { "action": "fill", "page": "WebTablePage", "element": "searchBox", "data": "Cierra" },
+        { "action": "click", "page": "WebTablePage", "element": "editBtn" },
+        { "action": "fill", "page": "WebTablePage", "element": "salary", "data": "9999" },
+        { "action": "click", "page": "WebTablePage", "element": "submitBtn" },
+        { "action": "verify_text", "page": "WebTablePage", "element": "lastSalary", "data": "9999" }
+      ]
+    },
+    {
+      "testId": "DQ_16",
+      "testName": "[WebTable] Delete Record",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/webtables" },
+        { "action": "fill", "page": "WebTablePage", "element": "searchBox", "data": "Cierra" },
+        { "action": "click", "page": "WebTablePage", "element": "deleteBtn" },
+        {
+          "action": "verify_not_contains_text",
+          "page": "WebTablePage",
+          "element": "tableBody",
+          "data": "Cierra"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_17",
+      "testName": "[WebTable] Verify Search Empty",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/webtables" },
+        { "action": "fill", "page": "WebTablePage", "element": "searchBox", "data": "ZZZZZZ" },
+        {
+          "action": "verify_not_contains_text",
+          "page": "WebTablePage",
+          "element": "tableBody",
+          "data": "ZZZZZZ"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_18",
+      "testName": "[TextBox] Empty Submit",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/text-box" },
+        { "action": "click", "page": "TextBoxPage", "element": "submitBtn" }
+      ]
+    },
+    {
+      "testId": "DQ_19",
+      "testName": "[CheckBox] Collapse All",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/checkbox" },
+        { "action": "click", "page": "CheckBoxPage", "element": "homeSwitcher" },
+        {
+          "action": "verify_class_contains",
+          "page": "CheckBoxPage",
+          "element": "homeSwitcher",
+          "data": "rc-tree-switcher_open"
+        },
+        { "action": "click", "page": "CheckBoxPage", "element": "homeSwitcher" },
+        {
+          "action": "verify_class_contains",
+          "page": "CheckBoxPage",
+          "element": "homeSwitcher",
+          "data": "rc-tree-switcher_close"
+        }
+      ]
+    },
+    {
+      "testId": "DQ_20",
+      "testName": "[Links] Dynamic Link Response",
+      "steps": [
+        { "action": "goto", "data": "https://demoqa.com/links" },
+        { "action": "click", "page": "LinksPage", "element": "createdLink" },
+        { "action": "verify_visible", "page": "LinksPage", "element": "responseMessage" }
+      ]
+    }
+  ]
+}

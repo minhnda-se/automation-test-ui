@@ -1,0 +1,68 @@
+{
+  "config": {
+    "locatorFile": "advanced-locators.json"
+  },
+  "scenario": "Kiểm thử Tính năng Nâng cao (Dynamic & Runtime)",
+  "testCases": [
+    {
+      "testId": "ADV_01",
+      "testName": "[Dynamic Data] Đăng ký tài khoản với Dữ liệu ngẫu nhiên",
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Register", "element": "signupMenu" },
+
+        {
+          "action": "fill",
+          "page": "Demoblaze_Register",
+          "element": "signupUsername",
+          "data": "AutoUser_{{TIMESTAMP}}"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Register",
+          "element": "signupPassword",
+          "data": "Pass_{{RANDOM_STRING}}"
+        },
+
+        { "action": "click", "page": "Demoblaze_Register", "element": "signupBtn" }
+      ]
+    },
+    {
+      "testId": "ADV_02",
+      "testName": "[State Sharing] Lấy tên sản phẩm ở Trang chủ và Verify ở Giỏ hàng",
+      "steps": [
+        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "fill",
+          "page": "Sauce_Inventory",
+          "element": "username",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "Sauce_Inventory",
+          "element": "password",
+          "data": "secret_sauce"
+        },
+        { "action": "click", "page": "Sauce_Inventory", "element": "loginBtn" },
+
+        {
+          "action": "store_text",
+          "page": "Sauce_Inventory",
+          "element": "firstProductName",
+          "variable": "STORED_PRODUCT_NAME"
+        },
+
+        { "action": "click", "page": "Sauce_Inventory", "element": "firstProductAddBtn" },
+        { "action": "click", "page": "Sauce_Inventory", "element": "cartIcon" },
+
+        {
+          "action": "verify_text",
+          "page": "Sauce_Cart",
+          "element": "cartItemName",
+          "data": "{{STORED_PRODUCT_NAME}}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "LoginPage": {
+    "usernameInput": "#user-name",
+    "passwordInput": "#password",
+    "loginBtn": "#login-button",
+    "errorMessage": "[data-test='error']"
+  },
+  "InventoryPage": {
+    "cartIcon": ".shopping_cart_link",
+    "cartBadge": ".shopping_cart_badge",
+    "backpackAddBtn": "#add-to-cart-sauce-labs-backpack",
+    "backpackRemoveBtn": "#remove-sauce-labs-backpack",
+    "bikeLightAddBtn": "#add-to-cart-sauce-labs-bike-light",
+    "menuBtn": "#react-burger-menu-btn",
+    "logoutLink": "#logout_sidebar_link"
+  },
+  "CartPage": {
+    "checkoutBtn": "#checkout",
+    "continueShoppingBtn": "#continue-shopping",
+    "cartItemName": ".inventory_item_name"
+  },
+  "CheckoutPage": {
+    "firstNameInput": "#first-name",
+    "lastNameInput": "#last-name",
+    "postalCodeInput": "#postal-code",
+    "continueBtn": "#continue",
+    "cancelBtn": "#cancel",
+    "errorMessage": "[data-test='error']"
+  },
+  "OverviewPage": {
+    "finishBtn": "#finish",
+    "cancelBtn": "#cancel",
+    "title": ".title"
+  },
+  "CompletePage": {
+    "completeHeader": ".complete-header",
+    "backHomeBtn": "#back-to-products"
+  }
+}

@@ -1,19 +1,46 @@
 {
-  "Demoblaze_Register": {
-    "signupMenu": "#signin2",
-    "signupUsername": "#sign-username",
-    "signupPassword": "#sign-password",
-    "signupBtn": "button[onclick='register()']"
+  "LoginPage": {
+    "usernameInput": "",
+    "passwordInput": "",
+    "loginBtn": "",
+    "errorMessage": ""
   },
-  "Sauce_Inventory": {
-    "username": "#user-name",
-    "password": "#password",
-    "loginBtn": "#login-button",
-    "firstProductName": ".inventory_item_name",
-    "firstProductAddBtn": ".btn_inventory",
-    "cartIcon": ".shopping_cart_link"
+  "InventoryPage": {
+    "cartIcon": "",
+    "backpackAddBtn": "",
+    "cartBadge": "",
+    "backpackRemoveBtn": "",
+    "bikeLightAddBtn": "",
+    "menuBtn": "",
+    "logoutLink": "",
+    "appLogo": "",
+    "addBackpackBtn": "",
+    "shoppingCartIcon": ""
   },
-  "Sauce_Cart": {
-    "cartItemName": ".inventory_item_name"
+  "CartPage": {
+    "cartItemName": "",
+    "continueShoppingBtn": "",
+    "checkoutBtn": ""
+  },
+  "CheckoutPage": {
+    "firstNameInput": "",
+    "lastNameInput": "",
+    "postalCodeInput": "",
+    "continueBtn": "",
+    "errorMessage": "",
+    "cancelBtn": ""
+  },
+  "OverviewPage": {
+    "title": "",
+    "cancelBtn": "",
+    "finishBtn": ""
+  },
+  "CompletePage": {
+    "completeHeader": "",
+    "backHomeBtn": ""
+  },
+  "Menu": {
+    "burgerMenuBtn": "",
+    "logoutBtn": ""
   }
 }

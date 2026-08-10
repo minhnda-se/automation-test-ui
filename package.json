@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile-bdd": "tsx scripts/compile-bdd.ts"
+    "compile-bdd": "tsx scripts/compile-bdd.ts",
+    "update-locators": "tsx scripts/generate-locator-todo.ts",
+    "test": "playwright test tests/hybrid-json/"
   },
   "keywords": [],
   "author": "",

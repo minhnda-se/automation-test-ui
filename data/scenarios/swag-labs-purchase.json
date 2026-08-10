@@ -1,0 +1,65 @@
+{
+  "config": {
+    "locatorFile": "swag-labs-purchase.json"
+  },
+  "scenario": "Luồng mua hàng Swag Labs",
+  "testCases": [
+    {
+      "testId": "TC_PURCHASE_01",
+      "testName": "Đăng nhập và thêm balo vào giỏ hàng thành công",
+      "description": "Kịch bản test thử luồng UI cơ bản và tính năng tự quét Locator",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        }
+      ],
+      "steps": [
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "InventoryPage",
+          "element": "appLogo"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "addBackpackBtn"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "shoppingCartIcon"
+        }
+      ],
+      "postconditions": [
+        {
+          "action": "click",
+          "page": "Menu",
+          "element": "burgerMenuBtn"
+        },
+        {
+          "action": "click",
+          "page": "Menu",
+          "element": "logoutBtn"
+        }
+      ]
+    }
+  ]
+}

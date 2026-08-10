@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schema/scenario-schema.json",
+  "config": {
+    "locatorFile": "locators.json"
+  },
+  "scenario": "Chức năng Đăng nhập hệ thống",
+  "testCases": [
+    {
+      "testId": "BDD_9968",
+      "testName": "Đăng nhập thành công với tài khoản chuẩn",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        },
+        {
+          "action": "fill",
+          "data": "standard_user",
+          "element": "usernameInput",
+          "page": "LoginPage"
+        },
+        {
+          "action": "fill",
+          "data": "secret_sauce",
+          "element": "passwordInput",
+          "page": "LoginPage"
+        },
+        {
+          "action": "click",
+          "element": "loginBtn",
+          "page": "LoginPage"
+        },
+        {
+          "action": "verify_visible",
+          "element": "cartIcon",
+          "page": "InventoryPage"
+        }
+      ]
+    }
+  ]
+}

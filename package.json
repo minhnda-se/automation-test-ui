@@ -1,15 +1,23 @@
 {
-  "name": "swag-labs-hybrid",
+  "name": "playwright-hybrid-framework",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "compile-bdd": "tsx scripts/compile-bdd.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.1.2"
+    "@types/node": "^26.1.2",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.2",
+    "tsx": "^4.23.12"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }

@@ -4,6 +4,7 @@ import { LocatorManager } from './LocatorManager';
 import { ElementHelper } from '../helpers/ElementHelper';
 import { AssertHelper } from '../helpers/AssertHelper';
 import { APIHelper } from '../helpers/APIHelper';
+import { AutoHealer } from './AutoHealer';
 
 export class ActionEngine {
   private dataManager: DataManager;
@@ -11,6 +12,7 @@ export class ActionEngine {
   private element: ElementHelper;
   private assert: AssertHelper;
   private api: APIHelper;
+  private autoHealer: AutoHealer;
 
   constructor(
     page: Page,
@@ -24,15 +26,62 @@ export class ActionEngine {
     this.element = new ElementHelper(page, testInfo);
     this.assert = new AssertHelper(page, testInfo);
     this.api = new APIHelper(request, testInfo);
+
+    // Defaulting locator file name for AutoHealer
+    this.autoHealer = new AutoHealer(page, 'locators.json');
   }
 
-  async executeStep(step: any) {
-    const locatorStr = this.locatorManager.getLocator(step.page, step.element);
-    const resolvedData = this.dataManager.resolve(step.data);
-    const stepDesc = `${step.action} - ${step.element || 'URL'}`;
+  async executeStep(step: any, isRetry: boolean = false): Promise<void> {
+    const locatorStr =
+      step.page && step.element ? this.locatorManager.getLocator(step.page, step.element) : '';
+    const stepDesc = `${step.action} - ${step.element || step.url || ''}`;
 
+    let resolvedData = step.data;
+    if (typeof step.data === 'object' && step.data !== null) {
+      const strData = JSON.stringify(step.data);
+      resolvedData = JSON.parse(this.dataManager.resolve(strData));
+    } else {
+      resolvedData = this.dataManager.resolve(step.data);
+    }
+
+    try {
+      await this.performAction(step, locatorStr, resolvedData, stepDesc);
+    } catch (error: any) {
+      // If a timeout error occurs and it has not been retried yet, trigger the Auto-Healer
+      if (
+        !isRetry &&
+        step.page &&
+        step.element &&
+        error.message &&
+        error.message.includes('Timeout')
+      ) {
+        console.warn(`[Engine] Locator failed for ${step.element}. Triggering Auto-Healer...`);
+        try {
+          const newLocator = await this.autoHealer.healLocator(step.page, step.element, locatorStr);
+
+          // Update the runtime locator manager with the newly generated locator
+          this.locatorManager.updateRuntimeLocator(step.page, step.element, newLocator);
+
+          console.log(`[Engine] Retrying action with new locator...`);
+          await this.executeStep(step, true);
+        } catch (healingError) {
+          console.error(`[Engine] Auto-Healing failed.`);
+          throw error;
+        }
+      } else {
+        throw error; // Throw original error if it is not a timeout or healing fails
+      }
+    }
+  }
+
+  private async performAction(
+    step: any,
+    locatorStr: string,
+    resolvedData: any,
+    stepDesc: string
+  ): Promise<void> {
     switch (step.action) {
-      // (Interactions)
+      // Interactions
       case 'goto':
         await this.element.goto(resolvedData);
         break;
@@ -53,14 +102,15 @@ export class ActionEngine {
         break;
       case 'switch_new_tab':
         await this.element.switchNewTab();
-        this.assert.page = this.element.page; // Đồng bộ lại page cho assert sau khi nhảy tab
+        // Synchronize page context for assertions after switching tabs
+        this.assert.page = this.element.page;
         break;
       case 'store_text':
         const text = await this.element.getText(locatorStr);
         this.dataManager.saveRuntimeVariable(step.variable, text);
         break;
 
-      // (Assertions)
+      // Assertions
       case 'verify_visible':
         await this.assert.verifyVisible(locatorStr, stepDesc);
         break;
@@ -83,14 +133,12 @@ export class ActionEngine {
         await this.assert.verifyUrlContains(resolvedData, stepDesc);
         break;
 
-      // API
+      // API Integrations
       case 'api_post':
-        if (!step.url) throw new Error(`[Lỗi JSON]: 'api_post' bắt buộc phải có "url"`);
-        // Bắn API bằng data đã được nội suy (biến ngẫu nhiên, runtime var)
+        if (!step.url) throw new Error(`[JSON Error]: 'api_post' requires a "url"`);
         const postRes = await this.api.post(step.url, resolvedData, step.headers);
 
-        // Tính năng cực xịn: Bắn API xong, chộp lấy 1 trường trong JSON trả về để lưu làm biến tạm
-        // Ví dụ: Lưu Token, Lưu User ID để dùng cho UI step phía sau
+        // Extract a specific field from the JSON response to store as a runtime variable
         if (step.store_response) {
           const valueToStore = postRes[step.store_response.key];
           this.dataManager.saveRuntimeVariable(step.store_response.variable, valueToStore);
@@ -98,20 +146,19 @@ export class ActionEngine {
         break;
 
       case 'api_get':
-        if (!step.url) throw new Error(`[Lỗi JSON]: 'api_get' bắt buộc phải có "url"`);
-        // URL có thể chứa biến động: /api/users/{{MY_USER_ID}}
+        if (!step.url) throw new Error(`[JSON Error]: 'api_get' requires a "url"`);
         const getUrl = this.dataManager.resolve(step.url);
         await this.api.get(getUrl, step.headers);
         break;
 
       case 'api_delete':
-        if (!step.url) throw new Error(`[Lỗi JSON]: 'api_delete' bắt buộc phải có "url"`);
+        if (!step.url) throw new Error(`[JSON Error]: 'api_delete' requires a "url"`);
         const deleteUrl = this.dataManager.resolve(step.url);
         await this.api.delete(deleteUrl, step.headers);
         break;
 
       default:
-        throw new Error(`Action không được hỗ trợ: ${step.action}`);
+        throw new Error(`Action not supported: ${step.action}`);
     }
   }
 }

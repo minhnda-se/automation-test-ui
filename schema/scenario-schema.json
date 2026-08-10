@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Playwright Hybrid Framework Schema",
+  "description": "Cấu trúc chuẩn cho các kịch bản kiểm thử của Keyword-Driven Framework",
+  "type": "object",
+  "required": ["scenario", "testCases"],
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": "Cấu hình riêng cho file kịch bản này",
+      "properties": {
+        "locatorFile": {
+          "type": "string",
+          "description": "Tên file JSON chứa định nghĩa Locator (VD: locators.json)"
+        }
+      }
+    },
+    "scenario": {
+      "type": "string",
+      "description": "Tên của Test Suite (Sẽ hiển thị trên Report)"
+    },
+    "testCases": {
+      "type": "array",
+      "description": "Danh sách các Test Cases trong Suite này",
+      "items": {
+        "$ref": "#/definitions/TestCase"
+      }
+    }
+  },
+  "definitions": {
+    "TestCase": {
+      "type": "object",
+      "required": ["testId", "testName", "steps"],
+      "properties": {
+        "testId": {
+          "type": "string",
+          "description": "Mã định danh của Test Case (VD: TC_01)"
+        },
+        "testName": {
+          "type": "string",
+          "description": "Tiêu đề của Test Case"
+        },
+        "description": {
+          "type": "string",
+          "description": "Mô tả chi tiết mục đích của Test Case (Dành cho Document)"
+        },
+        "dataTable": {
+          "type": "array",
+          "description": "Mảng dữ liệu cho Data-Driven Testing. Mỗi Object là 1 vòng lặp sinh ra 1 Test Case con.",
+          "items": { "type": "object" }
+        },
+        "preconditions": {
+          "type": "array",
+          "description": "Các bước chuẩn bị (Setup) trước khi chạy kịch bản chính",
+          "items": { "$ref": "#/definitions/Step" }
+        },
+        "steps": {
+          "type": "array",
+          "description": "Luồng các bước thực thi (Main Flow)",
+          "items": { "$ref": "#/definitions/Step" }
+        },
+        "postconditions": {
+          "type": "array",
+          "description": "Các bước dọn dẹp (Teardown) sau khi chạy xong, luôn được thực thi kể cả khi Fail",
+          "items": { "$ref": "#/definitions/Step" }
+        }
+      }
+    },
+    "Step": {
+      "type": "object",
+      "required": ["action"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "Hành động cần thực hiện",
+          "enum": [
+            "goto",
+            "click",
+            "right_click",
+            "left_click",
+            "double_click",
+            "fill",
+            "switch_new_tab",
+            "store_text",
+            "verify_visible",
+            "verify_text",
+            "verify_text_contains",
+            "verify_not_contains_text",
+            "verify_class_contains",
+            "verify_not_contains_class",
+            "verify_url_contains",
+            "api_post",
+            "api_get",
+            "api_delete"
+          ]
+        },
+        "page": {
+          "type": "string",
+          "description": "Tên Page khai báo trong file locators.json (VD: LoginPage)"
+        },
+        "element": {
+          "type": "string",
+          "description": "Tên Element khai báo trong file locators.json (VD: usernameInput)"
+        },
+        "data": {
+          "type": ["string", "object"],
+          "description": "Dữ liệu để nhập liệu hoặc chuỗi dùng để so sánh. (Hỗ trợ biến động {{...}})"
+        },
+        "variable": {
+          "type": "string",
+          "description": "Tên biến để lưu giá trị vào bộ nhớ tạm (Dùng cho action: store_text)"
+        },
+        "url": {
+          "type": "string",
+          "description": "Đường dẫn URL (Dùng cho các action gọi API)"
+        },
+        "headers": {
+          "type": "object",
+          "description": "Headers của API (VD: Authorization Token)"
+        },
+        "store_response": {
+          "type": "object",
+          "description": "Trích xuất dữ liệu từ API Response để lưu vào bộ nhớ tạm",
+          "properties": {
+            "key": { "type": "string", "description": "Key trong JSON response trả về" },
+            "variable": { "type": "string", "description": "Tên biến runtime sẽ lưu" }
+          },
+          "required": ["key", "variable"]
+        },
+        "expected_status": {
+          "type": "number",
+          "description": "Mã HTTP Status Code mong đợi (VD: 200, 201, 404)"
+        }
+      }
+    }
+  }
+}

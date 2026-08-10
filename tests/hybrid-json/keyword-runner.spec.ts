@@ -1,5 +1,3 @@
-// File: tests/hybrid-json/keyword-runner.spec.ts
-
 import { test } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -21,19 +19,14 @@ for (const file of jsonFiles) {
     : scenarioData.config?.locatorFile || 'locators.json';
 
   const locatorFilePath = path.join(__dirname, '../../data/locators', locatorFileName);
-
   const dynamicLocators = JSON.parse(fs.readFileSync(locatorFilePath, 'utf-8'));
 
   const suiteName = isOldFormat ? file : scenarioData.scenario || file;
 
   test.describe(`Suite: [${suiteName}]`, () => {
     for (const testCase of testCasesArray) {
-      // Execute the same test case for each data row (DDT)
-      if (
-        testCase.dataTable &&
-        Array.isArray(testCase.dataTable) &&
-        testCase.dataTable.length > 0
-      ) {
+      // Data-driven test
+      if (Array.isArray(testCase.dataTable) && testCase.dataTable.length > 0) {
         for (const [rowIndex, rowData] of testCase.dataTable.entries()) {
           test(`[${testCase.testId}] ${testCase.testName} - [Data Row ${rowIndex + 1}]`, async ({
             page,
@@ -42,45 +35,57 @@ for (const file of jsonFiles) {
             const engine = new ActionEngine(page, request, testInfo, dynamicLocators, rowData);
 
             try {
-              // Execute preconditions
+              // Execute setup
               if (Array.isArray(testCase.preconditions)) {
                 for (const [index, step] of testCase.preconditions.entries()) {
-                  try {
-                    await engine.executeStep(step);
-                  } catch (error) {
-                    console.error(`Precondition failed at step ${index + 1}:`, step);
-                    throw error;
-                  }
+                  const stepTitle = `Setup ${index + 1}: ${step.action} - ${step.element || step.url || step.variable || ''}`;
+
+                  await test.step(stepTitle, async () => {
+                    try {
+                      await engine.executeStep(step);
+                    } catch (error) {
+                      console.error(`Precondition failed at step ${index + 1}:`, step);
+                      throw error;
+                    }
+                  });
                 }
               }
 
               // Execute test steps
               if (Array.isArray(testCase.steps)) {
                 for (const [stepIndex, step] of testCase.steps.entries()) {
-                  try {
-                    await engine.executeStep(step);
-                  } catch (error) {
-                    console.error(`Test step failed at step ${stepIndex + 1}:`, step);
-                    throw error;
-                  }
+                  const stepTitle = `Step ${stepIndex + 1}: ${step.action} - ${step.element || step.url || step.variable || ''}`;
+
+                  await test.step(stepTitle, async () => {
+                    try {
+                      await engine.executeStep(step);
+                    } catch (error) {
+                      console.error(`Test step failed at step ${stepIndex + 1}:`, step);
+                      throw error;
+                    }
+                  });
                 }
               }
             } finally {
-              // Always execute postconditions
+              // Execute teardown
               if (Array.isArray(testCase.postconditions)) {
                 for (const [index, step] of testCase.postconditions.entries()) {
-                  try {
-                    await engine.executeStep(step);
-                  } catch (error) {
-                    console.error(`Postcondition failed at step ${index + 1}:`, step);
-                  }
+                  const stepTitle = `Teardown ${index + 1}: ${step.action} - ${step.element || step.url || step.variable || ''}`;
+
+                  await test.step(stepTitle, async () => {
+                    try {
+                      await engine.executeStep(step);
+                    } catch (error) {
+                      console.error(`Postcondition failed at step ${index + 1}:`, step);
+                    }
+                  });
                 }
               }
             }
           });
         }
       } else {
-        // Execute a standard test case
+        // Standard test
         test(`[${testCase.testId || 'TC'}] ${testCase.testName}`, async ({
           page,
           request,
@@ -88,38 +93,50 @@ for (const file of jsonFiles) {
           const engine = new ActionEngine(page, request, testInfo, dynamicLocators);
 
           try {
-            // Execute preconditions
+            // Execute setup
             if (Array.isArray(testCase.preconditions)) {
               for (const [index, step] of testCase.preconditions.entries()) {
-                try {
-                  await engine.executeStep(step);
-                } catch (error) {
-                  console.error(`Precondition failed at step ${index + 1}:`, step);
-                  throw error;
-                }
+                const stepTitle = `Setup ${index + 1}: ${step.action} - ${step.element || step.url || step.variable || ''}`;
+
+                await test.step(stepTitle, async () => {
+                  try {
+                    await engine.executeStep(step);
+                  } catch (error) {
+                    console.error(`Precondition failed at step ${index + 1}:`, step);
+                    throw error;
+                  }
+                });
               }
             }
 
             // Execute test steps
             if (Array.isArray(testCase.steps)) {
               for (const [stepIndex, step] of testCase.steps.entries()) {
-                try {
-                  await engine.executeStep(step);
-                } catch (error) {
-                  console.error(`Test step failed at step ${stepIndex + 1}:`, step);
-                  throw error;
-                }
+                const stepTitle = `Step ${stepIndex + 1}: ${step.action} - ${step.element || step.url || step.variable || ''}`;
+
+                await test.step(stepTitle, async () => {
+                  try {
+                    await engine.executeStep(step);
+                  } catch (error) {
+                    console.error(`Test step failed at step ${stepIndex + 1}:`, step);
+                    throw error;
+                  }
+                });
               }
             }
           } finally {
-            // Always execute postconditions
+            // Execute teardown
             if (Array.isArray(testCase.postconditions)) {
               for (const [index, step] of testCase.postconditions.entries()) {
-                try {
-                  await engine.executeStep(step);
-                } catch (error) {
-                  console.error(`Postcondition failed at step ${index + 1}:`, step);
-                }
+                const stepTitle = `Teardown ${index + 1}: ${step.action} - ${step.element || step.url || step.variable || ''}`;
+
+                await test.step(stepTitle, async () => {
+                  try {
+                    await engine.executeStep(step);
+                  } catch (error) {
+                    console.error(`Postcondition failed at step ${index + 1}:`, step);
+                  }
+                });
               }
             }
           }

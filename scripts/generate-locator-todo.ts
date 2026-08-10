@@ -1,0 +1,114 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
+const SCENARIOS_DIR = path.join(__dirname, '../data/scenarios');
+const LOCATORS_DIR = path.join(__dirname, '../data/locators');
+
+const args = process.argv.slice(2);
+
+if (args.length === 0) {
+  console.error('[Error] Please provide at least one scenario file name as an argument.');
+  console.error('Usage: npm run update-locators -- <file-name.json>');
+  process.exit(1);
+}
+
+function generateLocatorTemplate(targetFiles: string[]) {
+  if (!fs.existsSync(LOCATORS_DIR)) {
+    fs.mkdirSync(LOCATORS_DIR, { recursive: true });
+  }
+
+  // Quản lý dữ liệu locator theo từng đường dẫn file
+  const locatorFilesData: Record<string, Record<string, Record<string, string>>> = {};
+
+  let newElementsCount = 0;
+  let processedFilesCount = 0;
+
+  for (const targetFile of targetFiles) {
+    const fileName = targetFile.endsWith('.json') ? targetFile : `${targetFile}.json`;
+    const filePath = path.join(SCENARIOS_DIR, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      console.error(
+        `[Warning] Scenario file not found: ${fileName}. Skipping processing for this file.`
+      );
+      continue;
+    }
+
+    const content = fs.readFileSync(filePath, 'utf-8');
+
+    let scenarioData;
+    try {
+      scenarioData = JSON.parse(content);
+    } catch (error) {
+      console.error(`[Warning] Skipping invalid JSON file: ${fileName}`);
+      continue;
+    }
+
+    // 1. Trích xuất tên file locator từ config, nếu không có thì fallback về 'locators.json'
+    const locatorFileName = scenarioData.config?.locatorFile || 'locators.json';
+    const locatorFilePath = path.join(LOCATORS_DIR, locatorFileName);
+
+    // 2. Nếu file locator này chưa được nạp vào bộ nhớ trong lần chạy này, tiến hành nạp
+    if (!locatorFilesData[locatorFilePath]) {
+      locatorFilesData[locatorFilePath] = {}; // Khởi tạo rỗng
+
+      if (fs.existsSync(locatorFilePath)) {
+        try {
+          const existingData = fs.readFileSync(locatorFilePath, 'utf-8');
+          Object.assign(locatorFilesData[locatorFilePath], JSON.parse(existingData));
+        } catch (error) {
+          console.error(
+            `[Error] Failed to parse existing locator file: ${locatorFileName}. Ensure it is valid JSON.`
+          );
+          process.exit(1);
+        }
+      }
+    }
+
+    // Lấy object chứa locator của file hiện tại để tiến hành map elements
+    const currentLocatorsMap = locatorFilesData[locatorFilePath];
+
+    const isOldFormat = Array.isArray(scenarioData);
+    const testCases = isOldFormat ? scenarioData : scenarioData.testCases || [];
+
+    for (const testCase of testCases) {
+      const allSteps = [
+        ...(Array.isArray(testCase.preconditions) ? testCase.preconditions : []),
+        ...(Array.isArray(testCase.steps) ? testCase.steps : []),
+        ...(Array.isArray(testCase.postconditions) ? testCase.postconditions : []),
+      ];
+
+      for (const step of allSteps) {
+        if (step.page && step.element) {
+          if (!currentLocatorsMap[step.page]) {
+            currentLocatorsMap[step.page] = {};
+          }
+
+          if (currentLocatorsMap[step.page][step.element] === undefined) {
+            currentLocatorsMap[step.page][step.element] = '';
+            newElementsCount++;
+          }
+        }
+      }
+    }
+
+    console.log(
+      `[Info] Successfully processed scenario: ${fileName} -> Target Locator: ${locatorFileName}`
+    );
+    processedFilesCount++;
+  }
+
+  // 3. Ghi lại toàn bộ các file locator đã được thu thập/cập nhật
+  if (processedFilesCount > 0) {
+    for (const [filePath, data] of Object.entries(locatorFilesData)) {
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    }
+    console.log(
+      `[Success] Added ${newElementsCount} missing elements across updated locator files.`
+    );
+  } else {
+    console.log(`[Info] No valid files were processed. Locator files remain unchanged.`);
+  }
+}
+
+generateLocatorTemplate(args);

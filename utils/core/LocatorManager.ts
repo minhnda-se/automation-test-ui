@@ -15,4 +15,8 @@ export class LocatorManager {
 
     return locator.includes('nth=') ? locator : `${locator} >> nth=0`;
   }
+
+  public updateRuntimeLocator(pageName: string, elementName: string, newLocator: string) {
+    this.currentLocators[pageName][elementName] = newLocator;
+  }
 }

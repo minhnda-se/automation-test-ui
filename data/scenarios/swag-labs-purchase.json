@@ -1,6 +1,6 @@
 {
   "config": {
-    "locatorFile": "swag-labs-purchase.json"
+    "locatorFile": "swag-labs.json"
   },
   "scenario": "Luồng mua hàng Swag Labs",
   "testCases": [

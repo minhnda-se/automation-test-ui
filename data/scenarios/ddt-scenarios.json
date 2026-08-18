@@ -1,8 +1,8 @@
 {
+  "scenario": "DDT - Data Driven Testing",
   "config": {
     "locatorFile": "swag-lab.json"
   },
-  "scenario": "Kiểm thử Data-Driven Testing",
   "testCases": [
     {
       "testId": "DDT_01",

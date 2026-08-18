@@ -1,0 +1,54 @@
+{
+  "scenario": "Demo Test Scenarios",
+  "config": {
+    "locatorFile": "demoblaze.json"
+  },
+  "testCases": [
+    {
+      "testId": "DB_NEW_01",
+      "testName": "[Login] Đăng nhập tài khoản ngẫu nhiên mới 100%",
+      "preconditions": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
+
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "signupUsername",
+          "data": "{{RANDOM_EMAIL}}",
+          "storeAs": "STORED_EMAIL"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "signupPassword",
+          "data": "Pass_{{RANDOM_STRING}}",
+          "storeAs": "STORED_PASSWORD"
+        },
+        { "action": "click", "page": "Demoblaze_Auth", "element": "signupBtn" }
+      ],
+      "steps": [
+        { "action": "goto", "data": "https://www.demoblaze.com/" },
+        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginUsername",
+          "data": "{{STORED_EMAIL}}"
+        },
+
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginPassword",
+          "data": "{{STORED_PASSWORD}}"
+        },
+
+        { "action": "click", "page": "Demoblaze_Auth", "element": "loginBtn" },
+        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "logoutMenu" }
+      ],
+      "postconditions": [{ "action": "click", "page": "Demoblaze_Home", "element": "logoutMenu" }]
+    }
+  ]
+}

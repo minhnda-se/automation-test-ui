@@ -34,7 +34,7 @@ export class AssertHelper extends BaseHelper {
     if (data === undefined || data === null)
       throw new Error(`[Lỗi JSON]: 'verify_text_contains' tại ${stepElement} bắt buộc có data.`);
     try {
-      const expectedString = String(data).replace(/\s+/g, '');
+      const expectedString = String(data);
       await expect(this.page.locator(locatorStr)).toContainText(expectedString);
       await this.captureEvidence(stepDescription, 'PASS');
     } catch (error) {

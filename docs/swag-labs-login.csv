@@ -1,0 +1,13 @@
+TestID,TestName,Description,Phase,Action,Page,Element,Data
+TC_01,Đăng nhập thành công,Kiểm tra tài khoản standard user,Setup,goto,,,https://www.saucedemo.com/
+TC_01,,,Step,fill,LoginPage,usernameInput,standard_user
+TC_01,,,Step,fill,LoginPage,passwordInput,secret_sauce
+TC_01,,,Step,click,LoginPage,loginBtn,
+TC_01,,,Step,verify_visible,InventoryPage,cartIcon,
+TC_01,,,Teardown,click,Menu,menuBtn,
+TC_01,,,Teardown,click,Menu,logoutLink,
+TC_02,Tài khoản bị khóa,Kiểm tra thông báo lỗi khi user bị khóa,Setup,goto,,,https://www.saucedemo.com/
+TC_02,,,Step,fill,LoginPage,usernameInput,locked_out_user
+TC_02,,,Step,fill,LoginPage,passwordInput,secret_sauce
+TC_02,,,Step,click,LoginPage,loginBtn,
+TC_02,,,Step,verify_text_contains,LoginPage,errorMessage,"Epic sadface"

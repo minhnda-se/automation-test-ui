@@ -6,7 +6,12 @@
   "scripts": {
     "compile-bdd": "tsx scripts/compile-bdd.ts",
     "update-locators": "tsx scripts/generate-locator-todo.ts",
-    "test": "playwright test tests/hybrid-json/"
+    "csv2json": "tsx scripts/csv-to-json.ts",
+    "test": "npm run allure:clean && npx playwright test tests/hybrid-json/",
+    "test-ui": "npm run allure:clean && npx playwright test --ui",
+    "allure:clean": "npx rimraf allure-results allure-report",
+    "allure:report": "npx allure serve allure-results",
+    "report": "allure generate allure-results --clean -o allure-report && allure open allure-report"
   },
   "keywords": [],
   "author": "",

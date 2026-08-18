@@ -32,7 +32,8 @@ for (const file of jsonFiles) {
             page,
             request,
           }, testInfo) => {
-            const engine = new ActionEngine(page, request, testInfo, dynamicLocators, rowData);
+            const isolatedLocators = JSON.parse(JSON.stringify(dynamicLocators));
+            const engine = new ActionEngine(page, request, testInfo, isolatedLocators, rowData);
 
             try {
               // Execute setup
@@ -90,8 +91,8 @@ for (const file of jsonFiles) {
           page,
           request,
         }, testInfo) => {
-          const engine = new ActionEngine(page, request, testInfo, dynamicLocators);
-
+          const isolatedLocators = JSON.parse(JSON.stringify(dynamicLocators));
+          const engine = new ActionEngine(page, request, testInfo, isolatedLocators);
           try {
             // Execute setup
             if (Array.isArray(testCase.preconditions)) {

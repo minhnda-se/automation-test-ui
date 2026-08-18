@@ -511,7 +511,8 @@ Example:
   "action": "fill",
   "page": "RegisterPage",
   "element": "email",
-  "data": "{{RANDOM_EMAIL}}"
+  "data": "{{RANDOM_EMAIL}}",
+  "storeAs": "STORED_EMAIL" //optional
 }
 ```
 
@@ -645,7 +646,7 @@ The generated Playwright tests will appear as:
 
 # BDD Gherkin Support
 
-The framework supports writing scenarios using the Gherkin language.
+The framework supports writing test scenarios using the Gherkin language. Feature files are written in a human-readable format and are automatically converted into executable JSON scenarios.
 
 Example:
 
@@ -654,16 +655,25 @@ Feature: Login
 
   Scenario: Successful Login
 
-    Given I open "https://www.saucedemo.com"
+    Given I go to "https://www.saucedemo.com/"
 
-    When I fill "LoginPage.username" with "standard_user"
+    When I fill "standard_user" into "usernameInput" on "LoginPage"
 
-    And I fill "LoginPage.password" with "secret_sauce"
+    And I fill "secret_sauce" into "passwordInput" on "LoginPage"
 
-    And I click "LoginPage.loginButton"
+    And I click "loginBtn" on "LoginPage"
 
-    Then I should see "DashboardPage.inventoryContainer"
+    Then I verify "cartIcon" is visible on "InventoryPage"
 ```
+
+## Step Format
+
+| Step                                                 | Description                       |
+| ---------------------------------------------------- | --------------------------------- |
+| `Given I go to "<url>"`                              | Navigate to the specified URL     |
+| `When I fill "<value>" into "<locator>" on "<page>"` | Enter a value into an input field |
+| `And I click "<locator>" on "<page>"`                | Click an element                  |
+| `Then I verify "<locator>" is visible on "<page>"`   | Verify that an element is visible |
 
 The compiler automatically converts the feature file into an executable JSON scenario.
 

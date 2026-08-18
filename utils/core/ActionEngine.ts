@@ -99,6 +99,9 @@ export class ActionEngine {
         break;
       case 'fill':
         await this.element.fill(locatorStr, resolvedData, step.element);
+        if (step.storeAs) {
+          this.dataManager.saveRuntimeVariable(step.storeAs, String(resolvedData));
+        }
         break;
       case 'switch_new_tab':
         await this.element.switchNewTab();

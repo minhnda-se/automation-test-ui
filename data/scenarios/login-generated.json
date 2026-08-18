@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/scenario-schema.json",
   "config": {
-    "locatorFile": "locators.json"
+    "locatorFile": "swag-lab.json"
   },
   "scenario": "Chức năng Đăng nhập hệ thống",
   "testCases": [

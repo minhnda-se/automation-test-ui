@@ -52,7 +52,6 @@ Don't generate the `.feature` file until the user confirms the scenario list and
 ## Phase 4: Output
 
 State the exact file path you're saving to (based on Phase 0's actual directory finding, not an assumed path), and list:
-
 - Scenarios generated
 - Any steps left unmapped and how they're being handled (JSON fallback vs. flagged for a new BDD mapping)
 - The command to compile/run, if the project has one (check `package.json` scripts or the README's execution section)

@@ -45,7 +45,7 @@ Present your findings in this format so the user can scan and respond quickly:
 
 **PAUSE HERE.** Do not generate any JSON or files until the user explicitly confirms the test case list and answers the open questions.
 
-Missing locator _selectors_ don't need to block this pause — by default, every `page`/`element` referenced in the confirmed test cases gets a `TODO_LOCATOR` stub written to the locator file automatically (see Phase 3), so the file becomes a checklist you can resolve afterward with Playwright Codegen. Only treat a locator as a blocking open question if the _element itself_ is ambiguous (e.g. you're not sure which of two buttons the requirement means) — a selector simply not existing yet is expected, not a blocker.
+Missing locator *selectors* don't need to block this pause — by default, every `page`/`element` referenced in the confirmed test cases gets a `TODO_LOCATOR` stub written to the locator file automatically (see Phase 3), so the file becomes a checklist you can resolve afterward with Playwright Codegen. Only treat a locator as a blocking open question if the *element itself* is ambiguous (e.g. you're not sure which of two buttons the requirement means) — a selector simply not existing yet is expected, not a blocker.
 
 ## Phase 3: Execution
 
@@ -68,7 +68,9 @@ Each file in `data/scenarios/` is one test suite:
       "description": "Optional, one line.",
       "dataTable": [],
       "preconditions": [],
-      "steps": [{ "action": "goto", "data": "https://example.com/login" }],
+      "steps": [
+        { "action": "goto", "data": "https://example.com/login" }
+      ],
       "postconditions": []
     }
   ]
@@ -94,7 +96,7 @@ For the locator file itself: read the existing file first to confirm its actual 
 **Every `page`/`element` referenced in a generated step must have a matching entry written to the locator file — no step should reference a locator that isn't also represented there, even as a stub.** Concretely:
 
 - If the entry already exists with a real selector, reuse it as-is.
-- If the entry already exists with a _different_ selector than what you've found or been told, don't silently overwrite it — flag the conflict to the user and ask which is correct.
+- If the entry already exists with a *different* selector than what you've found or been told, don't silently overwrite it — flag the conflict to the user and ask which is correct.
 - If no entry exists yet and you don't have a confirmed real selector, add the entry anyway with the value `"TODO_LOCATOR"`. Never fabricate a CSS/XPath selector you haven't seen in the doc or gotten from the user — a stub is the correct output, not a guess.
 
 ### Locator file as a Codegen checklist
@@ -133,11 +135,9 @@ If `schema/scenario-schema.json` exists, validate the generated file against it 
 ### Worked example
 
 Given a requirement snippet like:
-
 > "User can log in with a valid email and password. An incorrect password shows 'Incorrect password' below the password field."
 
 **`data/scenarios/login-scenarios.json` (excerpt):**
-
 ```json
 {
   "testId": "TC_LOGIN_02",
@@ -148,18 +148,12 @@ Given a requirement snippet like:
     { "action": "fill", "page": "LoginPage", "element": "emailInput", "data": "{{RANDOM_EMAIL}}" },
     { "action": "fill", "page": "LoginPage", "element": "passwordInput", "data": "wrongpass123" },
     { "action": "click", "page": "LoginPage", "element": "loginButton" },
-    {
-      "action": "verify_text",
-      "page": "LoginPage",
-      "element": "passwordError",
-      "data": "Incorrect password"
-    }
+    { "action": "verify_text", "page": "LoginPage", "element": "passwordError", "data": "Incorrect password" }
   ]
 }
 ```
 
 **`data/locators/locators.json` (companion update — same run, no selectors known yet):**
-
 ```json
 {
   "LoginPage": {
@@ -176,7 +170,6 @@ Every `page`/`element` pair used in the steps above (`LoginPage.emailInput`, `Lo
 ## Phase 4: Reporting
 
 Generate `report-[feature-name].md` containing:
-
 - Summary of generated test cases (count, positive vs negative breakdown)
 - List of files created or modified, with paths (scenario file, locator file if updated)
 - Any `TODO_LOCATOR` placeholders left for follow-up, grouped by page, each with the suggested `npx playwright codegen <url>` command to resolve them

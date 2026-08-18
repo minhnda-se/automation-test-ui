@@ -1,0 +1,80 @@
+{
+  "config": {
+    "locatorFile": "swag-lab.json"
+  },
+  "scenario": "Compiled from swag-labs-login.csv",
+  "testCases": [
+    {
+      "testId": "TC_01",
+      "testName": "Đăng nhập thành công",
+      "description": "Kiểm tra tài khoản standard user",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        }
+      ],
+      "steps": [
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        { "action": "verify_visible", "page": "InventoryPage", "element": "cartIcon" }
+      ],
+      "postconditions": [
+        { "action": "click", "page": "InventoryPage", "element": "menuBtn" },
+        { "action": "click", "page": "InventoryPage", "element": "logoutLink" }
+      ]
+    },
+    {
+      "testId": "TC_02",
+      "testName": "Tài khoản bị khóa",
+      "description": "Kiểm tra thông báo lỗi khi user bị khóa",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        }
+      ],
+      "steps": [
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "locked_out_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Epic sadface"
+        }
+      ],
+      "postconditions": []
+    }
+  ]
+}

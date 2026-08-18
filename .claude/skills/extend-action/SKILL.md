@@ -1,5 +1,6 @@
 ---
 name: extend-action
+disable-model-invocation: true
 description: Add a new action keyword to the Playwright Hybrid Keyword-Driven Framework's core (ActionEngine, Helper layer, scenario schema, optional BDD compiler). Use whenever the user asks to add support for a new action/keyword (e.g. "upload_file", "drag_and_drop"), extend the ActionEngine, or wants a JSON scenario step type that doesn't exist yet.
 ---
 
@@ -13,12 +14,12 @@ You are a Software Architect maintaining this framework's core. Your job is to a
 
 ## Phase 0: Study the existing pattern before writing anything
 
-Don't write new code from a mental model of "how Playwright frameworks usually work" — read how _this one_ actually does it:
+Don't write new code from a mental model of "how Playwright frameworks usually work" — read how *this one* actually does it:
 
 1. Open `utils/core/ActionEngine.ts` and read 2-3 existing `case` entries (pick ones similar in kind to what you're adding — e.g. an element action if you're adding an element action, an API action if you're adding an API action). Note how each resolves variables, calls its helper, and handles errors.
 2. Open the matching helper and read the methods those cases call:
    - Element interactions (click, fill, hover, drag, upload, etc.) → `utils/helpers/ElementHelper.ts`
-   - Assertions (verify\_\*) → `utils/helpers/AssertHelper.ts`
+   - Assertions (verify_*) → `utils/helpers/AssertHelper.ts`
    - API calls (api_get/post/put/patch/delete) → `utils/helpers/APIHelper.ts`
    - Shared logic across helpers → `utils/helpers/BaseHelper.ts`
 3. Check `utils/core/LocatorManager.ts` and `utils/core/AutoHealer.ts` if the new action targets an element — element-based actions should resolve locators through `LocatorManager` (not a raw `page.locator()` call inline) so they participate in auto-healing like every other locator-based action.
@@ -30,7 +31,6 @@ If the codebase's actual patterns differ from what's described below, follow the
 ## Phase 1: Clarify the action's contract
 
 Before writing code, make sure you actually know:
-
 - **Name**: snake_case, verb-first, matching the existing style (`upload_file`, not `uploadFile` or `FileUpload`).
 - **Category**: element / assertion / API — determines which helper it belongs in.
 - **Required and optional fields**: e.g. does it need `page` + `element` + `data`? Just `page` + `element`? A file path? Ask if the user's request doesn't make this obvious — don't guess at a shape that'll need reworking later.
@@ -42,7 +42,7 @@ If the request is unambiguous (e.g. "add `upload_file(page, element, filePath)` 
 ## Phase 2: Implement across layers, in this order
 
 1. **Helper layer** — add the Playwright implementation in the appropriate helper (`ElementHelper.ts`, `AssertHelper.ts`, or `APIHelper.ts`). Match the existing method signature style, error handling, and logging conventions you saw in Phase 0.
-2. **Orchestration layer** — add the `case` in `ActionEngine.ts`'s switch statement. Resolve any `{{...}}` runtime variables/dynamic tokens via `DataManager` _before_ calling the helper — the helper should only ever receive already-resolved values, same as every existing action.
+2. **Orchestration layer** — add the `case` in `ActionEngine.ts`'s switch statement. Resolve any `{{...}}` runtime variables/dynamic tokens via `DataManager` *before* calling the helper — the helper should only ever receive already-resolved values, same as every existing action.
 3. **Schema** — add the new keyword to the `action` enum in `schema/scenario-schema.json`, and add its required/optional field constraints following the pattern of an existing similar action.
 4. **BDD compiler (only if in scope)** — add the regex mapping in `scripts/compile-bdd.ts` following an existing mapping's pattern.
 5. **Docs (recommended, not blocking)** — if the project's README/Supported Actions table documents actions (as this project's does), add a row for the new action so the docs don't silently drift out of date. If a `generate-json-test` skill or similar exists with its own hardcoded action reference list, flag to the user that it should be updated too.
@@ -50,7 +50,6 @@ If the request is unambiguous (e.g. "add `upload_file(page, element, filePath)` 
 ## Phase 3: Present for review — do not consider this done until approved
 
 Show the modified code blocks (diffs, not just descriptions) for:
-
 - Helper method
 - ActionEngine case
 - Schema change

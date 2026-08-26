@@ -21,9 +21,9 @@ export class APIActionHandler implements IActionHandler {
   async handle(step: IStep, _locatorStr: string, resolvedData: any, _stepDesc: string): Promise<void> {
     switch (step.action) {
       case 'api_post': {
-        if (!step.url) throw new Error(`[Lỗi JSON]: 'api_post' yêu cầu phải có trường "url"`);
+        if (!step.url) throw new Error(`[JSON Error]: 'api_post' requires a "url" field.`);
         const postUrl = this.dataManager.resolve(step.url);
-        const postRes = await this.api.post(postUrl, resolvedData, step.headers);
+        const postRes = await this.api.post(postUrl, resolvedData, step.headers, step.expected_status);
 
         if (step.store_response) {
           const valueToStore = postRes[step.store_response.key];
@@ -34,7 +34,7 @@ export class APIActionHandler implements IActionHandler {
       case 'api_put': {
         if (!step.url) throw new Error(`[JSON Error]: 'api_put' requires a "url" field.`);
         const putUrl = this.dataManager.resolve(step.url);
-        const putRes = await this.api.put(putUrl, resolvedData, step.headers);
+        const putRes = await this.api.put(putUrl, resolvedData, step.headers, step.expected_status);
 
         if (step.store_response) {
           const valueToStore = putRes[step.store_response.key];
@@ -45,7 +45,7 @@ export class APIActionHandler implements IActionHandler {
       case 'api_patch': {
         if (!step.url) throw new Error(`[JSON Error]: 'api_patch' requires a "url" field.`);
         const patchUrl = this.dataManager.resolve(step.url);
-        const patchRes = await this.api.patch(patchUrl, resolvedData, step.headers);
+        const patchRes = await this.api.patch(patchUrl, resolvedData, step.headers, step.expected_status);
 
         if (step.store_response) {
           const valueToStore = patchRes[step.store_response.key];
@@ -54,9 +54,9 @@ export class APIActionHandler implements IActionHandler {
         break;
       }
       case 'api_get': {
-        if (!step.url) throw new Error(`[Lỗi JSON]: 'api_get' yêu cầu phải có trường "url"`);
+        if (!step.url) throw new Error(`[JSON Error]: 'api_get' requires a "url" field.`);
         const getUrl = this.dataManager.resolve(step.url);
-        const getRes = await this.api.get(getUrl, step.headers);
+        const getRes = await this.api.get(getUrl, step.headers, step.expected_status);
 
         if (step.store_response) {
           const valueToStore = getRes[step.store_response.key];
@@ -65,9 +65,9 @@ export class APIActionHandler implements IActionHandler {
         break;
       }
       case 'api_delete': {
-        if (!step.url) throw new Error(`[Lỗi JSON]: 'api_delete' yêu cầu phải có trường "url"`);
+        if (!step.url) throw new Error(`[JSON Error]: 'api_delete' requires a "url" field.`);
         const deleteUrl = this.dataManager.resolve(step.url);
-        await this.api.delete(deleteUrl, step.headers);
+        await this.api.delete(deleteUrl, step.headers, step.expected_status);
         break;
       }
       default:

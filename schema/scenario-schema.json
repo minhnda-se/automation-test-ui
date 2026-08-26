@@ -189,7 +189,7 @@
         },
         "status": {
           "type": "number",
-          "description": "HTTP status code for the mocked response (used by mock_route)."
+          "description": "HTTP status code for the mocked response. mock_route only - it does not assert anything. To assert the status of a real API response, use \"expected_status\"."
         },
         "mockData": {
           "type": ["object", "string", "array"],
@@ -222,7 +222,7 @@
         },
         "expected_status": {
           "type": "number",
-          "description": "Expected HTTP status code. Note: currently only mock_route reads this (as the mocked response status); the API actions do not assert it yet."
+          "description": "Exact HTTP status an API response must have (api_get / api_post / api_put / api_patch / api_delete). When set, the status must match exactly, which is what makes a negative API test expressible. When omitted, any 2xx or 3xx passes. Not read by mock_route - use \"status\" for a mocked response status."
         }
       }
     }

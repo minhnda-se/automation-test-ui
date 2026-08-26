@@ -273,42 +273,42 @@
       "category": "API",
       "handler": "APIActionHandler",
       "fields": "`url`",
-      "note": "Optional `headers`."
+      "note": "Optional `headers`. Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
     },
     {
       "name": "api_get",
       "category": "API",
       "handler": "APIActionHandler",
       "fields": "`url`",
-      "note": "Optional `headers` and `store_response` ({ key, variable })."
+      "note": "Optional `headers` and `store_response` ({ key, variable }). Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
     },
     {
       "name": "api_patch",
       "category": "API",
       "handler": "APIActionHandler",
       "fields": "`url`, `data` (body)",
-      "note": "Optional `headers` and `store_response` ({ key, variable }). Partial update of a resource."
+      "note": "Optional `headers` and `store_response` ({ key, variable }). Partial update of a resource. Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
     },
     {
       "name": "api_post",
       "category": "API",
       "handler": "APIActionHandler",
       "fields": "`url`, `data` (body)",
-      "note": "Optional `headers` and `store_response` ({ key, variable })."
+      "note": "Optional `headers` and `store_response` ({ key, variable }). Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
     },
     {
       "name": "api_put",
       "category": "API",
       "handler": "APIActionHandler",
       "fields": "`url`, `data` (body)",
-      "note": "Optional `headers` and `store_response` ({ key, variable }). Full replacement of a resource."
+      "note": "Optional `headers` and `store_response` ({ key, variable }). Full replacement of a resource. Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
     },
     {
       "name": "mock_route",
       "category": "Network",
       "handler": "NetworkActionHandler",
       "fields": "`url` (pattern)",
-      "note": "Optional `mockData` (or `data`), `status` / `expected_status` (default 200), `contentType` (default application/json)."
+      "note": "Optional `mockData` (or `data`), `status` (default 200), `contentType` (default application/json). `status` is the mocked response status and asserts nothing."
     },
     {
       "name": "unmock_route",

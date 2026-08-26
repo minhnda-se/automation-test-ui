@@ -24,7 +24,10 @@ export class NetworkActionHandler implements IActionHandler {
           throw new Error(`[Lỗi JSON]: 'mock_route' bắt buộc phải có trường "url" (URL pattern).`);
         }
         const resolvedUrl = this.dataManager.resolve(step.url);
-        const status = step.status || step.expected_status || 200;
+        // `status` only. Reading expected_status here is what made one field name
+        // mean two things: a mocked response status for mock_route, and an
+        // assertion target for the API actions.
+        const status = step.status || 200;
         const contentType = step.contentType || 'application/json';
 
         let bodyPayload: string;

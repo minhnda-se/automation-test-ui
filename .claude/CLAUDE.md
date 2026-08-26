@@ -29,6 +29,7 @@ npx playwright test --ui                         # UI mode
 npx playwright show-report                       # HTML report
 npx playwright codegen <url>                     # resolve TODO_LOCATOR stubs
 npm run validate                                 # action reference check + scenario/flow validation
+npm run test:framework                           # offline engine guard tests (no network; gated in CI)
 npm run actions:sync                             # regenerate action reference after a handler change
 ```
 
@@ -64,7 +65,6 @@ The Gherkin compiler (`scripts/compile-bdd.ts`) is **frozen** at six step patter
 ## Open items
 
 - Action keywords exist in three places: the generated reference (authoritative), the `action` enum in `schema/scenario-schema.json`, and the `ActionType` union in `types/scenario.ts`. Only the first is generated, and nothing checks the other two agree. Adding an action means editing all three by hand.
-- `expected_status` is documented on API steps but not asserted — `APIHelper` only checks `response.ok()`. A test that expects a 404 cannot express it yet.
 - Auto-Healing is off by default and no longer writes to `data/locators/` (see `report/fix/phase-1-autohealer.md`). It still cannot distinguish a dead selector from a timing issue from a real behaviour change — treat any entry in `test-results/heal-report.json` as something to investigate, not a fix.
 
-Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`report/fix/phase-9-ci-trustworthy.md`).
+Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`report/fix/phase-9-ci-trustworthy.md`). `expected_status` is now asserted by `APIHelper` on all five API actions - exact match when set, `response.ok()` when omitted - and `mock_route` no longer reads it, so the name means one thing (`report/fix/phase-12-expected-status.md`). `LocatorManager` no longer appends `>> nth=0`, so an ambiguous locator fails under strict mode (`report/fix/phase-13a-locator-strictness.md`).

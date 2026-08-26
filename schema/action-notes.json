@@ -125,19 +125,19 @@
   },
   "api_get": {
     "fields": "`url`",
-    "note": "Optional `headers` and `store_response` ({ key, variable })."
+    "note": "Optional `headers` and `store_response` ({ key, variable }). Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
   },
   "api_post": {
     "fields": "`url`, `data` (body)",
-    "note": "Optional `headers` and `store_response` ({ key, variable })."
+    "note": "Optional `headers` and `store_response` ({ key, variable }). Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
   },
   "api_delete": {
     "fields": "`url`",
-    "note": "Optional `headers`."
+    "note": "Optional `headers`. Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
   },
   "mock_route": {
     "fields": "`url` (pattern)",
-    "note": "Optional `mockData` (or `data`), `status` / `expected_status` (default 200), `contentType` (default application/json)."
+    "note": "Optional `mockData` (or `data`), `status` (default 200), `contentType` (default application/json). `status` is the mocked response status and asserts nothing."
   },
   "unmock_route": {
     "fields": "`url` (pattern)",
@@ -153,10 +153,10 @@
   },
   "api_put": {
     "fields": "`url`, `data` (body)",
-    "note": "Optional `headers` and `store_response` ({ key, variable }). Full replacement of a resource."
+    "note": "Optional `headers` and `store_response` ({ key, variable }). Full replacement of a resource. Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
   },
   "api_patch": {
     "fields": "`url`, `data` (body)",
-    "note": "Optional `headers` and `store_response` ({ key, variable }). Partial update of a resource."
+    "note": "Optional `headers` and `store_response` ({ key, variable }). Partial update of a resource. Optional `expected_status` asserts the response status exactly; without it any 2xx or 3xx passes."
   }
 }

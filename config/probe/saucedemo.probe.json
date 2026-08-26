@@ -1,0 +1,70 @@
+{
+  "name": "saucedemo",
+  "baseUrl": "https://www.saucedemo.com/",
+  "output": "report/fix/probe-saucedemo.txt",
+  "auth": {
+    "actions": [
+      { "goto": "/" },
+      { "fill": { "selector": "#user-name", "value": "${SAUCE_USERNAME}" } },
+      { "fill": { "selector": "#password", "value": "${SAUCE_PASSWORD}" } },
+      { "click": "#login-button" }
+    ],
+    "waitForUrl": "**/inventory.html"
+  },
+  "states": [
+    {
+      "name": "Login page - unauthenticated",
+      "navigate": "/",
+      "dump": ["input", "[type=submit]", "[data-test]"]
+    },
+    {
+      "name": "Inventory list - default sort",
+      "authenticate": true,
+      "dump": ["select", "#shopping_cart_container, #shopping_cart_container *"],
+      "structure": true,
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "activeSortLabel", "selector": "select", "value": "selectedOption" },
+        { "name": "sortOptionValues", "selector": "select", "value": "options" },
+        { "name": "productCount", "selector": ".inventory_item", "value": "count" },
+        { "name": "firstProductName", "selector": ".inventory_item_name", "value": "text" }
+      ]
+    },
+    {
+      "name": "Inventory list - price high to low",
+      "actions": [
+        { "selectOption": { "selector": "select", "value": "hilo" } },
+        { "waitForTimeout": 300 }
+      ],
+      "capture": [
+        { "name": "activeSortLabel", "selector": "select", "value": "selectedOption" },
+        { "name": "firstProductName", "selector": ".inventory_item_name", "value": "text" }
+      ]
+    },
+    {
+      "name": "Product detail - item NOT in cart",
+      "actions": [
+        { "click": ".inventory_item_name" },
+        { "waitForUrl": "**/inventory-item.html*" }
+      ],
+      "dump": ["button", "[data-test]"],
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "productName", "selector": ".inventory_details_name", "value": "text" }
+      ]
+    },
+    {
+      "name": "Product detail - item IN cart (removeBtn and cartBadge exist only here)",
+      "actions": [{ "click": "#add-to-cart" }, { "waitForTimeout": 300 }],
+      "dump": ["button", "#shopping_cart_container, #shopping_cart_container *"]
+    },
+    {
+      "name": "Back to products - does the sort order survive the detail visit (AC-3.1)",
+      "actions": [{ "click": "#back-to-products" }, { "waitForUrl": "**/inventory.html" }],
+      "capture": [
+        { "name": "activeSortLabelAfterBack", "selector": "select", "value": "selectedOption" },
+        { "name": "firstProductNameAfterBack", "selector": ".inventory_item_name", "value": "text" }
+      ]
+    }
+  ]
+}

@@ -17,8 +17,14 @@ jobs:
       run: npm ci
     - name: Validate scenarios and flows
       run: npm run validate
+    - name: Typecheck
+      run: npm run typecheck
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Run framework guard tests (no network)
+      # tests/framework/ drives page.setContent, not a live site, so it is safe to
+      # gate on unconditionally - unlike the scenario suites below.
+      run: npm run test:framework
     - name: Run Playwright tests (@ci tagged suites only)
       # Deliberately not the full suite, on two counts. `npm test` runs every test
       # case against four third-party live sites, so it can go red because

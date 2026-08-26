@@ -8,8 +8,13 @@ import * as path from 'path';
  * It is kept because existing .feature files depend on it, not because it is a
  * complete BDD layer: it covers 6 of the 40 action keywords the framework
  * implements (see docs/ACTIONS.md), and it does not support Background,
- * Scenario Outline / Examples, tags, preconditions, postconditions, dataTable,
+ * Scenario Outline / Examples, preconditions, postconditions, dataTable,
  * or call_flow.
+ *
+ * Two header directives are honoured, both of which set suite-level config
+ * rather than adding a step pattern: `# locatorFile:` and `# tags:`. They exist
+ * because config written by hand into a -generated.json file is destroyed by the
+ * next recompile without warning.
  *
  * Do not extend it casually. Adding a step pattern means committing to keep a
  * second dictionary in sync with the handler layer for every future action, in
@@ -66,6 +71,9 @@ const STEP_MAPPINGS: StepMapping[] = [
   },
 ];
 
+/** Mirrors the `config.tags` item pattern in schema/scenario-schema.json. */
+const TAG_PATTERN = /^@[a-z0-9][a-z0-9._-]*$/;
+
 const FEATURES_DIR = path.join(__dirname, '../data/features');
 const SCENARIOS_DIR = path.join(__dirname, '../data/scenarios');
 const LOCATORS_DIR = path.join(__dirname, '../data/locators');
@@ -93,6 +101,26 @@ function parseStep(line: string, file: string): Record<string, unknown> {
       `  Anything else must be written as a JSON scenario in data/scenarios/ instead,\n` +
       `  which supports the full action set (see docs/ACTIONS.md).`
   );
+}
+
+/** Parses `# tags: @saucedemo @ci` (whitespace and/or comma separated). */
+function parseTags(line: string, file: string): string[] {
+  const tags = line
+    .replace('# tags:', '')
+    .split(/[\s,]+/)
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
+
+  const invalid = tags.filter((tag) => !TAG_PATTERN.test(tag));
+  if (invalid.length > 0) {
+    throw new Error(
+      `[compile-bdd] Invalid tag(s) in ${file}: ${invalid.join(', ')}\n` +
+        `  Tags must start with "@" then lowercase alphanumerics, dots, dashes\n` +
+        `  or underscores. Example: # tags: @saucedemo @ci`
+    );
+  }
+
+  return tags;
 }
 
 /** Stable per-feature identifier prefix, e.g. login.feature -> BDD_LOGIN. */
@@ -129,9 +157,12 @@ function compileAll(): void {
       ? customLocatorName
       : 'locators.json';
 
+    let locatorFile = defaultLocator;
+    let suiteTags: string[] = [];
+
     const outputJson: any = {
       $schema: '../../schema/scenario-schema.json',
-      config: { locatorFile: defaultLocator },
+      config: {},
       scenario: '',
       testCases: [],
     };
@@ -142,14 +173,27 @@ function compileAll(): void {
 
     for (const line of lines) {
       if (line.startsWith('#')) {
-        // Only the locatorFile directive is honoured; other comments are ignored.
+        // Two config directives are honoured; other comments are ignored.
         if (line.startsWith('# locatorFile:')) {
-          outputJson.config.locatorFile = line.replace('# locatorFile:', '').trim();
+          locatorFile = line.replace('# locatorFile:', '').trim();
+        } else if (line.startsWith('# tags:')) {
+          suiteTags = parseTags(line, file);
         }
+      } else if (line.startsWith('@')) {
+        // Native Gherkin tag syntax parses as nothing here. Failing loudly beats
+        // dropping it, which is how an @-tag reached a -generated.json by hand.
+        throw new Error(
+          `[compile-bdd] Gherkin tag line "${line}" is not supported (${file}).\n` +
+            `  Declare suite tags as a header directive instead: # tags: @saucedemo @ci`
+        );
       } else if (line.startsWith('Feature:')) {
         outputJson.scenario = line.replace('Feature:', '').trim();
       } else if (line.startsWith('Scenario:')) {
         if (currentTestCase) outputJson.testCases.push(currentTestCase);
+
+    // Assembled after parsing so tags lead the object regardless of directive order.
+    if (suiteTags.length > 0) outputJson.config.tags = suiteTags;
+    outputJson.config.locatorFile = locatorFile;
 
         scenarioIndex++;
         currentTestCase = {

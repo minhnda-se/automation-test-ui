@@ -53,13 +53,8 @@ export class ActionEngine {
   }
 
   async executeStep(step: IStep, isRetry: boolean = false): Promise<void> {
-    // verify_element_count asserts on the size of the matched set, so it must not
-    // receive the implicit `>> nth=0` that every other action gets.
-    const matchAll = step.action === 'verify_element_count';
     const locatorStr =
-      step.page && step.element
-        ? this.locatorManager.getLocator(step.page, step.element, matchAll)
-        : '';
+      step.page && step.element ? this.locatorManager.getLocator(step.page, step.element) : '';
     const stepDesc = `${step.action} - ${step.element || step.url || step.variable || step.flow || ''}`;
 
     let resolvedData = step.data;

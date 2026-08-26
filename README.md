@@ -217,7 +217,7 @@ It is entirely optional. No script, test, or CI step reads from it - the framewo
 
 ### BDD Gherkin Support (frozen)
 
-> **The BDD compiler is frozen at six step patterns**, against the framework's 40 action keywords. It has no `Background`, `Scenario Outline` / `Examples`, tags, preconditions, postconditions, `dataTable`, or `call_flow`. It is kept for the existing `.feature` files. **JSON scenarios are the primary input** and support everything; reach for BDD only when someone outside the QA team actually reads these files *and* the whole scenario fits the six patterns.
+> **The BDD compiler is frozen at six step patterns**, against the framework's 40 action keywords. It has no `Background`, `Scenario Outline` / `Examples`, preconditions, postconditions, `dataTable`, or `call_flow`. Suite tags and the locator file are set by the `# tags:` and `# locatorFile:` header directives. It is kept for the existing `.feature` files. **JSON scenarios are the primary input** and support everything; reach for BDD only when someone outside the QA team actually reads these files *and* the whole scenario fits the six patterns.
 
 Supported steps, in full:
 
@@ -348,6 +348,66 @@ npm run report
 
 ---
 
+## Resolving Locators - probe or codegen
+
+`npm run validate` fails on any `TODO_LOCATOR` stub, so every generated scenario
+ends with a locator pass. There are two tools for it, and they are good at
+different things.
+
+### `npm run probe-locators -- <config.json>`
+
+Drives a headless browser through a list of application states declared in a
+config file and dumps, for every state, each candidate element with **all of its
+attributes**. Output goes to stdout and to the config's `output` path.
+
+Reach for it when you are resolving many locators at once, or when you need to
+know how the application behaves before writing assertions.
+
+- Locator files here hold **plain selector strings**. A raw attribute dump maps
+  onto them directly; codegen's `getByRole(...)` chains need lossy conversion.
+- It shows **every candidate at once**, which is how colliding attributes get
+  caught. On SauceDemo, `data-test="inventory-item-name"` appears on both the
+  list and the detail page - visible immediately in a full dump, easy to miss
+  one element at a time.
+- Each dumped selector is annotated `[ambiguous under strict mode]` when it
+  matches more than one element, so ambiguity is caught while writing the
+  locator rather than at run time.
+- `capture` records named values per state (`text`, `count`, `selectedOption`,
+  `options`, `url`), which answers behavioural questions **before** any test is
+  written - whether a sort order survives a page visit, whether a list is
+  paginated, how many cards render.
+
+Example configs live in `config/probe/`. A config declares `baseUrl`, an optional
+`auth` block, and an ordered list of `states`; each state may `navigate`, run
+`actions`, `dump` selectors, run the repeated-container `structure` heuristic,
+and `capture` values.
+
+```bash
+SAUCE_USERNAME=standard_user SAUCE_PASSWORD=secret_sauce   npm run probe-locators -- config/probe/saucedemo.probe.json
+
+BOOKING_PASSWORD='...' npm run probe-locators -- config/probe/booking-app.probe.json
+```
+
+Credentials are referenced as `${ENV_VAR}` and read from the environment, never
+written into the config file. Values are also resolved through `DataManager`, so
+`{{RANDOM_EMAIL}}` and the other generator tokens work exactly as they do in a
+scenario - which is how the booking app is probed, since registering an account
+is what signs you in. Fill values whose selector looks like a secret are logged
+as `***`.
+
+### `npx playwright codegen <url>`
+
+Records a flow interactively and emits a script. Better when you want to explore
+an application by hand, confirm that a multi-step flow is even possible, or
+capture a sequence you cannot describe up front. See
+`.claude/skills/map-codegen-locators/SKILL.md` for mapping its output onto
+`TODO_LOCATOR` stubs.
+
+**Rule of thumb:** probe to resolve locators in bulk and to answer questions
+about the application; codegen to discover a flow interactively.
+
+---
+
 ## ⌨️ CLI Reference
 
 | Command | Description |
@@ -366,6 +426,8 @@ npm run report
 | `npm run compile-bdd` | Transpiles `.feature` files in `data/features/` into JSON scenarios. |
 | `npm run csv2json -- <file.csv>` | Transpiles CSV spreadsheets in `docs/` into JSON scenarios. |
 | `npm run update-locators -- <file.json>` | Auto-populates skeleton element keys into locator JSON files. |
+| `npm run probe-locators -- <config.json>` | Dumps DOM evidence for every candidate element in each state declared by the config, for resolving `TODO_LOCATOR` stubs. See Resolving Locators above. |
+| `npm run test:framework` | Runs the offline framework guard tests in `tests/framework/`. No network; gated unconditionally in CI. |
 
 ---
 

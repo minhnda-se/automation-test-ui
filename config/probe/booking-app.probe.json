@@ -1,0 +1,147 @@
+{
+  "name": "booking-app",
+  "baseUrl": "https://booking-appointment-system-psi.vercel.app/",
+  "output": "report/fix/probe-booking-app.txt",
+  "auth": {
+    "actions": [
+      {
+        "goto": "/auth/register"
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-name\"]",
+          "value": "QA Probe"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-email\"]",
+          "value": "{{RANDOM_EMAIL}}"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-password\"]",
+          "value": "${BOOKING_PASSWORD}"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-phone\"]",
+          "value": "{{RANDOM_PHONE}}"
+        }
+      },
+      {
+        "click": "[data-testid=\"register-submit-button\"]"
+      }
+    ],
+    "waitForSelector": "[data-testid=\"navbar-user-name\"]"
+  },
+  "states": [
+    {
+      "name": "Register page - unauthenticated",
+      "navigate": "/auth/register",
+      "dump": [
+        "input",
+        "button",
+        "[data-testid]"
+      ]
+    },
+    {
+      "name": "Login page - unauthenticated",
+      "navigate": "/auth/login",
+      "dump": [
+        "input",
+        "button",
+        "[data-testid]"
+      ]
+    },
+    {
+      "name": "Doctors list - unauthenticated",
+      "navigate": "/doctors",
+      "dump": [
+        "select",
+        "input",
+        "[data-testid]"
+      ],
+      "structure": true,
+      "capture": [
+        {
+          "name": "url",
+          "value": "url"
+        },
+        {
+          "name": "doctorCardCount",
+          "selector": "[data-testid^=\"doctor-card\"]",
+          "value": "count"
+        }
+      ],
+      "actions": [
+        {
+          "waitForTimeout": 4000
+        }
+      ]
+    },
+    {
+      "name": "Navbar - authenticated (registration signs the account in)",
+      "authenticate": true,
+      "dump": [
+        "[data-testid^=\"navbar\"]"
+      ],
+      "capture": [
+        {
+          "name": "url",
+          "value": "url"
+        },
+        {
+          "name": "userGreeting",
+          "selector": "[data-testid=\"navbar-user-name\"]",
+          "value": "text"
+        },
+        {
+          "name": "loginLinkMatches",
+          "selector": "[data-testid=\"navbar-login-link\"], [data-testid=\"navbar-login-button\"]",
+          "value": "count"
+        },
+        {
+          "name": "homeLinkMatches",
+          "selector": "[data-testid=\"navbar-brand\"], [data-testid=\"navbar-link-home\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Doctors list - authenticated",
+      "navigate": "/doctors",
+      "dump": [
+        "select",
+        "[data-testid]"
+      ],
+      "structure": true,
+      "actions": [
+        {
+          "waitForTimeout": 4000
+        }
+      ]
+    },
+    {
+      "name": "My bookings - authenticated",
+      "navigate": "/bookings/me",
+      "dump": [
+        "[data-testid]"
+      ],
+      "structure": true,
+      "capture": [
+        {
+          "name": "url",
+          "value": "url"
+        }
+      ],
+      "actions": [
+        {
+          "waitForTimeout": 4000
+        }
+      ]
+    }
+  ]
+}

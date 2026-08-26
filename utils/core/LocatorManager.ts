@@ -10,14 +10,13 @@ export class LocatorManager {
   /**
    * Resolve a page/element reference to a selector string.
    *
-   * By default an implicit `>> nth=0` is appended, which suppresses Playwright's
-   * strict-mode ambiguity error. Pass `matchAll` for actions that operate on the
-   * whole matched set rather than on one element - `verify_element_count` is the
-   * only such action today, and the implicit index silently reduced every count
-   * to 1, which made the assertion meaningless. (The blanket suffix itself is
-   * Phase 13's subject; this is the narrow fix for the action it breaks outright.)
+   * Returns the selector exactly as written. Nothing is appended: an ambiguous
+   * selector must reach Playwright ambiguous so strict mode can reject it, which
+   * is the only runtime signal that a locator is bound to the wrong element. A
+   * locator that legitimately targets one of several matches says so itself with
+   * an explicit `>> nth=`.
    */
-  public getLocator(pageName?: string, elementName?: string, matchAll = false): string {
+  public getLocator(pageName?: string, elementName?: string): string {
     if (!pageName || !elementName) return '';
 
     const pageLocators = this.currentLocators[pageName];
@@ -30,9 +29,7 @@ export class LocatorManager {
       throw new Error(`[LocatorManager] Element "${elementName}" not found in Page "${pageName}".`);
     }
 
-    if (matchAll) return locator;
-
-    return locator.includes('nth=') ? locator : `${locator} >> nth=0`;
+    return locator;
   }
 
   public updateRuntimeLocator(pageName: string, elementName: string, newLocator: string): void {

@@ -9,8 +9,8 @@
     "username": "#user-name",
     "password": "#password",
     "loginBtn": "#login-button",
-    "firstProductName": ".inventory_item_name",
-    "firstProductAddBtn": ".btn_inventory",
+    "firstProductName": ".inventory_item_name >> nth=0",
+    "firstProductAddBtn": ".btn_inventory >> nth=0",
     "cartIcon": ".shopping_cart_link"
   },
   "Sauce_Cart": {

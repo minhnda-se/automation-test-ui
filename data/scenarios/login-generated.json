@@ -4,7 +4,7 @@
     "tags": [
       "@saucedemo"
     ],
-    "locatorFile": "locators.json"
+    "locatorFile": "swag-lab.json"
   },
   "scenario": "User login",
   "testCases": [

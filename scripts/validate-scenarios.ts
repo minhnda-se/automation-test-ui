@@ -26,9 +26,7 @@ function loadValidActions(): Set<string> {
     const names: string[] = reference.names || [];
 
     if (!Array.isArray(names) || names.length === 0) {
-      console.error(
-        '[Error] Action reference is empty or malformed. Run: npm run actions:sync'
-      );
+      console.error('[Error] Action reference is empty or malformed. Run: npm run actions:sync');
       process.exit(1);
     }
 
@@ -143,7 +141,9 @@ function validateAll() {
         }
       }
 
-      const locatorFile = isOldFormat ? 'locators.json' : json.config?.locatorFile || 'locators.json';
+      const locatorFile = isOldFormat
+        ? 'locators.json'
+        : json.config?.locatorFile || 'locators.json';
       const locatorPath = path.join(LOCATORS_DIR, locatorFile);
       let locatorsData: any = {};
 
@@ -208,7 +208,7 @@ function validateAll() {
           if (['fill', 'select_option'].includes(step.action)) {
             if (step.data === undefined || step.data === '') {
               console.error(
-                `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "${step.action}" requires non-empty "data" property.`
+                `[${file} -> ${tcId} -> Step ${sIdx + 1}] Action "${step.action}" requires non-empty "data" property.`
               );
               totalErrors++;
             }
@@ -220,10 +220,14 @@ function validateAll() {
             }
           }
 
-          if (['verify_text', 'verify_text_contains', 'verify_not_contains_text'].includes(step.action)) {
+          if (
+            ['verify_text', 'verify_text_contains', 'verify_not_contains_text'].includes(
+              step.action
+            )
+          ) {
             if (step.data === undefined || step.data === '') {
               console.error(
-                `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Assertion "${step.action}" requires non-empty "data" to compare against.`
+                `[${file} -> ${tcId} -> Step ${sIdx + 1}] Assertion "${step.action}" requires non-empty "data" to compare against.`
               );
               totalErrors++;
             }
@@ -331,16 +335,22 @@ function validateAll() {
     for (const [locatorFile, references] of byFile) {
       console.log(`  data/locators/${locatorFile}`);
       for (const reference of references) {
-        console.log(`    - ${reference} (${unresolvedStubs.get(`${locatorFile} -> ${reference}`)} step reference(s))`);
+        console.log(
+          `    - ${reference} (${unresolvedStubs.get(`${locatorFile} -> ${reference}`)} step reference(s))`
+        );
       }
     }
 
     console.log(`\n  Resolve these with: npx playwright codegen <url>`);
-    console.log(`  Then replace each ${TODO_LOCATOR} value in the locator file with the recorded selector.\n`);
+    console.log(
+      `  Then replace each ${TODO_LOCATOR} value in the locator file with the recorded selector.\n`
+    );
   }
 
   if (totalErrors === 0) {
-    console.log(`✅ Validation Passed: Processed ${totalFiles} scenario and flow files with 0 critical errors.`);
+    console.log(
+      `✅ Validation Passed: Processed ${totalFiles} scenario and flow files with 0 critical errors.`
+    );
   } else {
     console.error(`❌ Validation Failed: Found ${totalErrors} errors across ${totalFiles} files.`);
     process.exit(1);

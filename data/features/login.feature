@@ -1,6 +1,8 @@
 # Compiled by: npm run compile-bdd
 # The BDD compiler is FROZEN at six step patterns - see scripts/compile-bdd.ts.
 # Anything those six cannot express belongs in a JSON scenario instead.
+# locatorFile: swag-lab.json
+# tags: @saucedemo
 Feature: User login
 
 Scenario: Successful login with a standard account

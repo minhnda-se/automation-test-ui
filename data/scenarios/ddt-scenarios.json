@@ -9,23 +9,54 @@
   "testCases": [
     {
       "testId": "DDT_01",
-      "testName": "[Swag Labs] Đăng nhập bằng nhiều loại tài khoản",
-      "dataTable": [
+      "testName": "[Swag Labs] Standard account reaches the inventory page",
+      "steps": [
         {
-          "my_user": "standard_user",
-          "my_pass": "secret_sauce"
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
         },
         {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "usernameInput",
+          "data": "standard_user"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "secret_sauce"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/inventory.html"
+        },
+        {
+          "action": "verify_visible",
+          "page": "InventoryPage",
+          "element": "cartIcon"
+        }
+      ]
+    },
+    {
+      "testId": "DDT_02",
+      "testName": "[Swag Labs] Rejected accounts each report their own error",
+      "description": "Rows share one flow because they differ only in credentials and expected copy. The happy path and the empty-field case have different step shapes and are separate test cases.",
+      "dataTable": [
+        {
           "my_user": "locked_out_user",
-          "my_pass": "secret_sauce"
+          "my_pass": "secret_sauce",
+          "expected_error": "Sorry, this user has been locked out"
         },
         {
           "my_user": "invalid_user_123",
-          "my_pass": "wrong_password"
-        },
-        {
-          "my_user": "",
-          "my_pass": ""
+          "my_pass": "wrong_password",
+          "expected_error": "Username and password do not match"
         }
       ],
       "steps": [
@@ -49,6 +80,34 @@
           "action": "click",
           "page": "LoginPage",
           "element": "loginBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "{{expected_error}}"
+        }
+      ]
+    },
+    {
+      "testId": "DDT_03",
+      "testName": "[Swag Labs] Submitting an empty form reports a required username",
+      "description": "No fill steps: the fields must stay untouched for the required-field validation to fire.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Username is required"
         }
       ]
     }

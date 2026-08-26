@@ -59,7 +59,7 @@ Match each `TODO_LOCATOR` stub to a codegen entry using the strongest available 
 
 ## Phase 4: Validate and report
 
-- Confirm the updated `locators.json` is still valid JSON and, if a schema/format check exists for locator files, run it.
+- Run `npm run validate`. It fails while any referenced stub is still `TODO_LOCATOR`, so a clean run is the signal that the mapping is complete. Use `npm run validate:wip` to see what remains without failing, grouped by locator file with a step-reference count for each unresolved element.
 - Report:
   - Stubs resolved vs. still outstanding (and why, if a codegen match wasn't found)
   - Any conversions flagged as lower-confidence (approximated from role/label rather than a literal attribute) that are worth a manual double-check

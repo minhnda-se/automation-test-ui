@@ -4,20 +4,30 @@ paths:
   - "scripts/compile-bdd.ts"
 ---
 
-# BDD / Gherkin
+# BDD / Gherkin - FROZEN
+
+## Status
+
+`scripts/compile-bdd.ts` is frozen at **six step patterns**, against the framework's **40 action keywords**. No `Background`, no `Scenario Outline` / `Examples`, no tags, no preconditions or postconditions, no `dataTable`, no `call_flow`.
+
+It is kept for the existing `.feature` files, not because BDD is a supported first-class input. JSON scenarios in `data/scenarios/` are the primary input and support everything.
 
 ## Source of truth
 
-`scripts/compile-bdd.ts`'s regex mappings are the only valid step phrasing — not any dictionary written into a doc, including this one. A plausible-sounding Gherkin sentence that doesn't match the compiler's regex fails to compile rather than just looking slightly off. Read the actual file before writing or reviewing `.feature` content.
+`scripts/compile-bdd.ts`'s `STEP_MAPPINGS` array is the only valid step phrasing - not any dictionary written into a doc, including this one. A plausible Gherkin sentence that does not match fails the build. The compiler prints the full supported list on failure, so a mismatch is self-explanatory.
 
-## Titles
+See `.claude/skills/write-bdd-feature/SKILL.md` for the six patterns and the decision procedure.
 
-Feature and Scenario titles: concise, business-readable, describe the behavior under test — not the implementation (`Scenario: User cannot log in with an incorrect password`, not `Scenario: Verify passwordError element is visible`).
+## Do not extend it casually
 
-## Coverage gaps
+Adding a step pattern commits the project to keeping a second action dictionary in sync with the handler layer forever, in a place `npm run actions:check` cannot verify. Anything the six patterns cannot express belongs in a JSON scenario. If BDD should become first-class, that is a scoped project - see `docs/claude/CLAUDE_ADOPTION_FEASIBILITY.md`, section C, option 3.
 
-Not every JSON action necessarily has a BDD mapping (API preconditions in particular may not be exposed to BDD at all). Don't force an awkward step to cover something with no mapping — flag it for `.claude/skills/extend-action/SKILL.md` if a mapping should exist, or handle it as a JSON-only precondition instead.
+## Titles and language
 
-## File location
+Feature and Scenario titles: concise, business-readable, describing behaviour rather than implementation. English only, like everything else in this repository.
 
-`.feature` files are assumed to live in `data/features/`, compiled via `scripts/compile-bdd.ts` — confirm this against the actual repo (see `CLAUDE.md` Open Items) before trusting it blindly.
+## Output
+
+`.feature` files live in `data/features/` (confirmed - the directory exists). Compiling writes `data/scenarios/<name>-generated.json`, which the runner picks up alongside hand-written suites. Test ids are deterministic (`BDD_<FEATURE>_<NN>`), so a recompile produces no git diff unless the feature actually changed.
+
+Never hand-edit a `-generated.json` file. Edit the `.feature` and recompile.

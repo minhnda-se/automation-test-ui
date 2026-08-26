@@ -1,6 +1,7 @@
 {
   "scenario": "DemoQA Elements Automation",
   "config": {
+    "tags": ["@demoqa"],
     "locatorFile": "demoqa.json"
   },
   "testCases": [

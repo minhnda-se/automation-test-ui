@@ -22,10 +22,14 @@ docs/                # requirement/spec documents
 npm install
 npx playwright install
 npx playwright test tests/hybrid-json/          # run all
+npm run test:ci                                  # run the @ci smoke set (8 tests; what CI runs)
+npm run test:saucedemo                           # run one target app by tag
 npx playwright test <path-to-scenario-file>      # run one file
 npx playwright test --ui                         # UI mode
 npx playwright show-report                       # HTML report
 npx playwright codegen <url>                     # resolve TODO_LOCATOR stubs
+npm run validate                                 # action reference check + scenario/flow validation
+npm run actions:sync                             # regenerate action reference after a handler change
 ```
 
 ## Core rules (full detail in `.claude/rules/`)
@@ -34,7 +38,9 @@ npx playwright codegen <url>                     # resolve TODO_LOCATOR stubs
 - **Zero icon policy** — no emojis/symbols in code, config, JSON, or terminal output.
 - **Clean Architecture** — `utils/core/` never calls Playwright/HTTP directly; always delegate to `utils/helpers/`.
 - **Locators are centralized** — never hardcode a CSS/XPath selector inside a scenario step; reference via `page`/`element` fields.
-- **Scenario JSON must validate** against `schema/scenario-schema.json` before being considered done.
+- **Scenario JSON must validate** — run `npm run validate` before considering any scenario file done.
+- **Action keywords come from `docs/ACTIONS.md`** — generated from `utils/handlers/*.ts` by `npm run actions:sync`. Never generate an action that is not listed there, and never trust an action table written into a doc or skill.
+- **Atomic Steps & Non-Empty Assertions** — All manual steps must be decomposed into atomic actions; `fill`, `verify_text`, `verify_url_contains` must never have empty `data` (see `.claude/rules/step-decomposition.md` and `.claude/skills/map-manual-tc/`).
 
 ## Naming conventions
 
@@ -45,10 +51,20 @@ npx playwright codegen <url>                     # resolve TODO_LOCATOR stubs
 ## Where to look next
 
 - `.claude/rules/` — topic-specific conventions, some path-scoped (only load when relevant files are touched)
+- `docs/ACTIONS.md` — authoritative action keyword reference (generated, do not edit)
+- `schema/actions.json` — same list, machine-readable; consumed by `scripts/validate-scenarios.ts`
+- `schema/action-notes.json` — hand-maintained field descriptions merged into the generated reference
 - `.claude/skills/` — step-by-step playbooks for test generation, BDD, locator fixes, action extension, codegen mapping
+
+## BDD status
+
+The Gherkin compiler (`scripts/compile-bdd.ts`) is **frozen** at six step patterns out of 40 actions. JSON scenarios are the primary input. Do not extend the compiler without a scoped decision — see `.claude/rules/bdd.md`.
 - `.claude/commands/` — task-specific slash commands (`/plan`, `/implement`, `/test`, etc.)
 
 ## Open items
 
-- `.claude/rules/bdd.md` assumes `.feature` files live in `data/features/` — confirm this against the actual repo before trusting it; the originally documented directory tree didn't show this folder.
-- Auto-Healing (`utils/core/AutoHealer.ts`) can silently pass a test whose locator broke for a real reason. Treat any heal event on a `critical`-tagged test as something to review, not just log.
+- Action keywords exist in three places: the generated reference (authoritative), the `action` enum in `schema/scenario-schema.json`, and the `ActionType` union in `types/scenario.ts`. Only the first is generated, and nothing checks the other two agree. Adding an action means editing all three by hand.
+- `expected_status` is documented on API steps but not asserted — `APIHelper` only checks `response.ok()`. A test that expects a 404 cannot express it yet.
+- Auto-Healing is off by default and no longer writes to `data/locators/` (see `report/fix/phase-1-autohealer.md`). It still cannot distinguish a dead selector from a timing issue from a real behaviour change — treat any entry in `test-results/heal-report.json` as something to investigate, not a fix.
+
+Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`report/fix/phase-9-ci-trustworthy.md`).

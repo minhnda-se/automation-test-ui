@@ -15,10 +15,18 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
+    - name: Validate scenarios and flows
+      run: npm run validate
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
+    - name: Run Playwright tests (@ci tagged suites only)
+      # Deliberately not the full suite, on two counts. `npm test` runs every test
+      # case against four third-party live sites, so it can go red because
+      # somebody else's website was slow - and SauceDemo rate-limits, so the
+      # volume matters as much as the target. @ci is an 8-test smoke set, one per
+      # critical path. Run the rest deliberately: npm run test:saucedemo /
+      # test:demoblaze / test:demoqa / test:booking.
+      run: npm run test:ci
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

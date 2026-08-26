@@ -14,7 +14,7 @@ The framework only works if the JSON is exactly right — a wrong action name, a
 Before reading any requirement doc, load the sources of truth so you're not generating from memory:
 
 1. Read `schema/scenario-schema.json` if it exists — this is the authoritative shape. The structure and examples below (from the framework's own README) are a strong fallback if no schema file is present, but the schema file wins on any conflict.
-2. Read `utils/core/ActionEngine.ts` to get the current, complete action list. The table under "Supported Actions" below is a snapshot from the framework docs — treat it as a strong prior, but ActionEngine.ts is authoritative if it differs (actions get added/removed over time).
+2. Read `docs/ACTIONS.md` — the authoritative action list, generated from `utils/handlers/*.ts` by `npm run actions:sync`. It gives every implemented keyword with its required fields. Do not generate an action that is not in that file, and do not rely on any action table written into a skill or doc: those drift, the generated file cannot. If the file is missing, run `npm run actions:sync` before continuing.
 3. Look inside `data/locators/` and list what's there (e.g. `locators.json`, `advanced-locators.json`). Read whichever file is the closest match for the feature you're working on, since scenario files can each point at a different locator file via `config.locatorFile`.
 4. Look at 1-2 existing files in `data/scenarios/` for the project's actual conventions (testId prefixes, how `page`/`element` names are cased, whether preconditions/postconditions are used) — real examples in the codebase beat the generic template below.
 5. Confirm `docs/`, `data/locators/`, and `data/scenarios/` exist relative to repo root. If the layout differs, ask the user instead of guessing paths.
@@ -109,6 +109,8 @@ npx playwright codegen <url>
 
 against each page that has outstanding `TODO_LOCATOR` entries, click through the relevant elements to get Codegen's suggested selectors, and paste them in over the matching `page.element` stub. Because every referenced locator already has an entry (even if unresolved), the locator file itself is the complete checklist — nothing needs to be tracked separately.
 
+While stubs are still outstanding, `npm run validate` fails by design: a scenario referencing an unresolved stub is not runnable. Use `npm run validate:wip` during the locator pass — it downgrades stubs to warnings, prints them grouped by locator file with a reference count, and still enforces every other rule. Tell the user which command applies to the state their work is in; do not tell them a generated suite is done while `npm run validate` is red.
+
 ### Steps, data, and variables
 
 - Use `api_post` / `api_get` / `api_delete` / `api_put` / `api_patch` in `preconditions`/`postconditions` for setup and teardown (seeding a user, cleaning up created records) rather than driving the UI — faster and less flaky.
@@ -122,15 +124,19 @@ against each page that has outstanding `TODO_LOCATOR` entries, click through the
 
 ### Validate before you report success
 
-If `schema/scenario-schema.json` exists, validate the generated file against it (e.g. a small `ajv` or `jsonschema` script) and fix any errors before Phase 4. If no schema file exists, at minimum lint the JSON for validity and cross-check every `action` name against the list you read from `ActionEngine.ts` in Phase 0. A scenario file that doesn't validate is not done, regardless of how complete it looks.
+Run the project's own gate and fix everything it reports before Phase 4:
 
-### Supported Actions (reference — verify against ActionEngine.ts)
+```
+npm run validate
+```
 
-**UI:** `goto`(data) · `click`(page,element) · `right_click`(page,element) · `double_click`(page,element) · `hover`(page,element) · `fill`(page,element,data) · `clear`(page,element) · `press`(page,element,data) · `select_option`(page,element,data) · `check`(page,element) · `uncheck`(page,element) · `switch_new_tab` · `close_tab` · `reload` · `go_back` · `go_forward` · `wait`(data) · `wait_for_element`(page,element) · `scroll_into_view`(page,element) · `store_text`(page,element,variable OR variable,data) · `store_attribute`(page,element,attribute,variable)
+This checks the action reference is current, then validates every scenario and flow file: unknown actions, empty `data` on `fill`/`select_option`/`verify_text*`, missing `element`, missing flow files, and unnamed `store_text`. A scenario file that does not pass `npm run validate` is not done, regardless of how complete it looks.
 
-**Assertions:** `verify_visible` · `verify_hidden` · `verify_enabled` · `verify_disabled` · `verify_checked` · `verify_unchecked` · `verify_text`(data) · `verify_text_contains`(data) · `verify_not_contains_text`(data) · `verify_attribute`(attribute,data) · `verify_class_contains`(data) · `verify_url`(data) · `verify_url_contains`(data) · `verify_title`(data) · `verify_count`(data)
+### Supported Actions
 
-**API:** `api_get`(url) · `api_post`(url,data) · `api_put`(url,data) · `api_patch`(url,data) · `api_delete`(url) — optional: `headers`, `expected_status`, `store_response`
+The complete, current action list with required fields lives in **`docs/ACTIONS.md`**. Read it in Phase 0 and generate only from it.
+
+It is produced from the handler layer by `npm run actions:sync`, and `npm run validate` fails if it is stale — so it cannot silently disagree with the engine. No action table is duplicated into this skill on purpose: the previous hand-maintained copy listed sixteen keywords the framework does not implement.
 
 ### Worked example
 
@@ -182,5 +188,5 @@ Generate `report-[feature-name].md` containing:
 - Never fabricate a `page`/`element` selector. Use `TODO_LOCATOR` and flag it instead of guessing.
 - Never overwrite an existing locator entry or test case without surfacing the conflict to the user first.
 - Never hardcode real credentials or personal data — always use the dynamic data tokens.
-- Never invent an `action` name that isn't confirmed in `ActionEngine.ts` or the reference table above.
+- Never invent an `action` name that isn't in `docs/ACTIONS.md`.
 - Never skip Phase 2's pause, even if the requirement doc looks unambiguous — the user may know context (edge cases, error copy, which locator file to use) that isn't in the doc.

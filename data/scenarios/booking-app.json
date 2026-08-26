@@ -1,0 +1,1196 @@
+{
+  "config": {
+    "tags": ["@booking"],
+    "locatorFile": "booking-app.json"
+  },
+  "scenario": "Compiled from booking-app.csv",
+  "testCases": [
+    {
+      "testId": "TC_REG_01",
+      "testName": "Hiển thị Form Đăng ký và Header",
+      "description": "Kiểm tra giao diện trang đăng ký và các trường nhập liệu theo AC1 và AC2",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "logo"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "homeLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "doctorsLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "searchLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "loginLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "registerLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "nameInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "emailInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "passwordInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "phoneInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "loginLink"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_REG_02",
+      "testName": "Kiểm tra Validation Form Đăng ký",
+      "description": "Kiểm tra các trường bắt buộc và định dạng nhập liệu theo AC3",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Nguyen Test"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "invalid-email-format"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "123"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_REG_03",
+      "testName": "Đăng ký tài khoản thành công",
+      "description": "Kiểm tra luồng đăng ký tài khoản mới với dữ liệu hợp lệ theo AC4",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "QA Tester Auto"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "3000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "userGreeting"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "logoutBtn"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_REG_04",
+      "testName": "Từ chối Đăng ký Email Trùng lặp",
+      "description": "Kiểm tra hệ thống báo lỗi khi đăng ký với email đã tồn tại theo AC5",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Initial Duplicate Tester"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}",
+          "variable": "REG_EMAIL",
+          "storeAs": "REG_EMAIL"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "3000"
+        },
+        {
+          "action": "click",
+          "page": "Navbar",
+          "element": "logoutBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Duplicate User Second Attempt"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{REG_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "registerError"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_REG_05",
+      "testName": "Chuyển hướng từ Đăng ký sang Đăng nhập",
+      "description": "Kiểm tra liên kết Đã có tài khoản chuyển hướng sang trang đăng nhập theo AC6",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "loginLink"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_AUTH_01",
+      "testName": "Hiển thị Form Đăng nhập và Header",
+      "description": "Kiểm tra giao diện trang đăng nhập và các trường nhập liệu theo AC1 và AC2",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "logo"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "homeLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "doctorsLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "emailInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "passwordInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "registerLink"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_AUTH_02",
+      "testName": "Kiểm tra Validation Form Đăng nhập",
+      "description": "Kiểm tra khi để trống email hoặc mật khẩu theo AC5",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_AUTH_03",
+      "testName": "Đăng nhập thất bại với Thông tin không hợp lệ",
+      "description": "Kiểm tra thông báo lỗi khi đăng nhập sai tài khoản hoặc mật khẩu theo AC4",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "emailInput",
+          "data": "invalid_user_{{RANDOM_NUMBER}}@test.com"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "WrongPassword123!"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1500"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "loginError"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_AUTH_04",
+      "testName": "Đăng nhập thành công và Duy trì phiên",
+      "description": "Kiểm tra luồng đăng nhập thành công chuyển hướng về trang chủ và tạo phiên làm việc theo AC3",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Nguyen Login User"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}",
+          "variable": "AUTH_EMAIL",
+          "storeAs": "AUTH_EMAIL"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "3000"
+        },
+        {
+          "action": "click",
+          "page": "Navbar",
+          "element": "logoutBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "emailInput",
+          "data": "{{AUTH_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "wait",
+          "data": "3000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "userGreeting"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "myBookingsLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "logoutBtn"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_AUTH_05",
+      "testName": "Chuyển hướng từ Đăng nhập sang Đăng ký",
+      "description": "Kiểm tra liên kết Chưa có tài khoản chuyển hướng sang trang đăng ký theo AC6",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "registerLink"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_DOC_01",
+      "testName": "Hiển thị Danh sách Bác sĩ với Thông tin Chi tiết",
+      "description": "Kiểm tra danh sách bác sĩ hiển thị chuyên khoa kinh nghiệm đánh giá và giá khám theo AC1",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors",
+          "url": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/doctors"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "specialtyFilter"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "cityFilter"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "sortSelect"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "doctorCard"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_DOC_02",
+      "testName": "Lọc Danh sách Bác sĩ theo Chuyên khoa",
+      "description": "Kiểm tra chức năng lọc bác sĩ theo chuyên khoa và xóa bộ lọc theo AC2",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors",
+          "url": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "select_option",
+          "page": "DoctorsPage",
+          "element": "specialtyFilter",
+          "data": "00000000-0000-4000-8000-000000000004"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "doctorCard"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "resetFilterBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "doctorCard"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_DOC_03",
+      "testName": "Sắp xếp Danh sách Bác sĩ theo Đánh giá và Phí khám",
+      "description": "Kiểm tra sắp xếp theo đánh giá cao và phí khám thấp đến cao theo AC2",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors",
+          "url": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "select_option",
+          "page": "DoctorsPage",
+          "element": "sortSelect",
+          "data": "rating"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "doctorCard"
+        },
+        {
+          "action": "select_option",
+          "page": "DoctorsPage",
+          "element": "sortSelect",
+          "data": "fee"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "doctorCard"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_DOC_04",
+      "testName": "Xem Trang Chi tiết Bác sĩ và Khung giờ Khám",
+      "description": "Kiểm tra điều hướng tới trang chi tiết bác sĩ hiển thị đầy đủ thông tin theo AC3",
+      "preconditions": [],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors",
+          "url": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/doctors/"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "doctorName"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "specialtyBadge"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "experienceText"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "feeText"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "bookNowBtn"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_BOOK_01",
+      "testName": "Đặt lịch khám bệnh thành công",
+      "description": "Kiểm tra quy trình đặt lịch khám với bác sĩ chọn ngày giờ và xuất hiện trong Lịch của tôi theo US3 AC4",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Patient Book User"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/new",
+          "url": "https://booking-appointment-system-psi.vercel.app/bookings/new"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "select_option",
+          "page": "BookingNewPage",
+          "element": "doctorSelect",
+          "data": "00000000-0000-4000-8000-00000000013b"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "calendarDateButton"
+        },
+        {
+          "action": "wait",
+          "data": "500"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "slotButton"
+        },
+        {
+          "action": "wait",
+          "data": "500"
+        },
+        {
+          "action": "fill",
+          "page": "BookingNewPage",
+          "element": "notesInput",
+          "data": "Hen kham suc khoe tong quat"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBookingBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/bookings"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_BOOK_02",
+      "testName": "Xử lý Xung đột và Đặt trùng khung giờ khám",
+      "description": "Kiểm tra hệ thống ngăn chặn đặt trùng khung giờ đã có người đặt theo US3 AC5",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Patient Conflict User"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/new",
+          "url": "https://booking-appointment-system-psi.vercel.app/bookings/new"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "select_option",
+          "page": "BookingNewPage",
+          "element": "doctorSelect",
+          "data": "00000000-0000-4000-8000-00000000013b"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "calendarDateButton"
+        },
+        {
+          "action": "wait",
+          "data": "500"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "slotButton"
+        },
+        {
+          "action": "wait",
+          "data": "500"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBookingBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1500"
+        },
+        {
+          "action": "verify_visible",
+          "page": "BookingNewPage",
+          "element": "bookingError"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_QUOTA_01",
+      "testName": "Giới hạn Quota Đặt lịch Tối đa 3 Lịch hẹn mỗi Ngày",
+      "description": "Kiểm tra hệ thống từ chối đặt lịch khi vượt quá giới hạn theo US4 AC1 đến AC4",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Patient Quota User"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/new",
+          "url": "https://booking-appointment-system-psi.vercel.app/bookings/new"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "select_option",
+          "page": "BookingNewPage",
+          "element": "doctorSelect",
+          "data": "00000000-0000-4000-8000-00000000013b"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "calendarDateButton"
+        },
+        {
+          "action": "wait",
+          "data": "500"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "slotButton"
+        },
+        {
+          "action": "wait",
+          "data": "500"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBookingBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1500"
+        },
+        {
+          "action": "verify_visible",
+          "page": "BookingNewPage",
+          "element": "bookingError"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_CANCEL_01",
+      "testName": "Hủy lịch hẹn thành công với Xác nhận Modal",
+      "description": "Kiểm tra hủy lịch khám hợp lệ cập nhật trạng thái theo US5 AC1 AC3 và AC4",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Patient Cancel User"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me",
+          "url": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "cancelBookingBtn"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/bookings/me"
+        }
+      ],
+      "postconditions": []
+    },
+    {
+      "testId": "TC_CANCEL_02",
+      "testName": "Quy tắc Thời gian Hủy lịch Trước 1 Giờ",
+      "description": "Kiểm tra quy định thời gian bắt đầu khám theo US5 AC2 và AC5",
+      "preconditions": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register",
+          "url": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "Patient TimeRule User"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{RANDOM_EMAIL}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Password123!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait",
+          "data": "2000"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me",
+          "url": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait",
+          "data": "1000"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ],
+      "postconditions": []
+    }
+  ]
+}

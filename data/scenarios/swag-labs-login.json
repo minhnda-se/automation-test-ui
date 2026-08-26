@@ -1,5 +1,8 @@
 {
   "config": {
+    "tags": [
+      "@saucedemo"
+    ],
     "locatorFile": "swag-lab.json"
   },
   "scenario": "Compiled from swag-labs-login.csv",
@@ -32,11 +35,23 @@
           "page": "LoginPage",
           "element": "loginBtn"
         },
-        { "action": "verify_visible", "page": "InventoryPage", "element": "cartIcon" }
+        {
+          "action": "verify_visible",
+          "page": "InventoryPage",
+          "element": "cartIcon"
+        }
       ],
       "postconditions": [
-        { "action": "click", "page": "InventoryPage", "element": "menuBtn" },
-        { "action": "click", "page": "InventoryPage", "element": "logoutLink" }
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "menuBtn"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "logoutLink"
+        }
       ]
     },
     {

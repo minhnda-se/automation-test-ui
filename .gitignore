@@ -6,6 +6,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.pnpm-store/
+.npm/
 
 # =========================================================
 # Playwright
@@ -15,13 +17,22 @@ test-results/
 blob-report/
 playwright/.cache/
 playwright/.auth/
+.auth/
+pw-results*.json
 
-# Screenshots & Videos (generated during execution)
-test-results/**/*.png
-test-results/**/*.jpg
-test-results/**/*.jpeg
-test-results/**/*.webm
-test-results/**/*.zip
+# Allure
+allure-results/
+allure-report/
+
+# =========================================================
+# Generated reports, plans and documentation
+# =========================================================
+report/
+plan/
+
+# docs/: ignore everything except CSV source inputs consumed by scripts/csv-to-json.ts
+docs/*
+!docs/*.csv
 
 # =========================================================
 # Coverage
@@ -79,34 +90,18 @@ Thumbs.db
 Desktop.ini
 
 # =========================================================
-# Temporary Files
+# Temporary / scratch
 # =========================================================
 tmp/
 temp/
 .cache/
-
-# =========================================================
-# Auto-generated JSON (optional)
-# Uncomment if your compiler generates temporary scenarios
-# =========================================================
-# data/generated/
-
-# =========================================================
-# AI Cache (optional)
-# Uncomment if Auto-Healing caches responses
-# =========================================================
-# .ai-cache/
-
-# =========================================================
-# Package Manager
-# =========================================================
-.pnpm-store/
-.npm/
-
-# =========================================================
-# Miscellaneous
-# =========================================================
+_to_delete/
+scripts/tmp-*.ts
 *.bak
 *.tmp
 *.swp
 *.swo
+
+# Archives
+*.tar.gz
+*.zip

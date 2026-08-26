@@ -1,46 +1,10 @@
 {
   "LoginPage": {
-    "usernameInput": "",
-    "passwordInput": "",
-    "loginBtn": "",
-    "errorMessage": ""
+    "usernameInput": "#user-name",
+    "passwordInput": "#password",
+    "loginBtn": "#login-button"
   },
   "InventoryPage": {
-    "cartIcon": "",
-    "backpackAddBtn": "",
-    "cartBadge": "",
-    "backpackRemoveBtn": "",
-    "bikeLightAddBtn": "",
-    "menuBtn": "",
-    "logoutLink": "",
-    "appLogo": "",
-    "addBackpackBtn": "",
-    "shoppingCartIcon": ""
-  },
-  "CartPage": {
-    "cartItemName": "",
-    "continueShoppingBtn": "",
-    "checkoutBtn": ""
-  },
-  "CheckoutPage": {
-    "firstNameInput": "",
-    "lastNameInput": "",
-    "postalCodeInput": "",
-    "continueBtn": "",
-    "errorMessage": "",
-    "cancelBtn": ""
-  },
-  "OverviewPage": {
-    "title": "",
-    "cancelBtn": "",
-    "finishBtn": ""
-  },
-  "CompletePage": {
-    "completeHeader": "",
-    "backHomeBtn": ""
-  },
-  "Menu": {
-    "burgerMenuBtn": "",
-    "logoutBtn": ""
+    "cartIcon": ".shopping_cart_link"
   }
 }

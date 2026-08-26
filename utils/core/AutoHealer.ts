@@ -3,14 +3,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 
-// Load environment variables from .env file
 dotenv.config();
 
 export class AutoHealer {
   private page: Page;
   private locatorsFilePath: string;
 
-  constructor(page: Page, locatorFileName: string) {
+  constructor(page: Page, locatorFileName: string = 'locators.json') {
     this.page = page;
     this.locatorsFilePath = path.join(__dirname, '../../data/locators', locatorFileName);
   }
@@ -20,7 +19,7 @@ export class AutoHealer {
     elementName: string,
     oldLocator: string
   ): Promise<string> {
-    console.log(`[AutoHealer] Attempting to heal locator: ${elementName} on ${pageName}`);
+    console.log(`[AutoHealer] Attempting to heal locator: "${elementName}" on page "${pageName}"`);
 
     const domSnapshot = await this.page.evaluate(() => {
       const bodyHtml = document.body.innerHTML;
@@ -34,7 +33,7 @@ export class AutoHealer {
     const newLocator = await this.requestAIForLocator(elementName, oldLocator, domSnapshot);
 
     if (newLocator) {
-      this.updateLocatorFile(pageName, elementName, newLocator);
+      this.recordHealProposal(pageName, elementName, oldLocator, newLocator);
       console.log(`[AutoHealer] Successfully healed. New locator generated: ${newLocator}`);
       return newLocator;
     }
@@ -50,7 +49,8 @@ export class AutoHealer {
     const apiKey = process.env.OPENAI_API_KEY;
 
     if (!apiKey) {
-      throw new Error(`[AutoHealer Error]: OPENAI_API_KEY is not defined in the .env file.`);
+      console.warn(`[AutoHealer Warning]: OPENAI_API_KEY is not defined in .env. Skipping auto-healing.`);
+      return null;
     }
 
     const systemPrompt = `You are a QA Automation expert. The Playwright locator '${oldLocator}' for the element '${elementName}' has failed. 
@@ -79,28 +79,65 @@ Return ONLY the raw string of the new CSS selector. Do not include markdown form
 
       if (!response.ok) {
         const errorBody = await response.text();
-        throw new Error(`OpenAI API failed with status ${response.status}: ${errorBody}`);
+        console.error(`[AutoHealer Error] OpenAI API returned ${response.status}: ${errorBody}`);
+        return null;
       }
 
-      const data = await response.json();
-      const newLocator = data.choices[0].message.content.trim();
+      const data = (await response.json()) as any;
+      const newLocator = data?.choices?.[0]?.message?.content?.trim();
 
-      return newLocator;
+      return newLocator || null;
     } catch (error) {
-      console.error(`[AutoHealer] Error communicating with AI service:`, error);
+      console.error(`[AutoHealer Error] Failed communicating with AI service:`, error);
       return null;
     }
   }
 
-  private updateLocatorFile(pageName: string, elementName: string, newLocator: string): void {
-    const fileContent = fs.readFileSync(this.locatorsFilePath, 'utf-8');
-    const locators = JSON.parse(fileContent);
+  /**
+   * Records a heal proposal as a run artifact.
+   * The locator source files under data/locators are never mutated during a run:
+   * a heal is a proposal for review, not a committed change.
+   */
+  private recordHealProposal(
+    pageName: string,
+    elementName: string,
+    oldLocator: string,
+    newLocator: string
+  ): void {
+    try {
+      const reportDir = path.join(__dirname, '../../test-results');
+      const reportPath = path.join(reportDir, 'heal-report.json');
 
-    if (!locators[pageName]) {
-      locators[pageName] = {};
+      if (!fs.existsSync(reportDir)) {
+        fs.mkdirSync(reportDir, { recursive: true });
+      }
+
+      let entries: any[] = [];
+      if (fs.existsSync(reportPath)) {
+        try {
+          entries = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+          if (!Array.isArray(entries)) entries = [];
+        } catch {
+          entries = [];
+        }
+      }
+
+      entries.push({
+        timestamp: new Date().toISOString(),
+        locatorFile: path.basename(this.locatorsFilePath),
+        page: pageName,
+        element: elementName,
+        oldLocator,
+        proposedLocator: newLocator,
+        applied: 'runtime-only',
+      });
+
+      fs.writeFileSync(reportPath, JSON.stringify(entries, null, 2));
+      console.warn(
+        `[AutoHealer] Heal proposal recorded in test-results/heal-report.json for "${pageName}.${elementName}". Source locator file was NOT modified.`
+      );
+    } catch (error) {
+      console.error('[AutoHealer Error] Could not write heal report:', error);
     }
-
-    locators[pageName][elementName] = newLocator;
-    fs.writeFileSync(this.locatorsFilePath, JSON.stringify(locators, null, 2));
   }
 }

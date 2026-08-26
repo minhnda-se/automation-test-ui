@@ -1,6 +1,7 @@
 {
   "scenario": "Demoblaze E2E Test Scenarios",
   "config": {
+    "tags": ["@demoblaze"],
     "locatorFile": "demoblaze.json"
   },
   "testCases": [

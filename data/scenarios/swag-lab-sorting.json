@@ -1,0 +1,603 @@
+{
+  "$schema": "../../schema/scenario-schema.json",
+  "config": {
+    "locatorFile": "swag-lab.json",
+    "tags": [
+      "@saucedemo"
+    ]
+  },
+  "scenario": "Swag Labs Product Sorting and Product Detail",
+  "testCases": [
+    {
+      "testId": "TC_SORT_01",
+      "testName": "[Sort] Product list defaults to Name (A to Z)",
+      "description": "AC-1.1, AC-1.5, AC-1.6 - default order on arrival, six products, control reflects the active option.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "verify_url_contains",
+          "data": "inventory.html"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Name (A to Z)"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "InventoryPage",
+          "element": "inventoryItem",
+          "data": 6
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Sauce Labs Backpack"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "lastItemName",
+          "data": "Test.allTheThings() T-Shirt (Red)"
+        }
+      ],
+      "tags": [
+        "@ci"
+      ]
+    },
+    {
+      "testId": "TC_SORT_02",
+      "testName": "[Sort] Name (Z to A) reverses the alphabetical order",
+      "description": "AC-1.2, AC-1.5, AC-1.6.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "select_option",
+          "page": "InventoryPage",
+          "element": "sortDropdown",
+          "data": "Name (Z to A)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Name (Z to A)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Test.allTheThings() T-Shirt (Red)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "lastItemName",
+          "data": "Sauce Labs Backpack"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "InventoryPage",
+          "element": "inventoryItem",
+          "data": 6
+        }
+      ]
+    },
+    {
+      "testId": "TC_SORT_03",
+      "testName": "[Sort] Price (low to high) puts the cheapest product first",
+      "description": "AC-1.3, AC-1.5, AC-1.6.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "select_option",
+          "page": "InventoryPage",
+          "element": "sortDropdown",
+          "data": "Price (low to high)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Price (low to high)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Sauce Labs Onesie"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemPrice",
+          "data": "$7.99"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "lastItemPrice",
+          "data": "$49.99"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "InventoryPage",
+          "element": "inventoryItem",
+          "data": 6
+        }
+      ]
+    },
+    {
+      "testId": "TC_SORT_04",
+      "testName": "[Sort] Price (high to low) puts the most expensive product first",
+      "description": "AC-1.4, AC-1.5, AC-1.6.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "select_option",
+          "page": "InventoryPage",
+          "element": "sortDropdown",
+          "data": "Price (high to low)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Price (high to low)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Sauce Labs Fleece Jacket"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemPrice",
+          "data": "$49.99"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "lastItemPrice",
+          "data": "$7.99"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "InventoryPage",
+          "element": "inventoryItem",
+          "data": 6
+        }
+      ]
+    },
+    {
+      "testId": "TC_SORT_05",
+      "testName": "[Sort] Sort order is NOT retained after a product detail visit (deviation from AC-3.1)",
+      "description": "Documents observed behaviour, which contradicts AC-3.1. The requirement asks for the sort to persist; the build resets it to the Name (A to Z) default on returning from a product detail page. Confirmed by DOM probe on 2026-08-26. See the Known deviations section of docs/REQ_product-sorting-and-detail.md. Change this test only if the application changes.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "select_option",
+          "page": "InventoryPage",
+          "element": "sortDropdown",
+          "data": "Price (high to low)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Sauce Labs Fleece Jacket"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "inventory-item.html"
+        },
+        {
+          "action": "click",
+          "page": "ProductDetailPage",
+          "element": "backToProductsBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "inventory.html"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Name (A to Z)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Sauce Labs Backpack"
+        }
+      ]
+    },
+    {
+      "testId": "TC_SORT_06",
+      "testName": "[Sort] Sort order resets to the default after signing out and back in",
+      "description": "AC-3.2 - a sort choice belongs to a browsing session, not to the account.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "select_option",
+          "page": "InventoryPage",
+          "element": "sortDropdown",
+          "data": "Price (high to low)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Price (high to low)"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "menuBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "logoutLink"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "logoutLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        },
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        },
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "sortDropdown"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "activeSortOption",
+          "data": "Name (A to Z)"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "data": "Sauce Labs Backpack"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PDP_01",
+      "testName": "[Detail] Opening a product shows its name, description and price",
+      "description": "AC-2.1, AC-2.2 - the name and price shown on the list are carried into the detail page and compared as runtime variables.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "store_text",
+          "page": "InventoryPage",
+          "element": "firstItemName",
+          "variable": "LIST_ITEM_NAME"
+        },
+        {
+          "action": "store_text",
+          "page": "InventoryPage",
+          "element": "firstItemPrice",
+          "variable": "LIST_ITEM_PRICE"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "inventory-item.html"
+        },
+        {
+          "action": "verify_text",
+          "page": "ProductDetailPage",
+          "element": "productName",
+          "data": "{{LIST_ITEM_NAME}}"
+        },
+        {
+          "action": "verify_text",
+          "page": "ProductDetailPage",
+          "element": "productPrice",
+          "data": "{{LIST_ITEM_PRICE}}"
+        },
+        {
+          "action": "verify_visible",
+          "page": "ProductDetailPage",
+          "element": "productDescription"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PDP_02",
+      "testName": "[Detail] Add to cart from the detail page updates the header count",
+      "description": "AC-2.3 - the control becomes Remove and the header count increments.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "inventory-item.html"
+        },
+        {
+          "action": "click",
+          "page": "ProductDetailPage",
+          "element": "addToCartBtn"
+        },
+        {
+          "action": "verify_text",
+          "page": "ProductDetailPage",
+          "element": "cartBadge",
+          "data": "1"
+        },
+        {
+          "action": "verify_visible",
+          "page": "ProductDetailPage",
+          "element": "removeBtn"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "ProductDetailPage",
+          "element": "addToCartBtn"
+        }
+      ],
+      "tags": [
+        "@ci"
+      ]
+    },
+    {
+      "testId": "TC_PDP_03",
+      "testName": "[Detail] Remove on the detail page clears the header count entirely",
+      "description": "AC-2.4 - an emptied cart shows no count at all, not a zero.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "click",
+          "page": "ProductDetailPage",
+          "element": "addToCartBtn"
+        },
+        {
+          "action": "verify_text",
+          "page": "ProductDetailPage",
+          "element": "cartBadge",
+          "data": "1"
+        },
+        {
+          "action": "click",
+          "page": "ProductDetailPage",
+          "element": "removeBtn"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "ProductDetailPage",
+          "element": "cartBadge"
+        },
+        {
+          "action": "verify_visible",
+          "page": "ProductDetailPage",
+          "element": "addToCartBtn"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PDP_04",
+      "testName": "[Detail] Back to products returns to the list with the cart intact",
+      "description": "AC-2.5, AC-2.6 - navigation back does not disturb what was added.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "common-login",
+          "params": {
+            "username": "standard_user",
+            "password": "secret_sauce"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "wait_for_element",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "click",
+          "page": "InventoryPage",
+          "element": "firstItemName"
+        },
+        {
+          "action": "click",
+          "page": "ProductDetailPage",
+          "element": "addToCartBtn"
+        },
+        {
+          "action": "verify_text",
+          "page": "ProductDetailPage",
+          "element": "cartBadge",
+          "data": "1"
+        },
+        {
+          "action": "click",
+          "page": "ProductDetailPage",
+          "element": "backToProductsBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "inventory.html"
+        },
+        {
+          "action": "verify_text",
+          "page": "InventoryPage",
+          "element": "cartBadge",
+          "data": "1"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "InventoryPage",
+          "element": "inventoryItem",
+          "data": 6
+        }
+      ]
+    }
+  ]
+}

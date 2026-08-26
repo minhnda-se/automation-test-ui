@@ -40,6 +40,40 @@ export class APIHelper {
     return responseBody;
   }
 
+  async put(url: string, data: any, headers?: any) {
+    const response = await this.request.put(url, { data, headers });
+    const responseBody = await response.json().catch(() => ({}));
+
+    await this.testInfo.attach(`[API PUT] ${url}`, {
+      body: JSON.stringify(
+        { requestBody: data, status: response.status(), response: responseBody },
+        null,
+        2
+      ),
+      contentType: 'application/json',
+    });
+
+    if (!response.ok()) throw new Error(`API PUT failed with status code ${response.status()}`);
+    return responseBody;
+  }
+
+  async patch(url: string, data: any, headers?: any) {
+    const response = await this.request.patch(url, { data, headers });
+    const responseBody = await response.json().catch(() => ({}));
+
+    await this.testInfo.attach(`[API PATCH] ${url}`, {
+      body: JSON.stringify(
+        { requestBody: data, status: response.status(), response: responseBody },
+        null,
+        2
+      ),
+      contentType: 'application/json',
+    });
+
+    if (!response.ok()) throw new Error(`API PATCH failed with status code ${response.status()}`);
+    return responseBody;
+  }
+
   async delete(url: string, headers?: any) {
     const response = await this.request.delete(url, { headers });
 

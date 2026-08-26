@@ -14,14 +14,19 @@ const csvFilePath = path.join(__dirname, '../docs', csvFileName);
 const jsonFileName = csvFileName.replace('.csv', '.json');
 const jsonFilePath = path.join(__dirname, '../data/scenarios', jsonFileName);
 
-// Trình phân tích CSV chịu lỗi (xử lý dấu phẩy trong ngoặc kép)
+// Trình phân tích CSV chuẩn RFC 4180 (xử lý dấu phẩy và escaped quotes "" trong ngoặc kép)
 function parseCSVRow(str: string): string[] {
   const result: string[] = [];
   let cur = '';
   let inQuote = false;
   for (let i = 0; i < str.length; i++) {
     if (str[i] === '"') {
-      inQuote = !inQuote;
+      if (inQuote && str[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuote = !inQuote;
+      }
     } else if (str[i] === ',' && !inQuote) {
       result.push(cur.trim());
       cur = '';
@@ -92,6 +97,18 @@ function compileCSVtoJSON() {
     if (rowData['page']) actionObj.page = rowData['page'];
     if (rowData['element']) actionObj.element = rowData['element'];
     if (rowData['data']) actionObj.data = rowData['data'];
+    if (rowData['url']) actionObj.url = rowData['url'];
+    if (rowData['variable']) actionObj.variable = rowData['variable'];
+    if (rowData['storeas'] || rowData['variable']) actionObj.storeAs = rowData['storeas'] || rowData['variable'];
+    if (rowData['timeout']) actionObj.timeout = Number(rowData['timeout']);
+    if (rowData['status']) actionObj.status = Number(rowData['status']);
+    if (rowData['mockdata']) {
+      try {
+        actionObj.mockData = JSON.parse(rowData['mockdata']);
+      } catch {
+        actionObj.mockData = rowData['mockdata'];
+      }
+    }
 
     // Phân phối vào đúng mảng dựa trên cột Phase
     const phase = rowData['phase']?.toLowerCase();

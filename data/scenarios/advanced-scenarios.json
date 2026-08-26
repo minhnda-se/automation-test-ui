@@ -6,6 +6,7 @@
   "testCases": [
     {
       "testId": "ADV_01",
+      "tags": ["@demoblaze"],
       "testName": "[Dynamic Data] Đăng ký tài khoản với Dữ liệu ngẫu nhiên",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
@@ -29,6 +30,7 @@
     },
     {
       "testId": "ADV_02",
+      "tags": ["@saucedemo"],
       "testName": "[State Sharing] Lấy tên sản phẩm ở Trang chủ và Verify ở Giỏ hàng",
       "steps": [
         { "action": "goto", "data": "https://www.saucedemo.com/" },

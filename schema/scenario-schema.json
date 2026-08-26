@@ -1,27 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Playwright Hybrid Framework Schema",
-  "description": "Cấu trúc chuẩn cho các kịch bản kiểm thử của Keyword-Driven Framework",
+  "description": "Scenario file structure for the Playwright Hybrid Keyword-Driven Framework.",
   "type": "object",
   "required": ["scenario", "testCases"],
   "properties": {
     "config": {
       "type": "object",
-      "description": "Cấu hình riêng cho file kịch bản này",
+      "description": "Configuration that applies to this scenario file only.",
       "properties": {
         "locatorFile": {
           "type": "string",
-          "description": "Tên file JSON chứa định nghĩa Locator (VD: locators.json)"
+          "description": "Locator file in data/locators/ used by this suite (e.g. swag-lab.json)."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tags applied to every test case in this suite (e.g. [\"@saucedemo\", \"@ci\"]). Each tag is appended to the generated test title, so Playwright's --grep can select it.",
+          "items": { "type": "string", "pattern": "^@[a-z0-9][a-z0-9._-]*$" }
+        },
+        "enableAutoHealing": {
+          "type": "boolean",
+          "description": "Opt this suite into optional runtime locator healing. Default false. Requires OPENAI_API_KEY; skipped with a warning if unset. A heal applies to the current run only and is recorded in test-results/heal-report.json - locator files are never modified during a run."
+        },
+        "storageState": {
+          "type": "string",
+          "description": "Path to a saved authenticated session/storage state file (e.g. .auth/user.json)."
         }
       }
     },
     "scenario": {
       "type": "string",
-      "description": "Tên của Test Suite (Sẽ hiển thị trên Report)"
+      "description": "Test suite name, shown in the report."
     },
     "testCases": {
       "type": "array",
-      "description": "Danh sách các Test Cases trong Suite này",
+      "description": "Test cases in this suite.",
       "items": {
         "$ref": "#/definitions/TestCase"
       }
@@ -34,34 +47,39 @@
       "properties": {
         "testId": {
           "type": "string",
-          "description": "Mã định danh của Test Case (VD: TC_01)"
+          "description": "Test case identifier, format TC_[FEATURE]_[NN] (e.g. TC_LOGIN_01)."
         },
         "testName": {
           "type": "string",
-          "description": "Tiêu đề của Test Case"
+          "description": "Test case title."
         },
         "description": {
           "type": "string",
-          "description": "Mô tả chi tiết mục đích của Test Case (Dành cho Document)"
+          "description": "Optional longer description of what this test case verifies."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tags for this test case only, merged with the suite-level config.tags and appended to the generated test title.",
+          "items": { "type": "string", "pattern": "^@[a-z0-9][a-z0-9._-]*$" }
         },
         "dataTable": {
           "type": "array",
-          "description": "Mảng dữ liệu cho Data-Driven Testing. Mỗi Object là 1 vòng lặp sinh ra 1 Test Case con.",
+          "description": "Data-driven rows. Each object produces one generated test case; reference row keys as {{key}} in steps.",
           "items": { "type": "object" }
         },
         "preconditions": {
           "type": "array",
-          "description": "Các bước chuẩn bị (Setup) trước khi chạy kịch bản chính",
+          "description": "Setup steps, executed before the main flow.",
           "items": { "$ref": "#/definitions/Step" }
         },
         "steps": {
           "type": "array",
-          "description": "Luồng các bước thực thi (Main Flow)",
+          "description": "Main execution flow.",
           "items": { "$ref": "#/definitions/Step" }
         },
         "postconditions": {
           "type": "array",
-          "description": "Các bước dọn dẹp (Teardown) sau khi chạy xong, luôn được thực thi kể cả khi Fail",
+          "description": "Teardown steps, always executed even when the test fails.",
           "items": { "$ref": "#/definitions/Step" }
         }
       }
@@ -72,64 +90,139 @@
       "properties": {
         "action": {
           "type": "string",
-          "description": "Hành động cần thực hiện",
+          "description": "Action keyword. Full catalog with required fields: docs/ACTIONS.md.",
           "enum": [
             "goto",
             "click",
             "right_click",
             "left_click",
             "double_click",
+            "hover",
             "fill",
+            "press_key",
+            "select_option",
+            "check",
+            "uncheck",
+            "upload_file",
+            "scroll_to",
+            "wait",
+            "wait_for_element",
             "switch_new_tab",
             "store_text",
+            "save_storage_state",
+            "call_flow",
+            "mock_route",
+            "unmock_route",
             "verify_visible",
+            "verify_not_visible",
+            "verify_enabled",
+            "verify_disabled",
+            "verify_checked",
             "verify_text",
             "verify_text_contains",
             "verify_not_contains_text",
             "verify_class_contains",
             "verify_not_contains_class",
             "verify_url_contains",
+            "verify_attribute",
+            "verify_element_count",
+            "verify_visual_snapshot",
             "api_post",
+            "api_put",
+            "api_patch",
             "api_get",
             "api_delete"
           ]
         },
         "page": {
           "type": "string",
-          "description": "Tên Page khai báo trong file locators.json (VD: LoginPage)"
+          "description": "Page key in the locator file, PascalCase (e.g. LoginPage)."
         },
         "element": {
           "type": "string",
-          "description": "Tên Element khai báo trong file locators.json (VD: usernameInput)"
+          "description": "Element key within the page, camelCase (e.g. usernameInput)."
         },
         "data": {
-          "type": ["string", "object"],
-          "description": "Dữ liệu để nhập liệu hoặc chuỗi dùng để so sánh. (Hỗ trợ biến động {{...}})"
+          "type": ["string", "number", "boolean", "object"],
+          "description": "Input value or expected value, depending on the action. Supports {{...}} tokens."
         },
         "variable": {
           "type": "string",
-          "description": "Tên biến để lưu giá trị vào bộ nhớ tạm (Dùng cho action: store_text)"
+          "description": "Runtime variable name to store a captured value into (used by store_text)."
+        },
+        "storeAs": {
+          "type": "string",
+          "description": "Runtime variable name to store the value just entered (optional, used by fill)."
         },
         "url": {
           "type": "string",
-          "description": "Đường dẫn URL (Dùng cho các action gọi API)"
+          "description": "URL, used by the API actions, mock_route, unmock_route, and goto."
+        },
+        "key": {
+          "type": "string",
+          "description": "Key to press (used by press_key, e.g. Enter, Tab, Escape)."
+        },
+        "attribute": {
+          "type": "string",
+          "description": "HTML attribute name to assert on (used by verify_attribute)."
+        },
+        "count": {
+          "type": "number",
+          "description": "Expected number of matching elements (used by verify_element_count)."
+        },
+        "timeout": {
+          "type": "number",
+          "description": "Timeout in milliseconds. Used by wait, and by wait_for_element (default 10000)."
+        },
+        "state": {
+          "type": "string",
+          "enum": ["attached", "detached", "visible", "hidden"],
+          "description": "Target element state for wait_for_element. Default visible."
+        },
+        "flow": {
+          "type": "string",
+          "description": "Sub-flow file name in data/flows/ (used by call_flow)."
+        },
+        "params": {
+          "type": "object",
+          "description": "Parameters passed into the sub-flow (used by call_flow)."
+        },
+        "status": {
+          "type": "number",
+          "description": "HTTP status code for the mocked response (used by mock_route)."
+        },
+        "mockData": {
+          "type": ["object", "string", "array"],
+          "description": "Mocked response body (used by mock_route)."
+        },
+        "contentType": {
+          "type": "string",
+          "description": "Content-Type of the mocked response. Default application/json."
+        },
+        "snapshotName": {
+          "type": "string",
+          "description": "Baseline image file name to compare against (used by verify_visual_snapshot)."
+        },
+        "maxDiffPixelRatio": {
+          "type": "number",
+          "description": "Maximum allowed pixel difference ratio, 0 to 1. Default 0.05."
         },
         "headers": {
           "type": "object",
-          "description": "Headers của API (VD: Authorization Token)"
+          "description": "HTTP headers for API requests (e.g. Authorization)."
         },
         "store_response": {
           "type": "object",
-          "description": "Trích xuất dữ liệu từ API Response để lưu vào bộ nhớ tạm",
+          "description": "Extract a value from the API response into a runtime variable.",
           "properties": {
-            "key": { "type": "string", "description": "Key trong JSON response trả về" },
-            "variable": { "type": "string", "description": "Tên biến runtime sẽ lưu" }
+            "key": { "type": "string", "description": "Key to read from the JSON response body." },
+            "variable": { "type": "string", "description": "Runtime variable name to store the extracted value in." }
           },
           "required": ["key", "variable"]
         },
         "expected_status": {
           "type": "number",
-          "description": "Mã HTTP Status Code mong đợi (VD: 200, 201, 404)"
+          "description": "Expected HTTP status code. Note: currently only mock_route reads this (as the mocked response status); the API actions do not assert it yet."
         }
       }
     }

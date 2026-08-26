@@ -1,17 +1,27 @@
 {
   "name": "playwright-hybrid-framework",
-  "version": "1.0.0",
+  "version": "1.10.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "compile-bdd": "tsx scripts/compile-bdd.ts",
     "update-locators": "tsx scripts/generate-locator-todo.ts",
     "csv2json": "tsx scripts/csv-to-json.ts",
+    "actions:sync": "tsx scripts/generate-action-reference.ts",
+    "actions:check": "tsx scripts/generate-action-reference.ts --check",
+    "validate": "npm run actions:check && tsx scripts/validate-scenarios.ts",
+    "validate:wip": "npm run actions:check && tsx scripts/validate-scenarios.ts --allow-todo",
     "test": "npm run allure:clean && npx playwright test tests/hybrid-json/",
+    "test:ci": "npx playwright test tests/hybrid-json/ --grep @ci",
+    "test:saucedemo": "npx playwright test tests/hybrid-json/ --grep @saucedemo",
+    "test:demoblaze": "npx playwright test tests/hybrid-json/ --grep @demoblaze",
+    "test:demoqa": "npx playwright test tests/hybrid-json/ --grep @demoqa",
+    "test:booking": "npx playwright test tests/hybrid-json/ --grep @booking",
     "test-ui": "npm run allure:clean && npx playwright test --ui",
     "allure:clean": "npx rimraf allure-results allure-report",
     "allure:report": "npx allure serve allure-results",
-    "report": "allure generate allure-results --clean -o allure-report && allure open allure-report"
+    "report": "allure generate allure-results --clean -o allure-report && allure open allure-report",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +32,8 @@
     "@types/node": "^26.1.2",
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.10.2",
-    "tsx": "^4.23.12"
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "dotenv": "^17.4.2"

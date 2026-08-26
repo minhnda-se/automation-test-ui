@@ -1,9 +1,9 @@
-// File: utils/helpers/ElementHelper.ts
 import { BaseHelper } from './BaseHelper';
+import * as path from 'path';
 
 export class ElementHelper extends BaseHelper {
   async goto(url: string) {
-    await this.page.goto(url);
+    await this.page.goto(url, { waitUntil: 'domcontentloaded' });
   }
 
   async click(locatorStr: string) {
@@ -22,11 +22,67 @@ export class ElementHelper extends BaseHelper {
     await this.page.locator(locatorStr).dblclick();
   }
 
-  async fill(locatorStr: string, data: any, stepElement: string) {
+  async hover(locatorStr: string) {
+    await this.page.locator(locatorStr).hover();
+  }
+
+  async fill(locatorStr: string, data: any, stepElement?: string) {
     if (data === undefined || data === null) {
-      throw new Error(`[Lỗi JSON]: 'fill' tại ${stepElement} bắt buộc phải có data.`);
+      throw new Error(`[Lỗi JSON]: 'fill' tại ${stepElement || 'element'} bắt buộc phải có data.`);
     }
     await this.page.locator(locatorStr).fill(String(data));
+  }
+
+  async pressKey(locatorStr: string, key: string) {
+    if (locatorStr) {
+      await this.page.locator(locatorStr).press(key);
+    } else {
+      await this.page.keyboard.press(key);
+    }
+  }
+
+  async selectOption(locatorStr: string, value: any) {
+    if (typeof value === 'object' && value !== null) {
+      await this.page.locator(locatorStr).selectOption(value);
+    } else {
+      await this.page.locator(locatorStr).selectOption(String(value));
+    }
+  }
+
+  async check(locatorStr: string) {
+    await this.page.locator(locatorStr).check();
+  }
+
+  async uncheck(locatorStr: string) {
+    await this.page.locator(locatorStr).uncheck();
+  }
+
+  async uploadFile(locatorStr: string, relativeOrAbsolutePath: string) {
+    const resolvedPath = path.isAbsolute(relativeOrAbsolutePath)
+      ? relativeOrAbsolutePath
+      : path.join(process.cwd(), relativeOrAbsolutePath);
+    await this.page.locator(locatorStr).setInputFiles(resolvedPath);
+  }
+
+  async scrollTo(locatorStr: string) {
+    await this.page.locator(locatorStr).scrollIntoViewIfNeeded();
+  }
+
+  async wait(ms: number) {
+    await this.page.waitForTimeout(Number(ms) || 1000);
+  }
+
+  /**
+   * Waits for a specific element to reach a state, instead of sleeping for a
+   * fixed duration. Prefer this over wait() everywhere it applies: a fixed
+   * sleep is both slower than it needs to be and still too short under load.
+   */
+  async waitForElement(
+    locatorStr: string,
+    state: 'attached' | 'detached' | 'visible' | 'hidden' = 'visible',
+    timeout: number = 10000
+  ) {
+    await this.page.locator(locatorStr).waitFor({ state, timeout: Number(timeout) || 10000 });
   }
 
   async switchNewTab() {

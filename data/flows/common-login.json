@@ -1,0 +1,11 @@
+{
+  "flowName": "common-login",
+  "description": "Reusable login flow for SauceDemo application",
+  "params": ["username", "password"],
+  "steps": [
+    { "action": "goto", "data": "https://www.saucedemo.com/" },
+    { "action": "fill", "page": "LoginPage", "element": "usernameInput", "data": "{{username}}" },
+    { "action": "fill", "page": "LoginPage", "element": "passwordInput", "data": "{{password}}" },
+    { "action": "click", "page": "LoginPage", "element": "loginBtn" }
+  ]
+}

@@ -1,6 +1,9 @@
 {
   "scenario": "DDT - Data Driven Testing",
   "config": {
+    "tags": [
+      "@saucedemo"
+    ],
     "locatorFile": "swag-lab.json"
   },
   "testCases": [
@@ -8,14 +11,28 @@
       "testId": "DDT_01",
       "testName": "[Swag Labs] Đăng nhập bằng nhiều loại tài khoản",
       "dataTable": [
-        { "my_user": "standard_user", "my_pass": "secret_sauce" },
-        { "my_user": "locked_out_user", "my_pass": "secret_sauce" },
-        { "my_user": "invalid_user_123", "my_pass": "wrong_password" },
-        { "my_user": "", "my_pass": "" }
+        {
+          "my_user": "standard_user",
+          "my_pass": "secret_sauce"
+        },
+        {
+          "my_user": "locked_out_user",
+          "my_pass": "secret_sauce"
+        },
+        {
+          "my_user": "invalid_user_123",
+          "my_pass": "wrong_password"
+        },
+        {
+          "my_user": "",
+          "my_pass": ""
+        }
       ],
       "steps": [
-        { "action": "goto", "data": "https://www.saucedemo.com/" },
-
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        },
         {
           "action": "fill",
           "page": "LoginPage",
@@ -28,8 +45,11 @@
           "element": "passwordInput",
           "data": "{{my_pass}}"
         },
-
-        { "action": "click", "page": "LoginPage", "element": "loginBtn" }
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "loginBtn"
+        }
       ]
     }
   ]

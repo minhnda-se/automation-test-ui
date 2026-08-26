@@ -1,0 +1,162 @@
+{
+  "goto": {
+    "fields": "`data` (URL), or `url`",
+    "note": "Navigates the page. No locator involved."
+  },
+  "click": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "left_click": {
+    "fields": "`page`, `element`",
+    "note": "Explicit left click. `click` is the normal choice."
+  },
+  "right_click": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "double_click": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "hover": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "fill": {
+    "fields": "`page`, `element`, `data`",
+    "note": "Optional `storeAs` saves the filled value as a runtime variable. `data` must be non-empty - the validator enforces this."
+  },
+  "press_key": {
+    "fields": "`page`, `element`, `data` (key name)",
+    "note": "Falls back to `key`, then to `Enter`."
+  },
+  "select_option": {
+    "fields": "`page`, `element`, `data`",
+    "note": "`data` must be non-empty - the validator enforces this."
+  },
+  "check": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "uncheck": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "upload_file": {
+    "fields": "`page`, `element`, `data` (file path)",
+    "note": ""
+  },
+  "scroll_to": {
+    "fields": "`page`, `element`",
+    "note": "Scrolls the element into view."
+  },
+  "wait": {
+    "fields": "`data` (milliseconds)",
+    "note": "Falls back to `timeout`, then to 1000. Prefer an assertion over a fixed wait where possible."
+  },
+  "switch_new_tab": {
+    "fields": "none",
+    "note": "Switches the engine to the most recently opened tab."
+  },
+  "store_text": {
+    "fields": "`page`, `element`, `variable`",
+    "note": "Reads the element's text into a runtime variable. `variable` is required and throws at runtime if absent."
+  },
+  "save_storage_state": {
+    "fields": "`data` (target path)",
+    "note": "Defaults to `.auth/user.json`. Used to capture an authenticated session for reuse via `config.storageState`."
+  },
+  "verify_visible": {
+    "fields": "`page`, `element`",
+    "note": "Do not use on generic wrappers or body containers - assert a concrete outcome instead."
+  },
+  "verify_not_visible": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "verify_enabled": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "verify_disabled": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "verify_checked": {
+    "fields": "`page`, `element`",
+    "note": ""
+  },
+  "verify_text": {
+    "fields": "`page`, `element`, `data`",
+    "note": "Exact match. `data` must be non-empty - the validator enforces this."
+  },
+  "verify_text_contains": {
+    "fields": "`page`, `element`, `data`",
+    "note": "Partial match. `data` must be non-empty - the validator enforces this."
+  },
+  "verify_not_contains_text": {
+    "fields": "`page`, `element`, `data`",
+    "note": "`data` must be non-empty - the validator enforces this."
+  },
+  "verify_class_contains": {
+    "fields": "`page`, `element`, `data`",
+    "note": ""
+  },
+  "verify_not_contains_class": {
+    "fields": "`page`, `element`, `data`",
+    "note": ""
+  },
+  "verify_url_contains": {
+    "fields": "`data`, or `url`",
+    "note": "No locator involved. The preferred assertion for redirection."
+  },
+  "verify_attribute": {
+    "fields": "`page`, `element`, `attribute`, `data`",
+    "note": "`attribute` is required and throws at runtime if absent."
+  },
+  "verify_element_count": {
+    "fields": "`page`, `element`, `data` (number)",
+    "note": "Falls back to `count`, then to 0."
+  },
+  "verify_visual_snapshot": {
+    "fields": "`page`, `element`",
+    "note": "Optional `snapshotName` and `maxDiffPixelRatio` (default 0.05). Name defaults to `<page>_<element>.png`."
+  },
+  "api_get": {
+    "fields": "`url`",
+    "note": "Optional `headers` and `store_response` ({ key, variable })."
+  },
+  "api_post": {
+    "fields": "`url`, `data` (body)",
+    "note": "Optional `headers` and `store_response` ({ key, variable })."
+  },
+  "api_delete": {
+    "fields": "`url`",
+    "note": "Optional `headers`."
+  },
+  "mock_route": {
+    "fields": "`url` (pattern)",
+    "note": "Optional `mockData` (or `data`), `status` / `expected_status` (default 200), `contentType` (default application/json)."
+  },
+  "unmock_route": {
+    "fields": "`url` (pattern)",
+    "note": "Removes a route mock installed by `mock_route`."
+  },
+  "call_flow": {
+    "fields": "`flow` (file name in data/flows/), `params`",
+    "note": "Reusable step sequence. Nesting is capped at depth 10. The validator checks the flow file exists."
+  },
+  "wait_for_element": {
+    "fields": "`page`, `element`",
+    "note": "Optional `state` (`visible` default, or `hidden` / `attached` / `detached`) and `timeout` in ms (default 10000). Prefer this over `wait` - a fixed sleep is both slower than needed and still too short under load."
+  },
+  "api_put": {
+    "fields": "`url`, `data` (body)",
+    "note": "Optional `headers` and `store_response` ({ key, variable }). Full replacement of a resource."
+  },
+  "api_patch": {
+    "fields": "`url`, `data` (body)",
+    "note": "Optional `headers` and `store_response` ({ key, variable }). Partial update of a resource."
+  }
+}

@@ -12,7 +12,14 @@
     "backpackRemoveBtn": "#remove-sauce-labs-backpack",
     "bikeLightAddBtn": "#add-to-cart-sauce-labs-bike-light",
     "menuBtn": "#react-burger-menu-btn",
-    "logoutLink": "#logout_sidebar_link"
+    "logoutLink": "#logout_sidebar_link",
+    "sortDropdown": "[data-test='product-sort-container']",
+    "activeSortOption": "[data-test='active-option']",
+    "inventoryItem": ".inventory_list .inventory_item",
+    "firstItemName": ".inventory_item_name >> nth=0",
+    "lastItemName": ".inventory_item_name >> nth=5",
+    "firstItemPrice": ".inventory_item_price >> nth=0",
+    "lastItemPrice": ".inventory_item_price >> nth=5"
   },
   "CartPage": {
     "checkoutBtn": "#checkout",
@@ -35,5 +42,14 @@
   "CompletePage": {
     "completeHeader": ".complete-header",
     "backHomeBtn": "#back-to-products"
+  },
+  "ProductDetailPage": {
+    "backToProductsBtn": "#back-to-products",
+    "productName": ".inventory_details_name",
+    "productPrice": ".inventory_details_price",
+    "productDescription": ".inventory_details_desc",
+    "addToCartBtn": "#add-to-cart",
+    "cartBadge": ".shopping_cart_badge",
+    "removeBtn": "#remove"
   }
 }

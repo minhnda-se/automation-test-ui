@@ -1,47 +1,44 @@
-export class LocatorManager {
-  private currentLocators: any;
+import { ILocatorStore } from '../../types/scenario';
 
-  constructor(currentLocators: any) {
-    this.currentLocators = currentLocators;
+export class LocatorManager {
+  private currentLocators: ILocatorStore;
+
+  constructor(currentLocators: ILocatorStore) {
+    this.currentLocators = currentLocators || {};
   }
 
-  public getLocator(pageName?: string, elementName?: string): string {
+  /**
+   * Resolve a page/element reference to a selector string.
+   *
+   * By default an implicit `>> nth=0` is appended, which suppresses Playwright's
+   * strict-mode ambiguity error. Pass `matchAll` for actions that operate on the
+   * whole matched set rather than on one element - `verify_element_count` is the
+   * only such action today, and the implicit index silently reduced every count
+   * to 1, which made the assertion meaningless. (The blanket suffix itself is
+   * Phase 13's subject; this is the narrow fix for the action it breaks outright.)
+   */
+  public getLocator(pageName?: string, elementName?: string, matchAll = false): string {
     if (!pageName || !elementName) return '';
-    // // ---- ĐOẠN LOG DEBUG ----
-    // console.log(
-    //   `\n[DEBUG-LOCATOR] Đang tìm kiếm: Page = "${pageName}" | Element = "${elementName}"`
-    // );
-    // console.log(
-    //   `[DEBUG-LOCATOR] Các Page hiện có trong bộ nhớ:`,
-    //   Object.keys(this.currentLocators)
-    // );
 
-    // if (this.currentLocators[pageName]) {
-    //   console.log(
-    //     `[DEBUG-LOCATOR] Các Element có trong ${pageName}:`,
-    //     Object.keys(this.currentLocators[pageName])
-    //   );
-    //   console.log(
-    //     `[DEBUG-LOCATOR] Giá trị thực tế của ${elementName}:`,
-    //     this.currentLocators[pageName][elementName]
-    //   );
-    // } else {
-    //   console.log(
-    //     `[DEBUG-LOCATOR] CẢNH BÁO: Không tìm thấy object page ${pageName} trong biến this.currentLocators`
-    //   );
-    // }
-    // // ------------------------
     const pageLocators = this.currentLocators[pageName];
-
-    if (!pageLocators) throw new Error(`Không tìm thấy Page: ${pageName}`);
+    if (!pageLocators) {
+      throw new Error(`[LocatorManager] Page "${pageName}" not found in locators repository.`);
+    }
 
     const locator = pageLocators[elementName];
-    if (!locator) throw new Error(`Không tìm thấy Locator: ${elementName} trong ${pageName}`);
+    if (!locator) {
+      throw new Error(`[LocatorManager] Element "${elementName}" not found in Page "${pageName}".`);
+    }
+
+    if (matchAll) return locator;
 
     return locator.includes('nth=') ? locator : `${locator} >> nth=0`;
   }
 
-  public updateRuntimeLocator(pageName: string, elementName: string, newLocator: string) {
+  public updateRuntimeLocator(pageName: string, elementName: string, newLocator: string): void {
+    if (!this.currentLocators[pageName]) {
+      this.currentLocators[pageName] = {};
+    }
     this.currentLocators[pageName][elementName] = newLocator;
   }
 }

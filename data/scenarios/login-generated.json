@@ -1,13 +1,16 @@
 {
   "$schema": "../../schema/scenario-schema.json",
   "config": {
-    "locatorFile": "swag-lab.json"
+    "tags": [
+      "@saucedemo"
+    ],
+    "locatorFile": "locators.json"
   },
-  "scenario": "Chức năng Đăng nhập hệ thống",
+  "scenario": "User login",
   "testCases": [
     {
-      "testId": "BDD_9968",
-      "testName": "Đăng nhập thành công với tài khoản chuẩn",
+      "testId": "BDD_LOGIN_01",
+      "testName": "Successful login with a standard account",
       "steps": [
         {
           "action": "goto",

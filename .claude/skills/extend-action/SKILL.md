@@ -23,7 +23,7 @@ Don't write new code from a mental model of "how Playwright frameworks usually w
    - API calls (api_get/post/put/patch/delete) → `utils/helpers/APIHelper.ts`
    - Shared logic across helpers → `utils/helpers/BaseHelper.ts`
 3. Check `utils/core/LocatorManager.ts` and `utils/core/AutoHealer.ts` if the new action targets an element — element-based actions should resolve locators through `LocatorManager` (not a raw `page.locator()` call inline) so they participate in auto-healing like every other locator-based action.
-4. Open `schema/scenario-schema.json` and look at how an existing action's required/optional fields are expressed in the enum/schema, so the new entry matches the existing pattern exactly.
+4. Open `schema/scenario-schema.json` and look at how an existing action's required/optional fields are expressed, so the new entry matches the existing pattern exactly. Note that the `action` enum in that file is generated - read it, do not edit it.
 5. Check whether `scripts/compile-bdd.ts` exists and skim one or two existing regex mappings, in case BDD support is in scope.
 
 If the codebase's actual patterns differ from what's described below, follow the codebase — this doc is a fallback, not an override.
@@ -43,8 +43,8 @@ If the request is unambiguous (e.g. "add `upload_file(page, element, filePath)` 
 
 1. **Helper layer** — add the Playwright implementation in the appropriate helper (`ElementHelper.ts`, `AssertHelper.ts`, or `APIHelper.ts`). Match the existing method signature style, error handling, and logging conventions you saw in Phase 0.
 2. **Orchestration layer** — add the `case` in `ActionEngine.ts`'s switch statement. Resolve any `{{...}}` runtime variables/dynamic tokens via `DataManager` *before* calling the helper — the helper should only ever receive already-resolved values, same as every existing action.
-3. **Schema** — add the new keyword to the `action` enum in `schema/scenario-schema.json`, and add its required/optional field constraints following the pattern of an existing similar action.
-3b. **Action reference** — add an entry for the new keyword to `schema/action-notes.json` (its `fields` and `note`), then run `npm run actions:sync` to regenerate `schema/actions.json` and `docs/ACTIONS.md`. This is not optional: `npm run validate` fails while the reference is stale, and until it is regenerated the scenario validator will reject every step using the new action.
+3. **Action reference** — add an entry for the new keyword to `schema/action-notes.json` (its `fields` and `note`), then run `npm run actions:sync`. That regenerates all four artifacts: `schema/actions.json`, `docs/ACTIONS.md`, the `action` enum in `schema/scenario-schema.json`, and the `ActionType` union in `types/actions.generated.ts`. **Do not hand-edit any of those four** - the enum and the union used to be maintained by hand and are now generated, so an edit is either overwritten by the next sync or caught by `npm run actions:check`. This step is not optional: `npm run validate` fails while the reference is stale, and until it is regenerated the scenario validator rejects every step using the new action.
+3b. **Schema field constraints (only if the action needs a new field)** — `schema/scenario-schema.json` still holds the hand-maintained *field* definitions. The `action` enum inside it is generated; everything else in that file is yours to edit.
 4. **BDD compiler (only if in scope)** — add the regex mapping in `scripts/compile-bdd.ts` following an existing mapping's pattern.
 5. **Docs (recommended, not blocking)** — if the project's README/Supported Actions table documents actions (as this project's does), add a row for the new action so the docs don't silently drift out of date. If a `generate-json-test` skill or similar exists with its own hardcoded action reference list, flag to the user that it should be updated too.
 

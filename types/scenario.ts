@@ -1,49 +1,9 @@
-export type ActionType =
-  // Interactions
-  | 'goto'
-  | 'click'
-  | 'right_click'
-  | 'left_click'
-  | 'double_click'
-  | 'hover'
-  | 'fill'
-  | 'press_key'
-  | 'select_option'
-  | 'check'
-  | 'uncheck'
-  | 'upload_file'
-  | 'scroll_to'
-  | 'wait'
-  | 'wait_for_element'
-  | 'switch_new_tab'
-  | 'store_text'
-  | 'save_storage_state'
-  // Sub-Flows
-  | 'call_flow'
-  // Network Mocking
-  | 'mock_route'
-  | 'unmock_route'
-  // Assertions
-  | 'verify_visible'
-  | 'verify_not_visible'
-  | 'verify_text'
-  | 'verify_text_contains'
-  | 'verify_not_contains_text'
-  | 'verify_class_contains'
-  | 'verify_not_contains_class'
-  | 'verify_url_contains'
-  | 'verify_enabled'
-  | 'verify_disabled'
-  | 'verify_checked'
-  | 'verify_attribute'
-  | 'verify_element_count'
-  | 'verify_visual_snapshot'
-  // API Actions
-  | 'api_post'
-  | 'api_put'
-  | 'api_patch'
-  | 'api_get'
-  | 'api_delete';
+// ActionType is generated from the handler layer - see types/actions.generated.ts
+// and scripts/generate-action-reference.ts. It is re-exported here so consumers
+// keep importing it from types/scenario, the way they always have.
+import { ActionType } from './actions.generated';
+
+export type { ActionType };
 
 export interface IStoreResponse {
   key: string;

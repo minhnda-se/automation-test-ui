@@ -30,9 +30,14 @@ allure-report/
 report/
 plan/
 
-# docs/: ignore everything except CSV source inputs consumed by scripts/csv-to-json.ts
+# docs/: ignore working notes, but keep the files the project depends on.
+# ACTIONS.md is generated and is the authoritative action reference - npm run
+# actions:check compares against it, so a checkout without it fails the CI
+# validate gate for a reason unrelated to any change.
 docs/*
 !docs/*.csv
+!docs/ACTIONS.md
+!docs/NEW_USER_GUIDE.md
 
 # =========================================================
 # Coverage

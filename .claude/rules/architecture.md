@@ -25,7 +25,7 @@ Helper  Helper Helper
 
 ## When adding a new action
 
-Follow `.claude/skills/extend-action/SKILL.md` rather than improvising. In short: Helper implementation first, then the `ActionEngine` case (resolve variables via `DataManager` before calling the helper), then the schema enum, then BDD mapping if in scope. Element-based actions resolve locators through `LocatorManager`, never an inline `page.locator()` call — bypassing it silently breaks auto-healing for that action.
+Follow `.claude/skills/extend-action/SKILL.md` rather than improvising. In short: Helper implementation first, then the `ActionEngine` case (resolve variables via `DataManager` before calling the helper), then an entry in `schema/action-notes.json` followed by `npm run actions:sync` - which generates the schema enum and the `ActionType` union, neither of which is hand-edited any more - then BDD mapping if in scope. Element-based actions resolve locators through `LocatorManager`, never an inline `page.locator()` call — bypassing it silently breaks auto-healing for that action.
 
 ## Never
 

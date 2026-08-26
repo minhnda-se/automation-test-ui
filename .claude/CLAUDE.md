@@ -54,6 +54,7 @@ npm run actions:sync                             # regenerate action reference a
 - `.claude/rules/` — topic-specific conventions, some path-scoped (only load when relevant files are touched)
 - `docs/ACTIONS.md` — authoritative action keyword reference (generated, do not edit)
 - `schema/actions.json` — same list, machine-readable; consumed by `scripts/validate-scenarios.ts`
+- `types/actions.generated.ts` — the `ActionType` union, generated; re-exported by `types/scenario.ts`. The `action` enum in `schema/scenario-schema.json` is generated in place as well. All four artifacts come from `npm run actions:sync`, and `npm run actions:check` fails if any has drifted.
 - `schema/action-notes.json` — hand-maintained field descriptions merged into the generated reference
 - `.claude/skills/` — step-by-step playbooks for test generation, BDD, locator fixes, action extension, codegen mapping
 
@@ -64,7 +65,6 @@ The Gherkin compiler (`scripts/compile-bdd.ts`) is **frozen** at six step patter
 
 ## Open items
 
-- Action keywords exist in three places: the generated reference (authoritative), the `action` enum in `schema/scenario-schema.json`, and the `ActionType` union in `types/scenario.ts`. Only the first is generated, and nothing checks the other two agree. Adding an action means editing all three by hand.
 - Auto-Healing is off by default and no longer writes to `data/locators/` (see `report/fix/phase-1-autohealer.md`). It still cannot distinguish a dead selector from a timing issue from a real behaviour change — treat any entry in `test-results/heal-report.json` as something to investigate, not a fix.
 
-Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`report/fix/phase-9-ci-trustworthy.md`). `expected_status` is now asserted by `APIHelper` on all five API actions - exact match when set, `response.ok()` when omitted - and `mock_route` no longer reads it, so the name means one thing (`report/fix/phase-12-expected-status.md`). `LocatorManager` no longer appends `>> nth=0`, so an ambiguous locator fails under strict mode (`report/fix/phase-13a-locator-strictness.md`).
+Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`report/fix/phase-9-ci-trustworthy.md`). `expected_status` is now asserted by `APIHelper` on all five API actions - exact match when set, `response.ok()` when omitted - and `mock_route` no longer reads it, so the name means one thing (`report/fix/phase-12-expected-status.md`). `LocatorManager` no longer appends `>> nth=0`, so an ambiguous locator fails under strict mode (`report/fix/phase-13a-locator-strictness.md`). Adding an action now means editing the handler and `schema/action-notes.json` only - the schema enum and the `ActionType` union are generated and checked (`report/fix/phase-11-action-list-single-source.md`).

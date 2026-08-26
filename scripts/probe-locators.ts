@@ -133,9 +133,18 @@ async function dumpSelector(page: Page, selector: string): Promise<void> {
   log(`   ${elements.length} match(es)${ambiguous}`);
 
   for (const element of elements) {
-    log('  ' + (await describe(element)));
+    // Transient nodes - toasts, animated alerts - can vanish between all() and
+    // evaluate(). That is worth recording, not worth aborting the whole run for:
+    // an error toast disappearing is often the very thing being probed.
+    let tag: string;
+    try {
+      log('  ' + (await describe(element)));
+      tag = await element.evaluate((node: Element) => node.tagName.toLowerCase());
+    } catch {
+      log('  [element disappeared before it could be described - transient node]');
+      continue;
+    }
 
-    const tag = await element.evaluate((node: Element) => node.tagName.toLowerCase());
     if (tag === 'select') {
       const options = await element.evaluate((node: Element) =>
         Array.from((node as HTMLSelectElement).options).map((o) => ({

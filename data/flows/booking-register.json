@@ -1,0 +1,22 @@
+{
+  "flowName": "booking-register",
+  "description": "Registers a fresh account on the booking app. Registration signs the user in directly, so this is also the authentication flow. Pass a unique email; the caller can reference it afterwards as {{email}}.",
+  "params": ["name", "email", "password", "phone"],
+  "steps": [
+    {
+      "action": "goto",
+      "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+    },
+    { "action": "fill", "page": "RegisterPage", "element": "nameInput", "data": "{{name}}" },
+    { "action": "fill", "page": "RegisterPage", "element": "emailInput", "data": "{{email}}" },
+    {
+      "action": "fill",
+      "page": "RegisterPage",
+      "element": "passwordInput",
+      "data": "{{password}}"
+    },
+    { "action": "fill", "page": "RegisterPage", "element": "phoneInput", "data": "{{phone}}" },
+    { "action": "click", "page": "RegisterPage", "element": "submitBtn" },
+    { "action": "wait_for_element", "page": "Navbar", "element": "userName" }
+  ]
+}

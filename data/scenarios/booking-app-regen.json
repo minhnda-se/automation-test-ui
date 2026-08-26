@@ -1,0 +1,2477 @@
+{
+  "$schema": "../../schema/scenario-schema.json",
+  "scenario": "Booking app - regenerated from UserStories_Booking_app_v0.1.pdf (Phase 10b)",
+  "config": {
+    "locatorFile": "booking-app-regen.json",
+    "tags": [
+      "@booking"
+    ]
+  },
+  "testCases": [
+    {
+      "testId": "TC_REG_01",
+      "testName": "[Register] Registration form shows every required field",
+      "description": "US1-AC1 - form at /auth/register displays full name, email, masked password, phone, the create-account button and the login link.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "RegisterPage",
+          "element": "form"
+        },
+        {
+          "action": "verify_text",
+          "page": "RegisterPage",
+          "element": "title",
+          "data": "Đăng ký tài khoản"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "nameInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "emailInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "passwordInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "phoneInput"
+        },
+        {
+          "action": "verify_text",
+          "page": "RegisterPage",
+          "element": "submitBtn",
+          "data": "Tạo tài khoản"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "loginLink"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_02",
+      "testName": "[Register] Navigation header shows the brand and all links",
+      "description": "US1-AC2 - BookingCare logo plus Home, Doctor, Search links and the Login / Register buttons.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Navbar",
+          "element": "brand"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "brand",
+          "data": "BookingCare"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "homeLink",
+          "data": "Trang chủ"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "doctorsLink",
+          "data": "Bác sĩ"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "searchLink",
+          "data": "Tìm kiếm"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "loginLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "registerLink"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_03",
+      "testName": "[Register] An invalid email format does not create an account",
+      "description": "US1-AC3 (negative). FINDING: the app renders no inline error. The email field is type=email required, so submission is blocked by native browser validation and no app-level message appears. Asserted as: still on /auth/register and no server error rendered.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "QA Regen"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "not-an-email"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Pw{{RANDOM_STRING}}1!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "RegisterPage",
+          "element": "errorMessage"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_04",
+      "testName": "[Register] Submitting an empty form does not create an account",
+      "description": "US1-AC3 (negative) - all fields required. Same finding as TC_REG_03: native validation blocks submission, no app-rendered inline error exists.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "RegisterPage",
+          "element": "errorMessage"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_05",
+      "testName": "[Register] The password field is masked",
+      "description": "US1-AC3 - password is displayed as dots.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "RegisterPage",
+          "element": "passwordInput"
+        },
+        {
+          "action": "verify_attribute",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "attribute": "type",
+          "data": "password"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_06",
+      "testName": "[Register] An invalid phone number does not create an account",
+      "description": "US1-AC3 (negative) - phone must be a valid format. EXPECTED TO FAIL: the phone input is type=text with no pattern and no required attribute, so the app appears to accept any value. A failure here is a requirements-versus-implementation defect, not a broken test.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "QA Regen"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "qa_regen_{{TIMESTAMP}}@test.com"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Pw{{RANDOM_STRING}}1!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "not-a-phone"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_07",
+      "testName": "[Register] Valid details create the account and sign the user in",
+      "description": "US1-AC4. The redirect target is /bookings/me, not home or login as the document says. An earlier probe reading that showed no redirect was measured before it completed; with a settle it lands on /bookings/me every time.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "QA Regen"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "qa_regen_{{TIMESTAMP}}@test.com"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "Pw{{RANDOM_STRING}}1!"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Navbar",
+          "element": "userName"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "userName",
+          "data": "QA Regen"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/bookings/me"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "logoutBtn"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_08",
+      "testName": "[Register] A duplicate email is rejected with an error",
+      "description": "US1-AC5. Error copy confirmed by probe: the app returns Vietnamese text, not the document's English example.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Duplicate Seed",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "nameInput",
+          "data": "QA Duplicate"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "emailInput",
+          "data": "{{email}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "passwordInput",
+          "data": "{{password}}"
+        },
+        {
+          "action": "fill",
+          "page": "RegisterPage",
+          "element": "phoneInput",
+          "data": "{{RANDOM_PHONE}}"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "RegisterPage",
+          "element": "errorMessage",
+          "data": "Email đã tồn tại"
+        }
+      ]
+    },
+    {
+      "testId": "TC_REG_09",
+      "testName": "[Register] The login link navigates to the login page",
+      "description": "US1-AC6.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/register"
+        },
+        {
+          "action": "click",
+          "page": "RegisterPage",
+          "element": "loginLink"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "form"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_01",
+      "testName": "[Login] Login form shows both fields and the register link",
+      "description": "US2-AC1 - email-or-username and masked password fields, submit button, register link.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "LoginPage",
+          "element": "form"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "emailInput"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "passwordInput"
+        },
+        {
+          "action": "verify_text",
+          "page": "LoginPage",
+          "element": "submitBtn",
+          "data": "Đăng nhập"
+        },
+        {
+          "action": "verify_visible",
+          "page": "LoginPage",
+          "element": "registerLink"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_02",
+      "testName": "[Login] Navigation header shows the brand and all links",
+      "description": "US2-AC2.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Navbar",
+          "element": "brand"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "brand",
+          "data": "BookingCare"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "homeLink",
+          "data": "Trang chủ"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "doctorsLink",
+          "data": "Bác sĩ"
+        },
+        {
+          "action": "verify_text",
+          "page": "Navbar",
+          "element": "searchLink",
+          "data": "Tìm kiếm"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "loginLink"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "registerLink"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_03",
+      "testName": "[Login] Valid credentials authenticate and the session persists",
+      "description": "US2-AC3 - the account is created in preconditions, then signed out is not required: this logs in fresh and confirms the session survives a navigation to another page.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Session",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "emailInput",
+          "data": "{{email}}"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "{{password}}"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Navbar",
+          "element": "userName"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "logoutBtn"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Navbar",
+          "element": "userName"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Navbar",
+          "element": "userName"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_04",
+      "testName": "[Login] An incorrect password shows an error and does not redirect",
+      "description": "US2-AC4 (negative). Error copy confirmed by probe as English 'Invalid credentials', which differs from the document's example wording.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Wrong Password",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "emailInput",
+          "data": "{{email}}"
+        },
+        {
+          "action": "fill",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "data": "DefinitelyWrong999"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "LoginPage",
+          "element": "errorMessage",
+          "data": "Invalid credentials"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_05",
+      "testName": "[Login] Submitting an empty form is prevented",
+      "description": "US2-AC5 (negative) - both fields required. Same native-validation finding as registration: no app-rendered inline error.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/login"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "LoginPage",
+          "element": "errorMessage"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_06",
+      "testName": "[Login] The password field is masked",
+      "description": "US2-AC5, partial. The other half of this criterion - a teal border on focus - is a CSS pseudo-state and is not assertable through the action set; recorded as not automatable rather than faked.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "LoginPage",
+          "element": "passwordInput"
+        },
+        {
+          "action": "verify_attribute",
+          "page": "LoginPage",
+          "element": "passwordInput",
+          "attribute": "type",
+          "data": "password"
+        }
+      ]
+    },
+    {
+      "testId": "TC_LOGIN_07",
+      "testName": "[Login] The register link navigates to the registration page",
+      "description": "US2-AC6.",
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/auth/login"
+        },
+        {
+          "action": "click",
+          "page": "LoginPage",
+          "element": "registerLink"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/auth/register"
+        },
+        {
+          "action": "verify_visible",
+          "page": "RegisterPage",
+          "element": "form"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PROV_01",
+      "testName": "[Providers] Provider list shows every required detail per provider",
+      "description": "US3-AC1 - requires an authenticated patient. Asserts all six documented attributes are present on the first card: specialty, experience, rating, fee, hospital, location.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Provider List",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorName"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorSpecialty"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorExperience"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorRating"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorFee"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorHospital"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorCity"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PROV_02",
+      "testName": "[Providers] Filtering by specialty narrows the list to that specialty",
+      "description": "US3-AC2 - specialty option value confirmed by probe (Tim mach). Asserts the first result actually carries the filtered specialty, not merely that the list re-rendered.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Filter",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "specialtySelect"
+        },
+        {
+          "action": "select_option",
+          "page": "DoctorsPage",
+          "element": "specialtySelect",
+          "data": "00000000-0000-4000-8000-000000000001"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "firstDoctorSpecialty"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "DoctorsPage",
+          "element": "firstDoctorSpecialty",
+          "data": "Tim mạch"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PROV_03",
+      "testName": "[Providers] The list can be sorted by check-up fee",
+      "description": "US3-AC2, partial. LIMITATION: the 40-action set has no relational assertion, so 'ascending by fee' cannot be verified - only that the control accepts the value and a populated list re-renders. Recorded as a framework gap.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Sort Fee",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "sortSelect"
+        },
+        {
+          "action": "select_option",
+          "page": "DoctorsPage",
+          "element": "sortSelect",
+          "data": "fee"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "firstDoctorFee"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorFee"
+        },
+        {
+          "action": "store_text",
+          "page": "DoctorsPage",
+          "element": "firstDoctorFee",
+          "variable": "FIRST_FEE_BY_FEE"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PROV_04",
+      "testName": "[Providers] The list can be sorted by rating",
+      "description": "US3-AC2, partial. Same relational-assertion limitation as TC_PROV_03.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Sort Rating",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "sortSelect"
+        },
+        {
+          "action": "select_option",
+          "page": "DoctorsPage",
+          "element": "sortSelect",
+          "data": "rating"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "firstDoctorRating"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorsPage",
+          "element": "firstDoctorRating"
+        },
+        {
+          "action": "store_text",
+          "page": "DoctorsPage",
+          "element": "firstDoctorRating",
+          "variable": "FIRST_RATING_BY_RATING"
+        }
+      ]
+    },
+    {
+      "testId": "TC_PROV_05",
+      "testName": "[Providers] The detail page opens and carries the booking entry point",
+      "description": "US3-AC3, PARTIAL. The criterion says the detail page displays available time slots. It does not - probing found no slot element on that page; slots live on /bookings/new, reached through the book-now link. Asserted here: navigation works and the documented provider details plus the booking entry point are present. The missing slot list is recorded as an unmet requirement, not faked with a selector that does not exist.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Provider Detail",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "store_text",
+          "page": "DoctorsPage",
+          "element": "firstDoctorName",
+          "variable": "CHOSEN_DOCTOR"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/doctors/"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "doctorName"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "DoctorDetailPage",
+          "element": "doctorName",
+          "data": "{{CHOSEN_DOCTOR}}"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "specialty"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "fee"
+        },
+        {
+          "action": "verify_visible",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        }
+      ]
+    },
+    {
+      "testId": "TC_BOOK_01",
+      "testName": "[Booking] Booking an available slot confirms it and lists it under My Appointments",
+      "description": "US3-AC4 - only available slots are selectable; after booking, the appointment is confirmed and appears in My Appointments.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Booking",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "MyBookingsPage",
+          "element": "bookingCard",
+          "data": 1
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "firstBookingDoctorName"
+        }
+      ]
+    },
+    {
+      "testId": "TC_BOOK_02",
+      "testName": "[Booking] A slot already taken is no longer offered as available",
+      "description": "US3-AC5, APPROXIMATED. The criterion concerns two users racing for one slot; the framework has no multi-session primitive, so this exercises the server-side conflict rule in a single session - take a slot, then confirm the slot list no longer offers it. Genuine concurrency stays uncovered; see the phase report.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Double Book",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "store_text",
+          "page": "BookingNewPage",
+          "element": "firstSlot",
+          "variable": "TAKEN_SLOT"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "verify_not_contains_text",
+          "page": "BookingNewPage",
+          "element": "slotField",
+          "data": "{{TAKEN_SLOT}}"
+        }
+      ]
+    },
+    {
+      "testId": "TC_QUOTA_01",
+      "testName": "[Quota] A patient can hold more than one appointment on the same day",
+      "description": "US4-AC1 - multiple bookings in one day are allowed, with the same or different providers.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Quota Multi",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "MyBookingsPage",
+          "element": "bookingCard",
+          "data": 2
+        }
+      ]
+    },
+    {
+      "testId": "TC_QUOTA_02",
+      "testName": "[Quota] A fourth booking on the same day is rejected with the limit message",
+      "description": "US4-AC2 and US4-AC4 - the hardest criterion in the document. Books the three permitted appointments, then asserts the fourth is refused, an error is shown, and the count stays at three.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Quota Limit",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "MyBookingsPage",
+          "element": "bookingCard",
+          "data": 3
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "errorMessage"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "BookingNewPage",
+          "element": "errorMessage",
+          "data": "TODO_EXPECTED_COPY_QUOTA_LIMIT"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_element_count",
+          "page": "MyBookingsPage",
+          "element": "bookingCard",
+          "data": 3
+        }
+      ]
+    },
+    {
+      "testId": "TC_QUOTA_03",
+      "testName": "[Quota] A cancelled appointment does not count toward the daily limit",
+      "description": "US4-AC3 - only valid bookings count toward the limit. Fills the quota, cancels one, then books again successfully.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Quota Cancel",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstBookingStatus"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ]
+    },
+    {
+      "testId": "TC_CANCEL_01",
+      "testName": "[Cancel] Each booked appointment offers a cancel control",
+      "description": "US5-AC1 - the cancel option is visible in My Appointments for a booked appointment.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Cancel Display",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "verify_url_contains",
+          "data": "/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        }
+      ]
+    },
+    {
+      "testId": "TC_CANCEL_02",
+      "testName": "[Cancel] An appointment more than an hour away can be cancelled",
+      "description": "US5-AC2, positive half only. The sub-one-hour half is not reachable through the UI, which offers no slot inside the next hour; recorded as partially covered rather than faked.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Cancel Eligible",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        },
+        {
+          "action": "verify_enabled",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        }
+      ]
+    },
+    {
+      "testId": "TC_CANCEL_03",
+      "testName": "[Cancel] Cancelling asks for confirmation before completing",
+      "description": "US5-AC3 - confirmation is required before the cancellation is carried out. The cancelled-status copy is not yet confirmed and is marked TODO_EXPECTED_COPY for the locator pass.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Cancel Confirm",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "cancelDialog"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstBookingStatus"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "MyBookingsPage",
+          "element": "firstBookingStatus",
+          "data": "TODO_EXPECTED_COPY_CANCELLED_STATUS"
+        }
+      ]
+    },
+    {
+      "testId": "TC_CANCEL_04",
+      "testName": "[Cancel] A cancelled slot is released back into availability",
+      "description": "US5-AC4 - after cancellation the slot returns to the provider available slots.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Cancel Release",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstBookingSlot"
+        },
+        {
+          "action": "store_text",
+          "page": "MyBookingsPage",
+          "element": "firstBookingSlot",
+          "variable": "RELEASED_SLOT"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "firstCancelBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "click",
+          "page": "MyBookingsPage",
+          "element": "confirmCancelBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "firstBookingStatus"
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "BookingNewPage",
+          "element": "slotField",
+          "data": "{{RELEASED_SLOT}}"
+        }
+      ]
+    },
+    {
+      "testId": "TC_CANCEL_05",
+      "testName": "[Cancel] Cancelling inside the one-hour window is refused",
+      "description": "US5-AC5 (negative). NOT FULLY AUTOMATABLE: creating an appointment less than an hour away needs a seeding path, and no API contract is available for this app. Covers the observable half only - a booking exists and no cancellation error is shown in the eligible case.",
+      "preconditions": [
+        {
+          "action": "call_flow",
+          "flow": "booking-register",
+          "params": {
+            "name": "QA Cancel Window",
+            "email": "qa_regen_{{TIMESTAMP}}@test.com",
+            "password": "Pw{{RANDOM_STRING}}1!",
+            "phone": "{{RANDOM_PHONE}}"
+          }
+        },
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/doctors"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorsPage",
+          "element": "grid"
+        },
+        {
+          "action": "click",
+          "page": "DoctorsPage",
+          "element": "firstDoctorDetailLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "click",
+          "page": "DoctorDetailPage",
+          "element": "bookNowLink"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotCalendar"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstDate"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "slotField"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "firstSlot"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "BookingNewPage",
+          "element": "confirmationCard"
+        },
+        {
+          "action": "click",
+          "page": "BookingNewPage",
+          "element": "submitBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        }
+      ],
+      "steps": [
+        {
+          "action": "goto",
+          "data": "https://booking-appointment-system-psi.vercel.app/bookings/me"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_visible",
+          "page": "MyBookingsPage",
+          "element": "bookingCard"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "MyBookingsPage",
+          "element": "errorMessage"
+        }
+      ]
+    }
+  ]
+}

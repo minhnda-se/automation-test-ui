@@ -1,0 +1,78 @@
+{
+  "Navbar": {
+    "brand": "[data-testid=\"navbar-brand\"]",
+    "homeLink": "[data-testid=\"navbar-link-home\"]",
+    "doctorsLink": "[data-testid=\"navbar-link-doctors\"]",
+    "searchLink": "[data-testid=\"navbar-link-search\"]",
+    "loginLink": "[data-testid=\"navbar-login-link\"]",
+    "registerLink": "[data-testid=\"navbar-register-link\"]",
+    "userName": "[data-testid=\"navbar-user-name\"]",
+    "logoutBtn": "[data-testid=\"navbar-logout-button\"]"
+  },
+  "RegisterPage": {
+    "title": "[data-testid=\"register-title\"]",
+    "form": "[data-testid=\"register-form\"]",
+    "nameInput": "[data-testid=\"register-input-name\"]",
+    "emailInput": "[data-testid=\"register-input-email\"]",
+    "passwordInput": "[data-testid=\"register-input-password\"]",
+    "phoneInput": "[data-testid=\"register-input-phone\"]",
+    "submitBtn": "[data-testid=\"register-submit-button\"]",
+    "loginLink": "[data-testid=\"register-login-link\"]",
+    "errorMessage": "[data-testid=\"register-error\"]"
+  },
+  "LoginPage": {
+    "form": "[data-testid=\"login-form\"]",
+    "emailInput": "[data-testid=\"login-email-input\"]",
+    "passwordInput": "[data-testid=\"login-password-input\"]",
+    "submitBtn": "[data-testid=\"login-submit-button\"]",
+    "registerLink": "[data-testid=\"login-register-link\"]",
+    "errorMessage": "[data-testid=\"login-error\"]"
+  },
+  "DoctorsPage": {
+    "grid": "[data-testid=\"doctors-page-grid\"]",
+    "specialtySelect": "[data-testid=\"doctors-filter-specialty-select\"]",
+    "sortSelect": "[data-testid=\"doctors-filter-sort-select\"]",
+    "firstDoctorName": "[data-testid^=\"doctor-card-\"][data-testid$=\"-name\"] >> nth=0",
+    "firstDoctorSpecialty": "[data-testid^=\"doctor-card-\"][data-testid$=\"-specialty\"] >> nth=0",
+    "firstDoctorExperience": "[data-testid^=\"doctor-card-\"][data-testid$=\"-experience\"] >> nth=0",
+    "firstDoctorRating": "[data-testid^=\"doctor-card-\"][data-testid$=\"-rating\"] >> nth=0",
+    "firstDoctorFee": "[data-testid^=\"doctor-card-\"][data-testid$=\"-fee\"] >> nth=0",
+    "firstDoctorHospital": "[data-testid^=\"doctor-card-\"][data-testid$=\"-hospital\"] >> nth=0",
+    "firstDoctorCity": "[data-testid^=\"doctor-card-\"][data-testid$=\"-city\"] >> nth=0",
+    "firstDoctorDetailLink": "[data-testid^=\"doctor-card-\"][data-testid$=\"-detail-link\"] >> nth=0"
+  },
+  "DoctorDetailPage": {
+    "doctorName": "[data-testid=\"doctor-detail-name\"]",
+    "specialty": "[data-testid=\"doctor-detail-specialty\"]",
+    "experience": "[data-testid=\"doctor-detail-experience\"]",
+    "rating": "[data-testid=\"doctor-detail-rating\"]",
+    "fee": "[data-testid=\"doctor-detail-fee\"]",
+    "hospitalName": "[data-testid=\"doctor-detail-hospital-name\"]",
+    "bookNowLink": "[data-testid=\"doctor-detail-book-now-link\"]"
+  },
+  "BookingNewPage": {
+    "title": "[data-testid=\"booking-new-title\"]",
+    "doctorSelect": "[data-testid=\"booking-new-doctor-select\"]",
+    "slotCalendar": "[data-testid=\"booking-slot-calendar\"]",
+    "firstDate": "button[data-testid^=\"booking-calendar-date-\"] >> nth=0",
+    "slotField": "[data-testid=\"booking-new-slot-field\"]",
+    "slotEmptyMessage": "[data-testid=\"booking-new-slot-empty\"]",
+    "firstSlot": "TODO_LOCATOR",
+    "notesInput": "[data-testid=\"booking-new-notes-input\"]",
+    "submitBtn": "[data-testid=\"booking-new-submit-button\"]",
+    "confirmationCard": "[data-testid=\"booking-new-confirmation-card\"]",
+    "confirmationDoctor": "[data-testid=\"booking-new-confirmation-doctor\"]",
+    "confirmationTime": "[data-testid=\"booking-new-confirmation-time\"]",
+    "errorMessage": "TODO_LOCATOR"
+  },
+  "MyBookingsPage": {
+    "bookingCard": "TODO_LOCATOR",
+    "firstBookingDoctorName": "TODO_LOCATOR",
+    "firstBookingStatus": "TODO_LOCATOR",
+    "firstBookingSlot": "TODO_LOCATOR",
+    "firstCancelBtn": "TODO_LOCATOR",
+    "confirmCancelBtn": "TODO_LOCATOR",
+    "cancelDialog": "TODO_LOCATOR",
+    "errorMessage": "TODO_LOCATOR"
+  }
+}

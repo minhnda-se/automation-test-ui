@@ -1,0 +1,385 @@
+{
+  "name": "booking-slots",
+  "baseUrl": "https://booking-appointment-system-psi.vercel.app/",
+  "output": "report/fix/probe-booking-slots.txt",
+  "auth": {
+    "actions": [
+      {
+        "goto": "/auth/register"
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-name\"]",
+          "value": "QA Slot Probe"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-email\"]",
+          "value": "{{RANDOM_EMAIL}}"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-password\"]",
+          "value": "${BOOKING_PASSWORD}"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-phone\"]",
+          "value": "{{RANDOM_PHONE}}"
+        }
+      },
+      {
+        "click": "[data-testid=\"register-submit-button\"]"
+      }
+    ],
+    "waitForSelector": "[data-testid=\"navbar-user-name\"]"
+  },
+  "states": [
+    {
+      "name": "Booking form loaded",
+      "authenticate": true,
+      "navigate": "/bookings/new",
+      "actions": [
+        {
+          "waitForTimeout": 4000
+        }
+      ],
+      "capture": [
+        {
+          "name": "url",
+          "value": "url"
+        },
+        {
+          "name": "dateCount",
+          "selector": "button[data-testid^=\"booking-calendar-date-\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 0",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=0"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 1",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=1"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 2",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=2"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 3",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=3"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 4",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=4"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 5",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=5"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 6",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=6"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 7",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=7"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 8",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=8"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 9",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=9"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 10",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=10"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 11",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=11"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 12",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=12"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    },
+    {
+      "name": "Date index 13",
+      "actions": [
+        {
+          "click": "button[data-testid^=\"booking-calendar-date-\"] >> nth=13"
+        },
+        {
+          "waitForTimeout": 1800
+        }
+      ],
+      "capture": [
+        {
+          "name": "slotCount",
+          "selector": "button[data-testid^=\"booking-slot-item-\"]",
+          "value": "count"
+        },
+        {
+          "name": "emptyMessage",
+          "selector": "[data-testid=\"booking-new-slot-empty\"]",
+          "value": "count"
+        }
+      ]
+    }
+  ]
+}

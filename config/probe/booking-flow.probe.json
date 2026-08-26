@@ -1,0 +1,98 @@
+{
+  "name": "booking-flow",
+  "baseUrl": "https://booking-appointment-system-psi.vercel.app/",
+  "output": "report/fix/probe-booking-flow.txt",
+  "auth": {
+    "actions": [
+      { "goto": "/auth/register" },
+      { "fill": { "selector": "[data-testid=\"register-input-name\"]", "value": "QA Flow Probe" } },
+      { "fill": { "selector": "[data-testid=\"register-input-email\"]", "value": "{{RANDOM_EMAIL}}" } },
+      { "fill": { "selector": "[data-testid=\"register-input-password\"]", "value": "${BOOKING_PASSWORD}" } },
+      { "fill": { "selector": "[data-testid=\"register-input-phone\"]", "value": "{{RANDOM_PHONE}}" } },
+      { "click": "[data-testid=\"register-submit-button\"]" }
+    ],
+    "waitForSelector": "[data-testid=\"navbar-user-name\"]"
+  },
+  "states": [
+    {
+      "name": "Doctor detail page",
+      "authenticate": true,
+      "navigate": "/doctors",
+      "actions": [
+        { "waitForTimeout": 4000 },
+        { "click": "[data-testid^=\"doctor-card-\"][data-testid$=\"-detail-link\"]" },
+        { "waitForTimeout": 3000 }
+      ],
+      "dump": ["[data-testid]", "button", "a[href*=\"/bookings\"]"],
+      "capture": [{ "name": "url", "value": "url" }]
+    },
+    {
+      "name": "Booking form - initial",
+      "actions": [
+        { "click": "[data-testid=\"doctor-detail-book-now-link\"]" },
+        { "waitForTimeout": 4000 }
+      ],
+      "dump": ["[data-testid]", "select", "button"],
+      "structure": true,
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "calendarDateCount", "selector": "button[data-testid^=\"booking-calendar-date-\"]", "value": "count" },
+        { "name": "slotCountBeforeDate", "selector": "button[data-testid^=\"booking-slot-item-\"]", "value": "count" }
+      ]
+    },
+    {
+      "name": "Booking form - after choosing a date",
+      "actions": [
+        { "click": "button[data-testid^=\"booking-calendar-date-\"]" },
+        { "waitForTimeout": 3000 }
+      ],
+      "dump": ["button[data-testid^=\"booking-slot-item-\"]", "[data-testid*=\"slot\"]"],
+      "capture": [
+        { "name": "slotCountAfterDate", "selector": "button[data-testid^=\"booking-slot-item-\"]", "value": "count" }
+      ]
+    },
+    {
+      "name": "Booking form - after choosing a slot and submitting",
+      "actions": [
+        { "click": "button[data-testid^=\"booking-slot-item-\"]" },
+        { "waitForTimeout": 1000 },
+        { "click": "[data-testid=\"booking-new-submit-button\"]" },
+        { "waitForTimeout": 4000 }
+      ],
+      "dump": ["[data-testid*=\"error\"]", "[data-testid*=\"toast\"]", "[data-testid*=\"success\"]"],
+      "capture": [{ "name": "url", "value": "url" }]
+    },
+    {
+      "name": "My bookings after one booking",
+      "navigate": "/bookings/me",
+      "actions": [{ "waitForTimeout": 4000 }],
+      "dump": ["[data-testid]"],
+      "structure": true,
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "itemCount", "selector": "[data-testid^=\"my-bookings-item-\"]", "value": "count" }
+      ]
+    },
+    {
+      "name": "Cancel confirmation dialog",
+      "actions": [
+        { "click": "[data-testid$=\"-cancel-button\"]" },
+        { "waitForTimeout": 2000 }
+      ],
+      "dump": ["[data-testid*=\"cancel\"]", "[role=\"dialog\"]", "[data-testid*=\"modal\"]"],
+      "capture": [{ "name": "url", "value": "url" }]
+    },
+    {
+      "name": "After confirming the cancellation",
+      "actions": [
+        { "click": "[data-testid=\"booking-cancel-confirm-button\"]" },
+        { "waitForTimeout": 4000 }
+      ],
+      "dump": ["[data-testid*=\"status\"]", "[data-testid*=\"toast\"]", "[data-testid^=\"my-bookings-item-\"]"],
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "itemCountAfterCancel", "selector": "[data-testid^=\"my-bookings-item-\"]", "value": "count" }
+      ]
+    }
+  ]
+}

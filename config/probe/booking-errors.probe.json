@@ -1,0 +1,99 @@
+{
+  "name": "booking-errors",
+  "baseUrl": "https://booking-appointment-system-psi.vercel.app/",
+  "output": "report/fix/probe-booking-errors.txt",
+  "auth": {
+    "actions": [
+      { "goto": "/auth/register" },
+      { "fill": { "selector": "[data-testid=\"register-input-name\"]", "value": "QA Probe" } },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-email\"]",
+          "value": "${PROBE_EMAIL}"
+        }
+      },
+      {
+        "fill": {
+          "selector": "[data-testid=\"register-input-password\"]",
+          "value": "${BOOKING_PASSWORD}"
+        }
+      },
+      { "fill": { "selector": "[data-testid=\"register-input-phone\"]", "value": "0912345678" } },
+      { "click": "[data-testid=\"register-submit-button\"]" },
+      { "waitForTimeout": 3000 }
+    ]
+  },
+  "states": [
+    {
+      "name": "Register - submit with every field empty",
+      "navigate": "/auth/register",
+      "actions": [
+        { "click": "[data-testid=\"register-submit-button\"]" },
+        { "waitForTimeout": 1500 }
+      ],
+      "dump": ["[data-testid*=\"error\"]", "[role=\"alert\"]", "[data-testid*=\"toast\"]"],
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "stillOnRegister", "selector": "[data-testid=\"register-form\"]", "value": "count" },
+        { "name": "nameValidationMessage", "selector": "[data-testid=\"register-input-name\"]", "value": "text" }
+      ]
+    },
+    {
+      "name": "Register - invalid email format",
+      "navigate": "/auth/register",
+      "actions": [
+        { "fill": { "selector": "[data-testid=\"register-input-name\"]", "value": "QA Probe" } },
+        { "fill": { "selector": "[data-testid=\"register-input-email\"]", "value": "not-an-email" } },
+        { "fill": { "selector": "[data-testid=\"register-input-password\"]", "value": "Password123!" } },
+        { "fill": { "selector": "[data-testid=\"register-input-phone\"]", "value": "0912345678" } },
+        { "click": "[data-testid=\"register-submit-button\"]" },
+        { "waitForTimeout": 1500 }
+      ],
+      "dump": ["[data-testid*=\"error\"]", "[role=\"alert\"]", "[data-testid*=\"toast\"]"],
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "stillOnRegister", "selector": "[data-testid=\"register-form\"]", "value": "count" }
+      ]
+    },
+    {
+      "name": "Register - duplicate email (account created by auth block first)",
+      "authenticate": true,
+      "navigate": "/auth/register",
+      "actions": [
+        { "fill": { "selector": "[data-testid=\"register-input-name\"]", "value": "QA Probe Dup" } },
+        { "fill": { "selector": "[data-testid=\"register-input-email\"]", "value": "${PROBE_EMAIL}" } },
+        { "fill": { "selector": "[data-testid=\"register-input-password\"]", "value": "${BOOKING_PASSWORD}" } },
+        { "fill": { "selector": "[data-testid=\"register-input-phone\"]", "value": "0912345678" } },
+        { "click": "[data-testid=\"register-submit-button\"]" },
+        { "waitForTimeout": 3000 }
+      ],
+      "dump": ["[data-testid*=\"error\"]", "[role=\"alert\"]", "[data-testid*=\"toast\"]"],
+      "capture": [{ "name": "url", "value": "url" }]
+    },
+    {
+      "name": "Login - wrong password",
+      "navigate": "/auth/login",
+      "actions": [
+        { "fill": { "selector": "[data-testid=\"login-email-input\"]", "value": "${PROBE_EMAIL}" } },
+        { "fill": { "selector": "[data-testid=\"login-password-input\"]", "value": "DefinitelyWrong999" } },
+        { "click": "[data-testid=\"login-submit-button\"]" },
+        { "waitForTimeout": 3000 }
+      ],
+      "dump": ["[data-testid*=\"error\"]", "[role=\"alert\"]", "[data-testid*=\"toast\"]"],
+      "capture": [
+        { "name": "url", "value": "url" },
+        { "name": "stillOnLogin", "selector": "[data-testid=\"login-submit-button\"]", "value": "count" }
+      ]
+    },
+    {
+      "name": "Login - both fields empty",
+      "navigate": "/auth/login",
+      "actions": [
+        { "click": "[data-testid=\"login-submit-button\"]" },
+        { "waitForTimeout": 1500 }
+      ],
+      "dump": ["[data-testid*=\"error\"]", "[role=\"alert\"]", "[data-testid*=\"toast\"]"],
+      "capture": [{ "name": "url", "value": "url" }]
+    }
+  ]
+}

@@ -98,7 +98,7 @@ export class UIActionHandler implements IActionHandler {
         break;
       case 'store_text':
         if (!step.variable) {
-          throw new Error(`[Lỗi JSON]: 'store_text' bắt buộc phải khai báo trường "variable".`);
+          throw new Error(`[JSON Error]: 'store_text' requires the "variable" field.`);
         }
         const text = await this.element.getText(locatorStr);
         this.dataManager.saveRuntimeVariable(step.variable, text);

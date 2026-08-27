@@ -16,7 +16,7 @@ You are a Software Architect maintaining this framework's core. Your job is to a
 
 Don't write new code from a mental model of "how Playwright frameworks usually work" — read how *this one* actually does it:
 
-1. Open `utils/core/ActionEngine.ts` and read 2-3 existing `case` entries (pick ones similar in kind to what you're adding — e.g. an element action if you're adding an element action, an API action if you're adding an API action). Note how each resolves variables, calls its helper, and handles errors.
+1. Open the handler your action belongs to in `utils/handlers/` and read 2-3 existing `case` entries (pick ones similar in kind to what you're adding — e.g. an element action if you're adding an element action, an API action if you're adding an API action). Note how each calls its helper and handles errors. `ActionEngine.ts` itself holds no `case` entries: it resolves runtime variables and locators, then dispatches to whichever handler's `canHandle()` claims the keyword. Each handler declares its keywords in a `supportedActions` set, and a new action must be added there as well as to the switch — `canHandle` is what routes it.
 2. Open the matching helper and read the methods those cases call:
    - Element interactions (click, fill, hover, drag, upload, etc.) → `utils/helpers/ElementHelper.ts`
    - Assertions (verify_*) → `utils/helpers/AssertHelper.ts`
@@ -42,7 +42,7 @@ If the request is unambiguous (e.g. "add `upload_file(page, element, filePath)` 
 ## Phase 2: Implement across layers, in this order
 
 1. **Helper layer** — add the Playwright implementation in the appropriate helper (`ElementHelper.ts`, `AssertHelper.ts`, or `APIHelper.ts`). Match the existing method signature style, error handling, and logging conventions you saw in Phase 0.
-2. **Orchestration layer** — add the `case` in `ActionEngine.ts`'s switch statement. Resolve any `{{...}}` runtime variables/dynamic tokens via `DataManager` *before* calling the helper — the helper should only ever receive already-resolved values, same as every existing action.
+2. **Handler layer** — add the keyword to the handler's `supportedActions` set *and* a `case` to its switch. Both are required: the set is what `canHandle()` routes on, so a case without it is unreachable. `ActionEngine` has already resolved `{{...}}` tokens via `DataManager` and the locator via `LocatorManager` by the time `handle()` runs — the handler receives `resolvedData` and `locatorStr` and should not re-resolve either.
 3. **Action reference** — add an entry for the new keyword to `schema/action-notes.json` (its `fields` and `note`), then run `npm run actions:sync`. That regenerates all four artifacts: `schema/actions.json`, `docs/ACTIONS.md`, the `action` enum in `schema/scenario-schema.json`, and the `ActionType` union in `types/actions.generated.ts`. **Do not hand-edit any of those four** - the enum and the union used to be maintained by hand and are now generated, so an edit is either overwritten by the next sync or caught by `npm run actions:check`. This step is not optional: `npm run validate` fails while the reference is stale, and until it is regenerated the scenario validator rejects every step using the new action.
 3b. **Schema field constraints (only if the action needs a new field)** — `schema/scenario-schema.json` still holds the hand-maintained *field* definitions. The `action` enum inside it is generated; everything else in that file is yours to edit.
 4. **BDD compiler (only if in scope)** — add the regex mapping in `scripts/compile-bdd.ts` following an existing mapping's pattern.
@@ -52,7 +52,7 @@ If the request is unambiguous (e.g. "add `upload_file(page, element, filePath)` 
 
 Show the modified code blocks (diffs, not just descriptions) for:
 - Helper method
-- ActionEngine case
+- Handler `supportedActions` entry and `case`
 - Schema change
 - BDD mapping, if applicable
 

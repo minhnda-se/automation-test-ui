@@ -21,7 +21,7 @@ export class NetworkActionHandler implements IActionHandler {
     switch (step.action) {
       case 'mock_route': {
         if (!step.url) {
-          throw new Error(`[Lỗi JSON]: 'mock_route' bắt buộc phải có trường "url" (URL pattern).`);
+          throw new Error(`[JSON Error]: 'mock_route' requires the "url" field (a URL pattern).`);
         }
         const resolvedUrl = this.dataManager.resolve(step.url);
         // `status` only. Reading expected_status here is what made one field name
@@ -52,7 +52,7 @@ export class NetworkActionHandler implements IActionHandler {
 
       case 'unmock_route': {
         if (!step.url) {
-          throw new Error(`[Lỗi JSON]: 'unmock_route' bắt buộc phải có trường "url".`);
+          throw new Error(`[JSON Error]: 'unmock_route' requires the "url" field.`);
         }
         const resolvedUrl = this.dataManager.resolve(step.url);
         console.log(`[NetworkHandler] Unmocking route "${resolvedUrl}"`);

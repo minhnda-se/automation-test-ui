@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { resolveSuiteStatus } from '../utils/core/SuiteStatus';
+import { checkAuthoredText } from './english-only';
 
 const SCENARIOS_DIR = path.join(__dirname, '../data/scenarios');
 const FLOWS_DIR = path.join(__dirname, '../data/flows');
@@ -85,14 +86,14 @@ function validateTags(tags: any, label: string): string[] {
   if (tags === undefined) return [];
 
   if (!Array.isArray(tags)) {
-    return [`❌ [${label}] "tags" must be an array of strings (e.g. ["@saucedemo", "@ci"]).`];
+    return [`[FAIL] [${label}] "tags" must be an array of strings (e.g. ["@saucedemo", "@ci"]).`];
   }
 
   const errors: string[] = [];
   for (const tag of tags) {
     if (typeof tag !== 'string' || !TAG_PATTERN.test(tag)) {
       errors.push(
-        `❌ [${label}] Invalid tag ${JSON.stringify(tag)}. Tags must look like "@saucedemo" - a leading "@" followed by lowercase letters, digits, ".", "_" or "-".`
+        `[FAIL] [${label}] Invalid tag ${JSON.stringify(tag)}. Tags must look like "@saucedemo" - a leading "@" followed by lowercase letters, digits, ".", "_" or "-".`
       );
     }
   }
@@ -100,7 +101,7 @@ function validateTags(tags: any, label: string): string[] {
 }
 
 function validateAll() {
-  console.log('🔍 Validating all scenario JSON files & flows against framework rules...\n');
+  console.log('Validating all scenario JSON files & flows against framework rules...\n');
 
   let totalErrors = 0;
   let totalFiles = 0;
@@ -133,7 +134,7 @@ function validateAll() {
       try {
         json = JSON.parse(content);
       } catch (e: any) {
-        console.error(`❌ [Scenario: ${file}] Invalid JSON syntax: ${e.message}`);
+        console.error(`[FAIL] [Scenario: ${file}] Invalid JSON syntax: ${e.message}`);
         totalErrors++;
         continue;
       }
@@ -142,7 +143,7 @@ function validateAll() {
       const testCases = isOldFormat ? json : json.testCases;
 
       if (!Array.isArray(testCases)) {
-        console.error(`❌ [Scenario: ${file}] Missing 'testCases' array.`);
+        console.error(`[FAIL] [Scenario: ${file}] Missing 'testCases' array.`);
         totalErrors++;
         continue;
       }
@@ -155,9 +156,19 @@ function validateAll() {
           totalErrors++;
         }
 
+        const scenarioNameError = checkAuthoredText(
+          'scenario',
+          json.scenario,
+          `Scenario: ${file}`
+        );
+        if (scenarioNameError) {
+          console.error(scenarioNameError);
+          totalErrors++;
+        }
+
         const suiteStatus = resolveSuiteStatus(json.config?.status);
         if (suiteStatus.error) {
-          console.error(`❌ [Scenario: ${file} -> config] ${suiteStatus.error}`);
+          console.error(`[FAIL] [Scenario: ${file} -> config] ${suiteStatus.error}`);
           totalErrors++;
         }
         suiteIsWip = suiteStatus.status === 'wip';
@@ -178,13 +189,13 @@ function validateAll() {
           locatorFileUsable = true;
         } catch (e: any) {
           console.error(
-            `❌ [Scenario: ${file}] Referenced locator file is not valid JSON: ${locatorFile} (${e.message})`
+            `[FAIL] [Scenario: ${file}] Referenced locator file is not valid JSON: ${locatorFile} (${e.message})`
           );
           totalErrors++;
         }
       } else {
         console.error(
-          `❌ [Scenario: ${file}] Referenced locator file does not exist: data/locators/${locatorFile}`
+          `[FAIL] [Scenario: ${file}] Referenced locator file does not exist: data/locators/${locatorFile}`
         );
         totalErrors++;
       }
@@ -196,6 +207,14 @@ function validateAll() {
           console.error(message);
           totalErrors++;
         }
+
+        for (const field of ['testName', 'description'] as const) {
+          const message = checkAuthoredText(field, tc[field], `${file} -> ${tcId}`);
+          if (message) {
+            console.error(message);
+            totalErrors++;
+          }
+        }
         const allSteps = [
           ...(Array.isArray(tc.preconditions) ? tc.preconditions : []),
           ...(Array.isArray(tc.steps) ? tc.steps : []),
@@ -204,14 +223,14 @@ function validateAll() {
 
         allSteps.forEach((step: any, sIdx: number) => {
           if (!step.action) {
-            console.error(`❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Missing "action" property.`);
+            console.error(`[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Missing "action" property.`);
             totalErrors++;
             return;
           }
 
           if (!VALID_ACTIONS.has(step.action)) {
             console.error(
-              `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Unknown action: "${step.action}".`
+              `[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Unknown action: "${step.action}".`
             );
             totalErrors++;
           }
@@ -221,7 +240,7 @@ function validateAll() {
             const flowPath = path.join(FLOWS_DIR, flowName);
             if (!step.flow || !fs.existsSync(flowPath)) {
               console.error(
-                `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Referenced flow "${step.flow}" not found in data/flows/.`
+                `[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Referenced flow "${step.flow}" not found in data/flows/.`
               );
               totalErrors++;
             }
@@ -237,7 +256,7 @@ function validateAll() {
             }
             if (!step.element) {
               console.error(
-                `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "${step.action}" requires "element" property.`
+                `[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "${step.action}" requires "element" property.`
               );
               totalErrors++;
             }
@@ -258,21 +277,21 @@ function validateAll() {
 
           if (step.action === 'goto' && !step.data && !step.url) {
             console.error(
-              `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "goto" requires "data" or "url" containing the destination URL.`
+              `[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "goto" requires "data" or "url" containing the destination URL.`
             );
             totalErrors++;
           }
 
           if (step.action === 'verify_url_contains' && !step.data && !step.url) {
             console.error(
-              `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Assertion "verify_url_contains" requires "data" or "url".`
+              `[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Assertion "verify_url_contains" requires "data" or "url".`
             );
             totalErrors++;
           }
 
           if (step.action === 'store_text' && !step.variable && !step.storeAs) {
             console.error(
-              `❌ [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "store_text" requires "variable" or "storeAs" to name the target variable.`
+              `[FAIL] [${file} -> ${tcId} -> Step ${sIdx + 1}] Action "store_text" requires "variable" or "storeAs" to name the target variable.`
             );
             totalErrors++;
           }
@@ -287,7 +306,7 @@ function validateAll() {
               if (firstReport) {
                 reportedLocatorIssues.add(locatorKey);
                 console.error(
-                  `❌ [${stepRef}] Page "${step.page}" not found in "${locatorFile}". Add it, or run: npm run update-locators -- ${file}`
+                  `[FAIL] [${stepRef}] Page "${step.page}" not found in "${locatorFile}". Add it, or run: npm run update-locators -- ${file}`
                 );
                 totalErrors++;
               }
@@ -295,7 +314,7 @@ function validateAll() {
               if (firstReport) {
                 reportedLocatorIssues.add(locatorKey);
                 console.error(
-                  `❌ [${stepRef}] Element "${step.element}" not found in Page "${step.page}" (${locatorFile}). Add it, or run: npm run update-locators -- ${file}`
+                  `[FAIL] [${stepRef}] Element "${step.element}" not found in Page "${step.page}" (${locatorFile}). Add it, or run: npm run update-locators -- ${file}`
                 );
                 totalErrors++;
               }
@@ -314,11 +333,11 @@ function validateAll() {
                 // Only the sentinel is waiting on a human at a browser.
                 if (ALLOW_TODO || suiteIsWip) {
                   console.warn(
-                    `⚠️  [${stepRef}] Unresolved locator stub "${step.page}.${step.element}" in "${locatorFile}" (first of several references).`
+                    `[WARN] [${stepRef}] Unresolved locator stub "${step.page}.${step.element}" in "${locatorFile}" (first of several references).`
                   );
                 } else {
                   console.error(
-                    `❌ [${stepRef}] Unresolved locator stub "${step.page}.${step.element}" in "${locatorFile}" (value: ${JSON.stringify(locatorsData[step.page][step.element])}). Resolve it with Playwright Codegen, or re-run with --allow-todo while it is still in progress.`
+                    `[FAIL] [${stepRef}] Unresolved locator stub "${step.page}.${step.element}" in "${locatorFile}" (value: ${JSON.stringify(locatorsData[step.page][step.element])}). Resolve it with Playwright Codegen, or re-run with --allow-todo while it is still in progress.`
                   );
                   totalErrors++;
                 }
@@ -338,12 +357,21 @@ function validateAll() {
       const flowPath = path.join(FLOWS_DIR, flowFile);
       try {
         const flowData = JSON.parse(fs.readFileSync(flowPath, 'utf-8'));
+
+        for (const field of ['flowName', 'description'] as const) {
+          const message = checkAuthoredText(field, flowData[field], `Flow: ${flowFile}`);
+          if (message) {
+            console.error(message);
+            totalErrors++;
+          }
+        }
+
         if (!Array.isArray(flowData.steps)) {
-          console.error(`❌ [Flow: ${flowFile}] Flow definition missing "steps" array.`);
+          console.error(`[FAIL] [Flow: ${flowFile}] Flow definition missing "steps" array.`);
           totalErrors++;
         }
       } catch (err: any) {
-        console.error(`❌ [Flow: ${flowFile}] Invalid JSON: ${err.message}`);
+        console.error(`[FAIL] [Flow: ${flowFile}] Invalid JSON: ${err.message}`);
         totalErrors++;
       }
     }
@@ -390,10 +418,10 @@ function validateAll() {
 
   if (totalErrors === 0) {
     console.log(
-      `✅ Validation Passed: Processed ${totalFiles} scenario and flow files with 0 critical errors.`
+      `[OK] Validation Passed: Processed ${totalFiles} scenario and flow files with 0 critical errors.`
     );
   } else {
-    console.error(`❌ Validation Failed: Found ${totalErrors} errors across ${totalFiles} files.`);
+    console.error(`[FAIL] Validation Failed: Found ${totalErrors} errors across ${totalFiles} files.`);
     process.exit(1);
   }
 }

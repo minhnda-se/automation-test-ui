@@ -71,7 +71,7 @@ export class AssertActionHandler implements IActionHandler {
         break;
       case 'verify_attribute':
         if (!step.attribute) {
-          throw new Error(`[Lỗi JSON]: 'verify_attribute' bắt buộc phải khai báo trường "attribute".`);
+          throw new Error(`[JSON Error]: 'verify_attribute' requires the "attribute" field.`);
         }
         await this.assert.verifyAttribute(locatorStr, step.attribute, resolvedData, stepDesc);
         break;

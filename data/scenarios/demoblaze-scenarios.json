@@ -7,7 +7,7 @@
   "testCases": [
     {
       "testId": "DB_NEW_01",
-      "testName": "[Register] Đăng ký tài khoản ngẫu nhiên mới 100%",
+      "testName": "[Register] Register a brand-new random account",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
@@ -31,7 +31,7 @@
     },
     {
       "testId": "DB_01",
-      "testName": "[Nav] Truy cập trang chủ và kiểm tra Logo",
+      "testName": "[Nav] Home page loads and shows the logo",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "verify_visible", "page": "Demoblaze_Home", "element": "brandLogo" }
@@ -39,7 +39,7 @@
     },
     {
       "testId": "DB_02",
-      "testName": "[Auth] Mở modal Đăng nhập",
+      "testName": "[Auth] Log in modal opens",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
@@ -48,7 +48,7 @@
     },
     {
       "testId": "DB_03",
-      "testName": "[Auth] Đóng modal Đăng nhập bằng nút Close",
+      "testName": "[Auth] Close button dismisses the log in modal",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
@@ -57,7 +57,7 @@
     },
     {
       "testId": "DB_04",
-      "testName": "[Auth] Mở modal Đăng ký (Sign up)",
+      "testName": "[Auth] Sign up modal opens",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
@@ -70,7 +70,7 @@
     },
     {
       "testId": "DB_05",
-      "testName": "[Auth] Đăng nhập thành công",
+      "testName": "[Auth] Log in succeeds",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
@@ -92,7 +92,7 @@
     },
     {
       "testId": "DB_06",
-      "testName": "[Auth] Đăng xuất thành công",
+      "testName": "[Auth] Log out succeeds",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
@@ -115,7 +115,7 @@
     },
     {
       "testId": "DB_07",
-      "testName": "[Category] Lọc sản phẩm theo danh mục Phones",
+      "testName": "[Category] Filter products by Phones",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "categoryPhones" },
@@ -124,7 +124,7 @@
     },
     {
       "testId": "DB_08",
-      "testName": "[Category] Lọc sản phẩm theo danh mục Laptops",
+      "testName": "[Category] Filter products by Laptops",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "categoryLaptops" },
@@ -133,7 +133,7 @@
     },
     {
       "testId": "DB_09",
-      "testName": "[Category] Lọc sản phẩm theo danh mục Monitors",
+      "testName": "[Category] Filter products by Monitors",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "categoryMonitors" },
@@ -142,7 +142,7 @@
     },
     {
       "testId": "DB_10",
-      "testName": "[Product] Mở trang chi tiết sản phẩm",
+      "testName": "[Product] Open the product detail page",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
@@ -155,7 +155,7 @@
     },
     {
       "testId": "DB_11",
-      "testName": "[Product] Nút Thêm vào giỏ hàng hiển thị",
+      "testName": "[Product] Add to cart button is visible",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
@@ -169,7 +169,7 @@
     },
     {
       "testId": "DB_12",
-      "testName": "[Cart] Thêm sản phẩm và kiểm tra trong Giỏ hàng",
+      "testName": "[Cart] Added product appears in the cart",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
@@ -180,7 +180,7 @@
     },
     {
       "testId": "DB_13",
-      "testName": "[Cart] Xóa sản phẩm khỏi Giỏ hàng",
+      "testName": "[Cart] Delete a product from the cart",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
@@ -191,7 +191,7 @@
     },
     {
       "testId": "DB_14",
-      "testName": "[Checkout] Mở modal Đặt hàng (Place Order)",
+      "testName": "[Checkout] Place Order modal opens",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
         { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
@@ -200,7 +200,7 @@
     },
     {
       "testId": "DB_15",
-      "testName": "[Checkout] Đóng modal Đặt hàng",
+      "testName": "[Checkout] Place Order modal closes",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
         { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
@@ -209,7 +209,7 @@
     },
     {
       "testId": "DB_16",
-      "testName": "[Checkout E2E] Nhập thông tin Khách hàng (Tên, Quốc gia, Thành phố)",
+      "testName": "[Checkout E2E] Enter customer details (name, country, city)",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
         { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
@@ -235,7 +235,7 @@
     },
     {
       "testId": "DB_17",
-      "testName": "[Checkout E2E] Nhập thông tin Thẻ thanh toán",
+      "testName": "[Checkout E2E] Enter payment card details",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
         { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
@@ -261,7 +261,7 @@
     },
     {
       "testId": "DB_18",
-      "testName": "[Checkout E2E] Hoàn tất luồng thanh toán",
+      "testName": "[Checkout E2E] Complete the purchase flow",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
@@ -286,7 +286,7 @@
     },
     {
       "testId": "DB_19",
-      "testName": "[Checkout E2E] Xác nhận thông báo mua hàng thành công",
+      "testName": "[Checkout E2E] Purchase confirmation message is shown",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
         { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
@@ -313,7 +313,7 @@
     },
     {
       "testId": "DB_20",
-      "testName": "[Checkout E2E] Đóng Popup thành công và hoàn thành",
+      "testName": "[Checkout E2E] Dismiss the confirmation popup",
       "steps": [
         { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
         { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },

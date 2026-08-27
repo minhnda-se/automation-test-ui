@@ -7,7 +7,7 @@
   "testCases": [
     {
       "testId": "DB_NEW_01",
-      "testName": "[Login] Đăng nhập tài khoản ngẫu nhiên mới 100%",
+      "testName": "[Login] Log in with a brand-new random account",
       "preconditions": [
         { "action": "goto", "data": "https://www.demoblaze.com/" },
         { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },

@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Lấy tên file từ command line
+// Read the file name from the command line
 const args = process.argv.slice(2);
 if (args.length === 0) {
-  console.error('[Error] Vui lòng truyền tên file CSV.');
+  console.error('[Error] Pass the CSV file name as an argument.');
   console.error('Usage: npm run csv2json -- data.csv');
   process.exit(1);
 }
@@ -14,7 +14,7 @@ const csvFilePath = path.join(__dirname, '../docs', csvFileName);
 const jsonFileName = csvFileName.replace('.csv', '.json');
 const jsonFilePath = path.join(__dirname, '../data/scenarios', jsonFileName);
 
-// Trình phân tích CSV chuẩn RFC 4180 (xử lý dấu phẩy và escaped quotes "" trong ngoặc kép)
+// RFC 4180 CSV parser: handles commas inside quoted fields and the doubled "" escape
 function parseCSVRow(str: string): string[] {
   const result: string[] = [];
   let cur = '';
@@ -40,7 +40,7 @@ function parseCSVRow(str: string): string[] {
 
 function compileCSVtoJSON() {
   if (!fs.existsSync(csvFilePath)) {
-    console.error(`[Error] Không tìm thấy file CSV tại: ${csvFilePath}`);
+    console.error(`[Error] CSV file not found at: ${csvFilePath}`);
     process.exit(1);
   }
 
@@ -48,7 +48,7 @@ function compileCSVtoJSON() {
   const lines = fileContent.split(/\r?\n/).filter((line) => line.trim() !== '');
 
   if (lines.length < 2) {
-    console.error('[Error] File CSV trống hoặc thiếu dữ liệu.');
+    console.error('[Error] CSV file is empty or has no data rows.');
     process.exit(1);
   }
 
@@ -75,7 +75,7 @@ function compileCSVtoJSON() {
     const testId = rowData['testid'];
     if (!testId) continue;
 
-    // Khởi tạo TestCase nếu chưa tồn tại trong Map
+    // Create the test case on first sight of its id
     if (!testCaseMap.has(testId)) {
       testCaseMap.set(testId, {
         testId: testId,
@@ -89,7 +89,7 @@ function compileCSVtoJSON() {
 
     const tc = testCaseMap.get(testId);
 
-    // Tạo đối tượng hành động
+    // Build the step object
     const actionObj: any = {
       action: rowData['action'],
     };
@@ -110,7 +110,7 @@ function compileCSVtoJSON() {
       }
     }
 
-    // Phân phối vào đúng mảng dựa trên cột Phase
+    // Route the step by its Phase column
     const phase = rowData['phase']?.toLowerCase();
     if (phase === 'setup' || phase === 'precondition') {
       tc.preconditions.push(actionObj);
@@ -121,12 +121,12 @@ function compileCSVtoJSON() {
     }
   }
 
-  // Chuyển Map thành Array
+  // Map to array
   ultimateJson.testCases = Array.from(testCaseMap.values());
 
   // Ghi ra file JSON
   fs.writeFileSync(jsonFilePath, JSON.stringify(ultimateJson, null, 2), 'utf-8');
-  console.log(`[Success] Đã biên dịch thành công file CSV sang JSON.`);
+  console.log(`[Success] Compiled the CSV into a JSON scenario.`);
   console.log(`[Output] ${jsonFilePath}`);
 }
 

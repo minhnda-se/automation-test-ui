@@ -64,7 +64,7 @@ export class AssertHelper extends BaseHelper {
 
   async verifyText(locatorStr: string, data: any, stepElement?: string, stepDescription?: string) {
     if (data === undefined || data === null) {
-      throw new Error(`[Lỗi JSON]: 'verify_text' tại ${stepElement || 'element'} bắt buộc có data.`);
+      throw new Error(`[JSON Error]: 'verify_text' at ${stepElement || 'element'} requires "data".`);
     }
     const desc = stepDescription || `verify_text - ${stepElement}`;
     try {
@@ -84,7 +84,7 @@ export class AssertHelper extends BaseHelper {
   ) {
     if (data === undefined || data === null) {
       throw new Error(
-        `[Lỗi JSON]: 'verify_text_contains' tại ${stepElement || 'element'} bắt buộc có data.`
+        `[JSON Error]: 'verify_text_contains' at ${stepElement || 'element'} requires "data".`
       );
     }
     const desc = stepDescription || `verify_text_contains - ${stepElement}`;
@@ -106,7 +106,7 @@ export class AssertHelper extends BaseHelper {
   ) {
     if (data === undefined || data === null) {
       throw new Error(
-        `[Lỗi JSON]: 'verify_not_contains_text' tại ${stepElement || 'element'} bắt buộc có data.`
+        `[JSON Error]: 'verify_not_contains_text' at ${stepElement || 'element'} requires "data".`
       );
     }
     const desc = stepDescription || `verify_not_contains_text - ${stepElement}`;
@@ -128,7 +128,7 @@ export class AssertHelper extends BaseHelper {
   ) {
     if (data === undefined || data === null) {
       throw new Error(
-        `[Lỗi JSON]: 'verify_class_contains' tại ${stepElement || 'element'} bắt buộc có data.`
+        `[JSON Error]: 'verify_class_contains' at ${stepElement || 'element'} requires "data".`
       );
     }
     const desc = stepDescription || `verify_class_contains - ${stepElement}`;
@@ -150,7 +150,7 @@ export class AssertHelper extends BaseHelper {
   ) {
     if (data === undefined || data === null) {
       throw new Error(
-        `[Lỗi JSON]: 'verify_not_contains_class' tại ${stepElement || 'element'} bắt buộc có data.`
+        `[JSON Error]: 'verify_not_contains_class' at ${stepElement || 'element'} requires "data".`
       );
     }
     const desc = stepDescription || `verify_not_contains_class - ${stepElement}`;
@@ -166,7 +166,7 @@ export class AssertHelper extends BaseHelper {
 
   async verifyUrlContains(data: any, stepDescription: string) {
     if (data === undefined || data === null) {
-      throw new Error(`[Lỗi JSON]: 'verify_url_contains' bắt buộc có data.`);
+      throw new Error(`[JSON Error]: 'verify_url_contains' requires "data".`);
     }
     try {
       const urlRegex = new RegExp(String(data));

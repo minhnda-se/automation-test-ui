@@ -26,7 +26,7 @@ export class FlowActionHandler implements IActionHandler {
 
   async handle(step: IStep, _locatorStr: string, _resolvedData: any, _stepDesc: string): Promise<void> {
     if (!step.flow) {
-      throw new Error(`[Lỗi JSON]: 'call_flow' bắt buộc phải khai báo trường "flow" (Tên file Flow).`);
+      throw new Error(`[JSON Error]: 'call_flow' requires the "flow" field (the flow file name).`);
     }
 
     if (this.callStackDepth >= this.maxDepth) {

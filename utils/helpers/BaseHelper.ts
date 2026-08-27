@@ -10,7 +10,8 @@ export class BaseHelper {
     this.testInfo = testInfo;
   }
 
-  // Tiện ích chụp ảnh dùng chung cho mọi file kế thừa
+  // Attaches to the Playwright report rather than writing to disk, so evidence
+  // travels with the test result instead of needing a separate artifact path.
   public async captureEvidence(stepName: string, status: 'PASS' | 'FAIL') {
     const screenshot = await this.page.screenshot();
     await this.testInfo.attach(`[${status}] ${stepName}`, {

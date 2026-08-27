@@ -20,7 +20,7 @@ function generateLocatorTemplate(targetFiles: string[]) {
     fs.mkdirSync(LOCATORS_DIR, { recursive: true });
   }
 
-  // Quản lý dữ liệu locator theo từng đường dẫn file
+  // Locator data kept per file path
   const locatorFilesData: Record<string, Record<string, Record<string, string>>> = {};
 
   let newElementsCount = 0;
@@ -47,13 +47,13 @@ function generateLocatorTemplate(targetFiles: string[]) {
       continue;
     }
 
-    // 1. Trích xuất tên file locator từ config, nếu không có thì fallback về 'locators.json'
+    // 1. Locator file name from config, falling back to 'locators.json'
     const locatorFileName = scenarioData.config?.locatorFile || 'locators.json';
     const locatorFilePath = path.join(LOCATORS_DIR, locatorFileName);
 
-    // 2. Nếu file locator này chưa được nạp vào bộ nhớ trong lần chạy này, tiến hành nạp
+    // 2. Load the locator file once per run and reuse it
     if (!locatorFilesData[locatorFilePath]) {
-      locatorFilesData[locatorFilePath] = {}; // Khởi tạo rỗng
+      locatorFilesData[locatorFilePath] = {}; // start empty
 
       if (fs.existsSync(locatorFilePath)) {
         try {
@@ -68,7 +68,7 @@ function generateLocatorTemplate(targetFiles: string[]) {
       }
     }
 
-    // Lấy object chứa locator của file hiện tại để tiến hành map elements
+    // Locators for the current file, to map elements into
     const currentLocatorsMap = locatorFilesData[locatorFilePath];
 
     const isOldFormat = Array.isArray(scenarioData);
@@ -106,7 +106,7 @@ function generateLocatorTemplate(targetFiles: string[]) {
     processedFilesCount++;
   }
 
-  // 3. Ghi lại toàn bộ các file locator đã được thu thập/cập nhật
+  // 3. Write back every locator file collected or updated
   if (processedFilesCount > 0) {
     for (const [filePath, data] of Object.entries(locatorFilesData)) {
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');

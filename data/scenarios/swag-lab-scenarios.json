@@ -9,7 +9,7 @@
   "testCases": [
     {
       "testId": "TC_01",
-      "testName": "[Auth] Đăng nhập thành công với tài khoản Standard",
+      "testName": "[Auth] Standard user logs in successfully",
       "steps": [
         {
           "action": "goto",
@@ -44,7 +44,7 @@
     },
     {
       "testId": "TC_02",
-      "testName": "[Auth] Đăng nhập thành công với tài khoản Problem",
+      "testName": "[Auth] Problem user logs in successfully",
       "steps": [
         {
           "action": "goto",
@@ -76,7 +76,7 @@
     },
     {
       "testId": "TC_03",
-      "testName": "[Auth] Đăng nhập thất bại do tài khoản bị khóa",
+      "testName": "[Auth] Locked-out user cannot log in",
       "steps": [
         {
           "action": "goto",
@@ -112,7 +112,7 @@
     },
     {
       "testId": "TC_04",
-      "testName": "[Auth] Đăng nhập thất bại do sai mật khẩu",
+      "testName": "[Auth] Wrong password is rejected",
       "steps": [
         {
           "action": "goto",
@@ -145,7 +145,7 @@
     },
     {
       "testId": "TC_05",
-      "testName": "[Auth] Báo lỗi khi bỏ trống Username",
+      "testName": "[Auth] Missing username reports an error",
       "steps": [
         {
           "action": "goto",
@@ -172,7 +172,7 @@
     },
     {
       "testId": "TC_06",
-      "testName": "[Auth] Báo lỗi khi bỏ trống Password",
+      "testName": "[Auth] Missing password reports an error",
       "steps": [
         {
           "action": "goto",
@@ -199,7 +199,7 @@
     },
     {
       "testId": "TC_07",
-      "testName": "[Auth] Báo lỗi khi bỏ trống cả Username và Password",
+      "testName": "[Auth] Missing username and password reports an error",
       "steps": [
         {
           "action": "goto",
@@ -220,7 +220,7 @@
     },
     {
       "testId": "TC_08",
-      "testName": "[Inventory] Thêm Balo vào giỏ hàng và kiểm tra Badge",
+      "testName": "[Inventory] Adding the backpack updates the cart badge",
       "steps": [
         {
           "action": "goto",
@@ -267,7 +267,7 @@
     },
     {
       "testId": "TC_09",
-      "testName": "[Inventory] Thêm Đèn pin xe đạp vào giỏ hàng",
+      "testName": "[Inventory] Adding the bike light to the cart",
       "steps": [
         {
           "action": "goto",
@@ -305,7 +305,7 @@
     },
     {
       "testId": "TC_10",
-      "testName": "[Inventory] Thêm và xóa sản phẩm trực tiếp từ trang chủ",
+      "testName": "[Inventory] Add and remove a product from the listing page",
       "steps": [
         {
           "action": "goto",
@@ -348,7 +348,7 @@
     },
     {
       "testId": "TC_11",
-      "testName": "[Nav] Đăng xuất hệ thống qua Hamburger Menu",
+      "testName": "[Nav] Log out through the hamburger menu",
       "steps": [
         {
           "action": "goto",
@@ -390,7 +390,7 @@
     },
     {
       "testId": "TC_12",
-      "testName": "[Cart] Xem sản phẩm trong giỏ hàng",
+      "testName": "[Cart] Cart shows the added product",
       "steps": [
         {
           "action": "goto",
@@ -436,7 +436,7 @@
     },
     {
       "testId": "TC_13",
-      "testName": "[Cart] Chức năng Continue Shopping từ giỏ hàng",
+      "testName": "[Cart] Continue Shopping returns to the listing",
       "steps": [
         {
           "action": "goto",
@@ -478,7 +478,7 @@
     },
     {
       "testId": "TC_14",
-      "testName": "[Checkout] Điều hướng từ Giỏ hàng sang màn hình Checkout Info",
+      "testName": "[Checkout] Cart leads to the checkout information step",
       "steps": [
         {
           "action": "goto",
@@ -520,7 +520,7 @@
     },
     {
       "testId": "TC_15",
-      "testName": "[Checkout Val] Báo lỗi khi bỏ trống First Name",
+      "testName": "[Checkout Val] Missing first name reports an error",
       "steps": [
         {
           "action": "goto",
@@ -588,7 +588,7 @@
     },
     {
       "testId": "TC_16",
-      "testName": "[Checkout Val] Báo lỗi khi bỏ trống Last Name",
+      "testName": "[Checkout Val] Missing last name reports an error",
       "steps": [
         {
           "action": "goto",
@@ -653,7 +653,7 @@
     },
     {
       "testId": "TC_17",
-      "testName": "[Checkout Val] Báo lỗi khi bỏ trống Postal Code",
+      "testName": "[Checkout Val] Missing postal code reports an error",
       "steps": [
         {
           "action": "goto",
@@ -718,7 +718,7 @@
     },
     {
       "testId": "TC_18",
-      "testName": "[Checkout Val] Báo lỗi ưu tiên First Name khi bỏ trống toàn bộ",
+      "testName": "[Checkout Val] Empty form reports the first name error first",
       "steps": [
         {
           "action": "goto",
@@ -766,7 +766,7 @@
     },
     {
       "testId": "TC_19",
-      "testName": "[Checkout Nav] Nút Cancel tại màn hình Info đưa về Cart",
+      "testName": "[Checkout Nav] Cancel on the information step returns to the cart",
       "steps": [
         {
           "action": "goto",
@@ -813,7 +813,7 @@
     },
     {
       "testId": "TC_20",
-      "testName": "[Checkout E2E] Điều hướng thành công đến màn hình Overview",
+      "testName": "[Checkout E2E] Information step leads to the overview",
       "steps": [
         {
           "action": "goto",
@@ -884,7 +884,7 @@
     },
     {
       "testId": "TC_21",
-      "testName": "[Checkout Nav] Nút Cancel tại màn hình Overview đưa về Inventory",
+      "testName": "[Checkout Nav] Cancel on the overview returns to the listing",
       "steps": [
         {
           "action": "goto",
@@ -959,7 +959,7 @@
     },
     {
       "testId": "TC_22",
-      "testName": "[Checkout E2E] Hoàn tất luồng thanh toán (Finish Order)",
+      "testName": "[Checkout E2E] Finish completes the order",
       "steps": [
         {
           "action": "goto",
@@ -1038,7 +1038,7 @@
     },
     {
       "testId": "TC_23",
-      "testName": "[Complete Nav] Nút Back Home đưa về Inventory sau khi hoàn tất mua hàng",
+      "testName": "[Complete Nav] Back Home returns to the listing after an order",
       "steps": [
         {
           "action": "goto",
@@ -1118,7 +1118,7 @@
     },
     {
       "testId": "TC_24",
-      "testName": "[E2E] Thực hiện mua 2 sản phẩm liên tiếp",
+      "testName": "[E2E] Buy two products in one order",
       "steps": [
         {
           "action": "goto",

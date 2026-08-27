@@ -9,8 +9,8 @@
   "testCases": [
     {
       "testId": "TC_01",
-      "testName": "Đăng nhập thành công",
-      "description": "Kiểm tra tài khoản standard user",
+      "testName": "Log in succeeds",
+      "description": "Checks the standard user account",
       "preconditions": [
         {
           "action": "goto",
@@ -56,8 +56,8 @@
     },
     {
       "testId": "TC_02",
-      "testName": "Tài khoản bị khóa",
-      "description": "Kiểm tra thông báo lỗi khi user bị khóa",
+      "testName": "Locked-out account",
+      "description": "Checks the error message shown for a locked-out user",
       "preconditions": [
         {
           "action": "goto",

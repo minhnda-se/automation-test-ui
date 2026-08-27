@@ -28,7 +28,7 @@ export class ElementHelper extends BaseHelper {
 
   async fill(locatorStr: string, data: any, stepElement?: string) {
     if (data === undefined || data === null) {
-      throw new Error(`[Lỗi JSON]: 'fill' tại ${stepElement || 'element'} bắt buộc phải có data.`);
+      throw new Error(`[JSON Error]: 'fill' at ${stepElement || 'element'} requires "data".`);
     }
     await this.page.locator(locatorStr).fill(String(data));
   }

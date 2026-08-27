@@ -57,6 +57,14 @@ export class ElementHelper extends BaseHelper {
     await this.page.locator(locatorStr).uncheck();
   }
 
+  // Playwright's clear() is fill('') plus the editability checks, which is why
+  // this is not just fill(locator, ''): the framework rejects a fill step with
+  // empty data - see scripts/validate-scenarios.ts - so emptying a field had no
+  // expressible form before this action existed.
+  async clear(locatorStr: string) {
+    await this.page.locator(locatorStr).clear();
+  }
+
   async uploadFile(locatorStr: string, relativeOrAbsolutePath: string) {
     const resolvedPath = path.isAbsolute(relativeOrAbsolutePath)
       ? relativeOrAbsolutePath

@@ -17,6 +17,7 @@ export class AssertActionHandler implements IActionHandler {
     'verify_enabled',
     'verify_disabled',
     'verify_checked',
+    'verify_unchecked',
     'verify_attribute',
     'verify_element_count',
     'verify_visual_snapshot',
@@ -46,6 +47,9 @@ export class AssertActionHandler implements IActionHandler {
         break;
       case 'verify_checked':
         await this.assert.verifyChecked(locatorStr, stepDesc);
+        break;
+      case 'verify_unchecked':
+        await this.assert.verifyUnchecked(locatorStr, stepDesc);
         break;
       case 'verify_text':
         await this.assert.verifyText(locatorStr, resolvedData, step.element, stepDesc);

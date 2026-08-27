@@ -60,7 +60,7 @@ npm run actions:sync                             # regenerate action reference a
 
 ## BDD status
 
-The Gherkin compiler (`scripts/compile-bdd.ts`) is **frozen** at six step patterns out of 40 actions. JSON scenarios are the primary input. Do not extend the compiler without a scoped decision — see `.claude/rules/bdd.md`.
+The Gherkin compiler (`scripts/compile-bdd.ts`) is **frozen** at six step patterns out of 42 actions. JSON scenarios are the primary input. Do not extend the compiler without a scoped decision — see `.claude/rules/bdd.md`.
 - `.claude/commands/` — task-specific slash commands (`/plan`, `/implement`, `/test`, etc.)
 
 ## Open items

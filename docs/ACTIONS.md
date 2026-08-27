@@ -8,13 +8,14 @@ npm run actions:sync
 
 This file is the authoritative list of action keywords. An action that does not appear here is not implemented, whatever any other document says. Field descriptions come from `schema/action-notes.json`; the keyword list itself comes from the handler classes.
 
-Total implemented actions: 40
+Total implemented actions: 42
 
-## UI (18)
+## UI (19)
 
 | Action | Fields | Notes |
 |---|---|---|
 | `check` | `page`, `element` | - |
+| `clear` | `page`, `element` | Empties an input. Use this rather than `fill` with an empty string - the validator rejects a `fill` step with empty `data`, so this is the only way to express clearing a field. |
 | `click` | `page`, `element` | - |
 | `double_click` | `page`, `element` | - |
 | `fill` | `page`, `element`, `data` | Optional `storeAs` saves the filled value as a runtime variable. `data` must be non-empty - the validator enforces this. |
@@ -33,7 +34,7 @@ Total implemented actions: 40
 | `wait` | `data` (milliseconds) | Falls back to `timeout`, then to 1000. Prefer an assertion over a fixed wait where possible. |
 | `wait_for_element` | `page`, `element` | Optional `state` (`visible` default, or `hidden` / `attached` / `detached`) and `timeout` in ms (default 10000). Prefer this over `wait` - a fixed sleep is both slower than needed and still too short under load. |
 
-## Assertion (14)
+## Assertion (15)
 
 | Action | Fields | Notes |
 |---|---|---|
@@ -48,6 +49,7 @@ Total implemented actions: 40
 | `verify_not_visible` | `page`, `element` | - |
 | `verify_text` | `page`, `element`, `data` | Exact match. `data` must be non-empty - the validator enforces this. |
 | `verify_text_contains` | `page`, `element`, `data` | Partial match. `data` must be non-empty - the validator enforces this. |
+| `verify_unchecked` | `page`, `element` | Negative counterpart of `verify_checked`. |
 | `verify_url_contains` | `data`, or `url` | No locator involved. The preferred assertion for redirection. |
 | `verify_visible` | `page`, `element` | Do not use on generic wrappers or body containers - assert a concrete outcome instead. |
 | `verify_visual_snapshot` | `page`, `element` | Optional `snapshotName` and `maxDiffPixelRatio` (default 0.05). Name defaults to `<page>_<element>.png`. |
@@ -79,8 +81,8 @@ Total implemented actions: 40
 
 | Handler | Actions |
 |---|---|
-| `UIActionHandler` | 18 |
-| `AssertActionHandler` | 14 |
+| `UIActionHandler` | 19 |
+| `AssertActionHandler` | 15 |
 | `APIActionHandler` | 5 |
 | `NetworkActionHandler` | 2 |
 | `FlowActionHandler` | 1 |

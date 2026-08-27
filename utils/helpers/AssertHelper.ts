@@ -52,6 +52,16 @@ export class AssertHelper extends BaseHelper {
     }
   }
 
+  async verifyUnchecked(locatorStr: string, stepDescription: string) {
+    try {
+      await expect(this.page.locator(locatorStr)).not.toBeChecked();
+      await this.captureEvidence(stepDescription, 'PASS');
+    } catch (error) {
+      await this.captureEvidence(stepDescription, 'FAIL');
+      throw error;
+    }
+  }
+
   async verifyText(locatorStr: string, data: any, stepElement?: string, stepDescription?: string) {
     if (data === undefined || data === null) {
       throw new Error(`[Lỗi JSON]: 'verify_text' tại ${stepElement || 'element'} bắt buộc có data.`);

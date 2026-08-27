@@ -8,7 +8,7 @@ paths:
 
 ## Status
 
-`scripts/compile-bdd.ts` is frozen at **six step patterns**, against the framework's **40 action keywords**. No `Background`, no `Scenario Outline` / `Examples`, no preconditions or postconditions, no `dataTable`, no `call_flow`.
+`scripts/compile-bdd.ts` is frozen at **six step patterns**, against the framework's **42 action keywords**. No `Background`, no `Scenario Outline` / `Examples`, no preconditions or postconditions, no `dataTable`, no `call_flow`.
 
 Two header directives set suite-level config: `# locatorFile:` and `# tags:`. Neither is a step pattern, and neither is exempt from the freeze rationale below - they exist because config hand-written into a `-generated.json` is destroyed by the next recompile. Native Gherkin `@tag` lines are rejected with an error rather than silently dropped.
 

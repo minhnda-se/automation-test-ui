@@ -27,6 +27,10 @@
     "fields": "`page`, `element`, `data`",
     "note": "Optional `storeAs` saves the filled value as a runtime variable. `data` must be non-empty - the validator enforces this."
   },
+  "clear": {
+    "fields": "`page`, `element`",
+    "note": "Empties an input. Use this rather than `fill` with an empty string - the validator rejects a `fill` step with empty `data`, so this is the only way to express clearing a field."
+  },
   "press_key": {
     "fields": "`page`, `element`, `data` (key name)",
     "note": "Falls back to `key`, then to `Enter`."
@@ -86,6 +90,10 @@
   "verify_checked": {
     "fields": "`page`, `element`",
     "note": ""
+  },
+  "verify_unchecked": {
+    "fields": "`page`, `element`",
+    "note": "Negative counterpart of `verify_checked`."
   },
   "verify_text": {
     "fields": "`page`, `element`, `data`",

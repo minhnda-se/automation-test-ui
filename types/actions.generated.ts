@@ -7,6 +7,7 @@
 export type ActionType =
   // UI
   | 'check'
+  | 'clear'
   | 'click'
   | 'double_click'
   | 'fill'
@@ -36,6 +37,7 @@ export type ActionType =
   | 'verify_not_visible'
   | 'verify_text'
   | 'verify_text_contains'
+  | 'verify_unchecked'
   | 'verify_url_contains'
   | 'verify_visible'
   | 'verify_visual_snapshot'

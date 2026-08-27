@@ -5,7 +5,7 @@ description: Write Gherkin .feature files for this framework's FROZEN BDD compil
 
 # Write BDD Feature (frozen compiler)
 
-`scripts/compile-bdd.ts` is **frozen**. It supports **six step patterns** out of the framework's **40 action keywords** (`docs/ACTIONS.md`). It has no support for `Background`, `Scenario Outline` / `Examples`, preconditions, postconditions, `dataTable`, or `call_flow`.
+`scripts/compile-bdd.ts` is **frozen**. It supports **six step patterns** out of the framework's **42 action keywords** (`docs/ACTIONS.md`). It has no support for `Background`, `Scenario Outline` / `Examples`, preconditions, postconditions, `dataTable`, or `call_flow`.
 
 Suite config is set by two header directives, `# locatorFile:` and `# tags:`, written above the `Feature:` line. Native Gherkin `@tag` lines are an error - use `# tags:` instead.
 

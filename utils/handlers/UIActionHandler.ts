@@ -17,6 +17,7 @@ export class UIActionHandler implements IActionHandler {
     'double_click',
     'hover',
     'fill',
+    'clear',
     'press_key',
     'select_option',
     'check',
@@ -64,6 +65,9 @@ export class UIActionHandler implements IActionHandler {
         if (step.storeAs) {
           this.dataManager.saveRuntimeVariable(step.storeAs, String(resolvedData));
         }
+        break;
+      case 'clear':
+        await this.element.clear(locatorStr);
         break;
       case 'press_key':
         await this.element.pressKey(locatorStr, resolvedData || step.key || 'Enter');

@@ -40,9 +40,10 @@
           "element": "signupBtn"
         },
         {
-          "action": "click",
+          "action": "wait_for_element",
           "page": "Demoblaze_Register",
-          "element": "signupCloseBtn"
+          "element": "signupModal",
+          "state": "hidden"
         },
         {
           "action": "click",

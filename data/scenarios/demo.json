@@ -1,7 +1,9 @@
 {
   "scenario": "Demo Test Scenarios",
   "config": {
-    "tags": ["@demoblaze"],
+    "tags": [
+      "@demoblaze"
+    ],
     "locatorFile": "demoblaze.json"
   },
   "testCases": [
@@ -9,9 +11,15 @@
       "testId": "DB_NEW_01",
       "testName": "[Login] Log in with a brand-new random account",
       "preconditions": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
-
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "signupMenu"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
@@ -26,30 +34,59 @@
           "data": "Pass_{{RANDOM_STRING}}",
           "storeAs": "STORED_PASSWORD"
         },
-        { "action": "click", "page": "Demoblaze_Auth", "element": "signupBtn" }
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "signupBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Demoblaze_Auth",
+          "element": "signupModal",
+          "state": "hidden"
+        }
       ],
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
-
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
           "element": "loginUsername",
           "data": "{{STORED_EMAIL}}"
         },
-
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
           "element": "loginPassword",
           "data": "{{STORED_PASSWORD}}"
         },
-
-        { "action": "click", "page": "Demoblaze_Auth", "element": "loginBtn" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "logoutMenu" }
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "logoutMenu"
+        }
       ],
-      "postconditions": [{ "action": "click", "page": "Demoblaze_Home", "element": "logoutMenu" }]
+      "postconditions": [
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "logoutMenu"
+        }
+      ],
+      "description": "Demoblaze closes the signup modal when register() succeeds, so waiting for it to hide is both the completion signal and the proof the account was created. Without it the next goto aborts the pending request and the login fails."
     }
   ]
 }

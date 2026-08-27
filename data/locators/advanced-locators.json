@@ -4,12 +4,12 @@
     "signupUsername": "#sign-username",
     "signupPassword": "#sign-password",
     "signupBtn": "button[onclick='register()']",
-    "signupCloseBtn": "#signInModal .btn-secondary",
     "loginMenu": "#login2",
     "loginUsername": "#loginusername",
     "loginPassword": "#loginpassword",
     "loginBtn": "button[onclick='logIn()']",
-    "welcomeUser": "#nameofuser"
+    "welcomeUser": "#nameofuser",
+    "signupModal": "#signInModal"
   },
   "Sauce_Inventory": {
     "username": "#user-name",

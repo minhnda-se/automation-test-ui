@@ -40,9 +40,10 @@
           "element": "signupBtn"
         },
         {
-          "action": "click",
+          "action": "wait_for_element",
           "page": "Demoblaze_Auth",
-          "element": "signupCloseBtn"
+          "element": "signupModal",
+          "state": "hidden"
         },
         {
           "action": "click",
@@ -434,6 +435,12 @@
           "element": "placeOrderBtn"
         },
         {
+          "action": "wait_for_element",
+          "page": "Demoblaze_Order",
+          "element": "orderModal",
+          "state": "visible"
+        },
+        {
           "action": "click",
           "page": "Demoblaze_Order",
           "element": "closeBtn"
@@ -457,6 +464,12 @@
           "action": "click",
           "page": "Demoblaze_Cart",
           "element": "placeOrderBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Demoblaze_Order",
+          "element": "orderModal",
+          "state": "visible"
         },
         {
           "action": "fill",
@@ -508,6 +521,12 @@
           "action": "click",
           "page": "Demoblaze_Cart",
           "element": "placeOrderBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Demoblaze_Order",
+          "element": "orderModal",
+          "state": "visible"
         },
         {
           "action": "fill",
@@ -649,6 +668,12 @@
           "action": "click",
           "page": "Demoblaze_Cart",
           "element": "placeOrderBtn"
+        },
+        {
+          "action": "wait_for_element",
+          "page": "Demoblaze_Order",
+          "element": "orderModal",
+          "state": "visible"
         },
         {
           "action": "fill",

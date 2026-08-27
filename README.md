@@ -340,6 +340,42 @@ Tags are optional and additive - a file without them still validates and still
 runs under `npm test`. A test case may add its own `tags` array, which is merged
 with the suite's.
 
+#### Suite status - work in progress
+
+A generated suite arrives with `TODO_LOCATOR` stubs and stays unrunnable until
+someone resolves them at a browser. `npm run validate` fails on an unresolved
+stub, which is correct for a finished suite and wrong for one mid-handoff: it
+puts an unfinished data file in the way of every unrelated change.
+
+`config.status` gives that suite somewhere to sit:
+
+```json
+{
+  "config": { "locatorFile": "booking-app-regen.json", "tags": ["@booking"], "status": "wip" },
+  "scenario": "Booking app - regenerated from the user stories"
+}
+```
+
+| Status | Effect |
+|---|---|
+| `ready` (default) | Every locator must be resolved or `npm run validate` fails. Applies to any suite without the field, so nothing changed for existing files. |
+| `wip` | Unresolved `TODO_LOCATOR` stubs are reported as outstanding work instead of errors. The runner appends `@wip` to the suite's test titles and marks them `fixme`, so they appear in the report as unfinished rather than vanishing. |
+
+What `wip` does **not** exempt: unknown actions, malformed tags, a missing
+locator file, and a `page`/`element` pair with no entry at all. Those are
+authoring mistakes rather than pending codegen work - the generator writes a
+`TODO_LOCATOR` entry for every locator a step references, so an absent one means
+the scenario and its locator file disagree. Only the sentinel is waiting on a
+human.
+
+An unrecognised value - `"WIP"`, `"draft"`, `true` - is a validation error and
+resolves to `ready`, never to `wip`. A typo must not silently exempt a suite from
+the gate.
+
+Set the status back to `ready` once the stubs are resolved. The validator names
+every wip suite in its summary on every run, so the state is visible rather than
+quietly permanent. Guarded by `tests/framework/wip-suite-status.spec.ts`.
+
 ### 4. View Test Reports
 ```bash
 # Generate and open Allure report

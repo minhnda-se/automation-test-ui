@@ -18,6 +18,11 @@
           "description": "Tags applied to every test case in this suite (e.g. [\"@saucedemo\", \"@ci\"]). Each tag is appended to the generated test title, so Playwright's --grep can select it.",
           "items": { "type": "string", "pattern": "^@[a-z0-9][a-z0-9._-]*$" }
         },
+        "status": {
+          "type": "string",
+          "enum": ["ready", "wip"],
+          "description": "Suite lifecycle status. Default \"ready\": every locator must be resolved or npm run validate fails. Set \"wip\" while a generated suite is still waiting on the codegen locator handoff - unresolved TODO_LOCATOR stubs are then reported as outstanding work instead of failing the build, and the runner marks the suite's tests fixme and tags them @wip. Everything else stays strict. Set it back to \"ready\" once the stubs are resolved."
+        },
         "enableAutoHealing": {
           "type": "boolean",
           "description": "Opt this suite into optional runtime locator healing. Default false. Requires OPENAI_API_KEY; skipped with a warning if unset. A heal applies to the current run only and is recorded in test-results/heal-report.json - locator files are never modified during a run."

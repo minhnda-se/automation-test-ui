@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ActionEngine } from '../../utils/core/ActionEngine';
 import { IScenario, ITestCase } from '../../types/scenario';
+import { isWipSuite, WIP_TAG } from '../../utils/core/SuiteStatus';
 
 const scenariosDirPath = path.join(__dirname, '../../data/scenarios');
 const jsonFiles = fs.readdirSync(scenariosDirPath).filter((file) => file.endsWith('.json'));
@@ -123,7 +124,14 @@ for (const file of jsonFiles) {
   const locatorFileName = scenarioData.config?.locatorFile || 'locators.json';
   const enableAutoHealing = scenarioData.config?.enableAutoHealing ?? false;
   const storageStateConfig = scenarioData.config?.storageState;
-  const suiteTags = scenarioData.config?.tags;
+  // A wip suite is still waiting on the codegen locator handoff, so its steps
+  // reference selectors that are literally the string "TODO_LOCATOR". Running
+  // them produces an invalid-selector error per step, which says nothing the
+  // validator has not already said more clearly. Register the tests and mark
+  // them fixme instead: they stay visible in the report as unfinished rather
+  // than disappearing, and the @wip tag makes them greppable.
+  const suiteIsWip = isWipSuite(scenarioData.config?.status);
+  const suiteTags = suiteIsWip ? [...(scenarioData.config?.tags || []), WIP_TAG] : scenarioData.config?.tags;
 
   const locatorFilePath = path.join(__dirname, '../../data/locators', locatorFileName);
   let dynamicLocators: any = {};
@@ -138,6 +146,10 @@ for (const file of jsonFiles) {
   const suiteName = scenarioData.scenario || file;
 
   test.describe(`Suite: [${suiteName}]`, () => {
+    if (suiteIsWip) {
+      test.fixme(true, 'Suite is config.status "wip" - unresolved TODO_LOCATOR stubs');
+    }
+
     // If storageState is configured and exists on disk, apply it to the test suite
     if (storageStateConfig) {
       const resolvedStatePath = path.isAbsolute(storageStateConfig)

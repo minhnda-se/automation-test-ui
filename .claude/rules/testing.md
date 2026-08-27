@@ -12,9 +12,29 @@ Prefer `api_post`/`api_get`/`api_delete`/`api_put`/`api_patch` for setup and tea
 
 Use `dataTable` (array of row objects) for the same flow run with multiple input variations, referencing row keys directly as tokens (`"data": "{{username}}"`) — don't duplicate near-identical test cases instead.
 
-## Tagging (planned, not yet in schema)
+## Tagging
 
-The schema doesn't have a `tags` field yet. When it's added, use it to separate `smoke` (fast, every commit), `regression` (full suite, scheduled), and `critical` (must never silently pass on a locator heal — see `error-handling.md`). Until then, keep this distinction in mind when naming/organizing scenario files so the migration is straightforward later.
+`tags` is in the schema, at suite level (`config.tags`) and per test case. Each
+tag is appended to the generated test title, and `--grep` selects on it. Exactly
+one target-application tag per test case (`@saucedemo`, `@demoblaze`, `@demoqa`,
+`@booking`); `@ci` marks the hand-picked smoke set that runs on every pull
+request, and is added on the evidence of a green run, never speculatively.
+
+`critical` is still not a tag. When it is added, a locator heal on a
+`critical`-tagged test must surface for human review rather than pass silently -
+see `error-handling.md`.
+
+## Suite status
+
+`config.status` is `"ready"` (the default) or `"wip"`. Mark a suite `wip` only
+while it is genuinely waiting on the codegen locator handoff: unresolved
+`TODO_LOCATOR` stubs stop failing `npm run validate`, and the runner marks the
+suite `fixme` with a `@wip` tag.
+
+It exempts the stub sentinel and nothing else. A missing locator entry, an
+unknown action or a malformed tag still fails. Set it back to `"ready"` as soon
+as the stubs are resolved - the validator names every wip suite on every run so
+the state cannot quietly become permanent.
 
 ## Positive and negative coverage
 

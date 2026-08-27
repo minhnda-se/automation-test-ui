@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { resolveSuiteStatus } from '../utils/core/SuiteStatus';
 
 const SCENARIOS_DIR = path.join(__dirname, '../data/scenarios');
 const FLOWS_DIR = path.join(__dirname, '../data/flows');
@@ -63,6 +64,12 @@ function isUnresolved(selector: any): boolean {
  *
  * Pass --allow-todo while that work is genuinely still in progress. It downgrades
  * unresolved stubs to warnings and is deliberately not what CI runs.
+ *
+ * `config.status: "wip"` does the same thing for one suite instead of all of
+ * them, which is the difference that matters in CI: --allow-todo is a blanket
+ * amnesty nobody should run on a gate, while a wip suite is a named exemption
+ * recorded in the file it applies to. Every other check stays strict for a wip
+ * suite - see the locator branch below for where the line is drawn.
  */
 const ALLOW_TODO = process.argv.includes('--allow-todo');
 
@@ -107,6 +114,12 @@ function validateAll() {
   // other error in the run.
   const reportedLocatorIssues = new Set<string>();
 
+  // Scenario files carrying config.status: "wip", for the summary. Their stubs
+  // are outstanding work rather than build errors, and the summary says which
+  // is which so a wip suite cannot quietly become permanent.
+  const wipSuites = new Set<string>();
+  const wipLocatorFiles = new Set<string>();
+
   // 1. Validate Scenarios
   if (fs.existsSync(SCENARIOS_DIR)) {
     const files = fs.readdirSync(SCENARIOS_DIR).filter((f) => f.endsWith('.json'));
@@ -134,11 +147,21 @@ function validateAll() {
         continue;
       }
 
+      let suiteIsWip = false;
+
       if (!isOldFormat) {
         for (const message of validateTags(json.config?.tags, `Scenario: ${file} -> config`)) {
           console.error(message);
           totalErrors++;
         }
+
+        const suiteStatus = resolveSuiteStatus(json.config?.status);
+        if (suiteStatus.error) {
+          console.error(`❌ [Scenario: ${file} -> config] ${suiteStatus.error}`);
+          totalErrors++;
+        }
+        suiteIsWip = suiteStatus.status === 'wip';
+        if (suiteIsWip) wipSuites.add(file);
       }
 
       const locatorFile = isOldFormat
@@ -278,11 +301,18 @@ function validateAll() {
               }
             } else if (isUnresolved(locatorsData[step.page][step.element])) {
               unresolvedStubs.set(locatorKey, (unresolvedStubs.get(locatorKey) || 0) + 1);
+              if (suiteIsWip) wipLocatorFiles.add(locatorFile);
 
               if (firstReport) {
                 reportedLocatorIssues.add(locatorKey);
 
-                if (ALLOW_TODO) {
+                // A missing page or element entry - the two branches above -
+                // stays an error even for a wip suite. Those are authoring
+                // mistakes, not pending codegen work: the generator writes a
+                // TODO_LOCATOR entry for every locator a step references, so an
+                // absent one means the scenario and its locator file disagree.
+                // Only the sentinel is waiting on a human at a browser.
+                if (ALLOW_TODO || suiteIsWip) {
                   console.warn(
                     `⚠️  [${stepRef}] Unresolved locator stub "${step.page}.${step.element}" in "${locatorFile}" (first of several references).`
                   );
@@ -321,6 +351,16 @@ function validateAll() {
 
   console.log(`\n--------------------------------------------------`);
 
+  if (wipSuites.size > 0) {
+    console.log(
+      `Work in progress: ${wipSuites.size} suite(s) marked config.status "wip" - ${Array.from(wipSuites).sort().join(', ')}`
+    );
+    console.log(
+      `  Their unresolved stubs are reported below as outstanding work, not as errors.`
+    );
+    console.log(`  Set status back to "ready" once the locators are resolved.\n`);
+  }
+
   if (unresolvedStubs.size > 0) {
     const label = ALLOW_TODO ? 'Outstanding locator work' : 'Unresolved locator stubs';
     console.log(`${label}: ${unresolvedStubs.size} element(s) still set to ${TODO_LOCATOR}\n`);
@@ -333,7 +373,8 @@ function validateAll() {
     }
 
     for (const [locatorFile, references] of byFile) {
-      console.log(`  data/locators/${locatorFile}`);
+      const suffix = wipLocatorFiles.has(locatorFile) ? '  (wip suite - not blocking)' : '';
+      console.log(`  data/locators/${locatorFile}${suffix}`);
       for (const reference of references) {
         console.log(
           `    - ${reference} (${unresolvedStubs.get(`${locatorFile} -> ${reference}`)} step reference(s))`

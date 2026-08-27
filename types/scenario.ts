@@ -2,8 +2,9 @@
 // and scripts/generate-action-reference.ts. It is re-exported here so consumers
 // keep importing it from types/scenario, the way they always have.
 import { ActionType } from './actions.generated';
+import { SuiteStatus } from '../utils/core/SuiteStatus';
 
-export type { ActionType };
+export type { ActionType, SuiteStatus };
 
 export interface IStoreResponse {
   key: string;
@@ -62,6 +63,11 @@ export interface IScenarioConfig {
    * `--grep` can select it.
    */
   tags?: string[];
+  /**
+   * Suite lifecycle status, default 'ready'. See utils/core/SuiteStatus.ts for
+   * what 'wip' exempts - and, more to the point, what it does not.
+   */
+  status?: SuiteStatus;
   enableAutoHealing?: boolean;
   storageState?: string;
 }

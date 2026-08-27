@@ -5,7 +5,8 @@
     "locatorFile": "booking-app-regen.json",
     "tags": [
       "@booking"
-    ]
+    ],
+    "status": "wip"
   },
   "testCases": [
     {

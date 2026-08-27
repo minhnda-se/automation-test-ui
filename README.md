@@ -120,7 +120,7 @@ Actions can be declared in the `preconditions`, `steps`, or `postconditions` arr
 | Category | Handler | Count |
 | :--- | :--- | :--- |
 | UI interactions | `UIActionHandler` | 19 |
-| Assertions | `AssertActionHandler` | 15 |
+| Assertions | `AssertActionHandler` | 16 |
 | API requests | `APIActionHandler` | 5 |
 | Network mocking | `NetworkActionHandler` | 2 |
 | Sub-flows | `FlowActionHandler` | 1 |
@@ -217,7 +217,7 @@ It is entirely optional. No script, test, or CI step reads from it - the framewo
 
 ### BDD Gherkin Support (frozen)
 
-> **The BDD compiler is frozen at six step patterns**, against the framework's 42 action keywords. It has no `Background`, `Scenario Outline` / `Examples`, preconditions, postconditions, `dataTable`, or `call_flow`. Suite tags and the locator file are set by the `# tags:` and `# locatorFile:` header directives. It is kept for the existing `.feature` files. **JSON scenarios are the primary input** and support everything; reach for BDD only when someone outside the QA team actually reads these files *and* the whole scenario fits the six patterns.
+> **The BDD compiler is frozen at six step patterns**, against the framework's 43 action keywords. It has no `Background`, `Scenario Outline` / `Examples`, preconditions, postconditions, `dataTable`, or `call_flow`. Suite tags and the locator file are set by the `# tags:` and `# locatorFile:` header directives. It is kept for the existing `.feature` files. **JSON scenarios are the primary input** and support everything; reach for BDD only when someone outside the QA team actually reads these files *and* the whole scenario fits the six patterns.
 
 Supported steps, in full:
 

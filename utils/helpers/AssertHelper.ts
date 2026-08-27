@@ -178,6 +178,25 @@ export class AssertHelper extends BaseHelper {
     }
   }
 
+  // toHaveValue reads the DOM value property, not the HTML attribute. That is
+  // the whole reason this exists next to verifyAttribute: typing into an input
+  // never updates its value attribute, so verify_attribute cannot assert what a
+  // user entered.
+  async verifyValue(locatorStr: string, data: any, stepElement?: string, stepDescription?: string) {
+    if (data === undefined || data === null) {
+      throw new Error(
+        `[JSON Error]: 'verify_value' at ${stepElement || 'element'} requires "data".`
+      );
+    }
+    try {
+      await expect(this.page.locator(locatorStr)).toHaveValue(String(data));
+      await this.captureEvidence(stepDescription || '', 'PASS');
+    } catch (error) {
+      await this.captureEvidence(stepDescription || '', 'FAIL');
+      throw error;
+    }
+  }
+
   async verifyAttribute(
     locatorStr: string,
     attributeName: string,

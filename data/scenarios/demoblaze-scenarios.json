@@ -1,7 +1,9 @@
 {
   "scenario": "Demoblaze E2E Test Scenarios",
   "config": {
-    "tags": ["@demoblaze"],
+    "tags": [
+      "@demoblaze"
+    ],
     "locatorFile": "demoblaze.json"
   },
   "testCases": [
@@ -9,58 +11,143 @@
       "testId": "DB_NEW_01",
       "testName": "[Register] Register a brand-new random account",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
-
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "signupMenu"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
           "element": "signupUsername",
-          "data": "{{RANDOM_EMAIL}}"
+          "data": "{{RANDOM_EMAIL}}",
+          "storeAs": "NEW_USERNAME"
         },
-
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
           "element": "signupPassword",
-          "data": "Pass_{{RANDOM_STRING}}"
+          "data": "Pass_{{RANDOM_STRING}}",
+          "storeAs": "NEW_PASSWORD"
         },
-
-        { "action": "click", "page": "Demoblaze_Auth", "element": "signupBtn" }
-      ]
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "signupBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "signupCloseBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginUsername",
+          "data": "{{NEW_USERNAME}}"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Auth",
+          "element": "loginPassword",
+          "data": "{{NEW_PASSWORD}}"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "Demoblaze_Home",
+          "element": "welcomeUser",
+          "data": "{{NEW_USERNAME}}"
+        }
+      ],
+      "description": "Registration is proved by logging in with the generated credentials: demoblaze reports the result of register() in a JS alert, and the framework has no dialog action to read it."
     },
     {
       "testId": "DB_01",
       "testName": "[Nav] Home page loads and shows the logo",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "brandLogo" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "brandLogo"
+        }
       ]
     },
     {
       "testId": "DB_02",
       "testName": "[Auth] Log in modal opens",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
-        { "action": "verify_visible", "page": "Demoblaze_Auth", "element": "loginUsername" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Auth",
+          "element": "loginUsername"
+        }
       ]
     },
     {
       "testId": "DB_03",
       "testName": "[Auth] Close button dismisses the log in modal",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
-        { "action": "click", "page": "Demoblaze_Auth", "element": "loginCloseBtn" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "loginCloseBtn"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "Demoblaze_Auth",
+          "element": "loginModal"
+        }
       ]
     },
     {
       "testId": "DB_04",
       "testName": "[Auth] Sign up modal opens",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "signupMenu" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "signupMenu"
+        },
         {
           "action": "verify_visible",
           "page": "Demoblaze_Auth",
@@ -72,8 +159,15 @@
       "testId": "DB_05",
       "testName": "[Auth] Log in succeeds",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
@@ -86,16 +180,31 @@
           "element": "loginPassword",
           "data": "testpass"
         },
-        { "action": "click", "page": "Demoblaze_Auth", "element": "loginBtn" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "logoutMenu" }
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "logoutMenu"
+        }
       ]
     },
     {
       "testId": "DB_06",
       "testName": "[Auth] Log out succeeds",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "loginMenu" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Auth",
@@ -108,44 +217,96 @@
           "element": "loginPassword",
           "data": "testpass"
         },
-        { "action": "click", "page": "Demoblaze_Auth", "element": "loginBtn" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "logoutMenu" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "loginMenu" }
+        {
+          "action": "click",
+          "page": "Demoblaze_Auth",
+          "element": "loginBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "logoutMenu"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "loginMenu"
+        }
       ]
     },
     {
       "testId": "DB_07",
       "testName": "[Category] Filter products by Phones",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "categoryPhones" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "firstProduct" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "categoryPhones"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        }
       ]
     },
     {
       "testId": "DB_08",
       "testName": "[Category] Filter products by Laptops",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "categoryLaptops" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "firstProduct" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "categoryLaptops"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        }
       ]
     },
     {
       "testId": "DB_09",
       "testName": "[Category] Filter products by Monitors",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "categoryMonitors" },
-        { "action": "verify_visible", "page": "Demoblaze_Home", "element": "firstProduct" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "categoryMonitors"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        }
       ]
     },
     {
       "testId": "DB_10",
       "testName": "[Product] Open the product detail page",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        },
         {
           "action": "verify_visible",
           "page": "Demoblaze_Product",
@@ -157,8 +318,15 @@
       "testId": "DB_11",
       "testName": "[Product] Add to cart button is visible",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        },
         {
           "action": "verify_text",
           "page": "Demoblaze_Product",
@@ -171,48 +339,125 @@
       "testId": "DB_12",
       "testName": "[Cart] Added product appears in the cart",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
-        { "action": "click", "page": "Demoblaze_Product", "element": "addToCartBtn" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "cartMenu" },
-        { "action": "verify_visible", "page": "Demoblaze_Cart", "element": "cartItem" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Product",
+          "element": "addToCartBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "cartMenu"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Cart",
+          "element": "cartItem"
+        }
       ]
     },
     {
       "testId": "DB_13",
       "testName": "[Cart] Delete a product from the cart",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
-        { "action": "click", "page": "Demoblaze_Product", "element": "addToCartBtn" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "cartMenu" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "deleteBtn" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Product",
+          "element": "addToCartBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "cartMenu"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "deleteBtn"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "Demoblaze_Cart",
+          "element": "cartItem"
+        }
       ]
     },
     {
       "testId": "DB_14",
       "testName": "[Checkout] Place Order modal opens",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
-        { "action": "verify_visible", "page": "Demoblaze_Order", "element": "nameInput" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/cart.html"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Order",
+          "element": "nameInput"
+        }
       ]
     },
     {
       "testId": "DB_15",
       "testName": "[Checkout] Place Order modal closes",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
-        { "action": "click", "page": "Demoblaze_Order", "element": "closeBtn" }
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/cart.html"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Order",
+          "element": "closeBtn"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "Demoblaze_Order",
+          "element": "orderModal"
+        }
       ]
     },
     {
       "testId": "DB_16",
       "testName": "[Checkout E2E] Enter customer details (name, country, city)",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/cart.html"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Order",
@@ -230,6 +475,24 @@
           "page": "Demoblaze_Order",
           "element": "cityInput",
           "data": "HCMC"
+        },
+        {
+          "action": "verify_value",
+          "page": "Demoblaze_Order",
+          "element": "nameInput",
+          "data": "Automation Tester"
+        },
+        {
+          "action": "verify_value",
+          "page": "Demoblaze_Order",
+          "element": "countryInput",
+          "data": "Vietnam"
+        },
+        {
+          "action": "verify_value",
+          "page": "Demoblaze_Order",
+          "element": "cityInput",
+          "data": "HCMC"
         }
       ]
     },
@@ -237,8 +500,15 @@
       "testId": "DB_17",
       "testName": "[Checkout E2E] Enter payment card details",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/cart.html"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Order",
@@ -256,6 +526,24 @@
           "page": "Demoblaze_Order",
           "element": "yearInput",
           "data": "2026"
+        },
+        {
+          "action": "verify_value",
+          "page": "Demoblaze_Order",
+          "element": "cardInput",
+          "data": "1234567890123456"
+        },
+        {
+          "action": "verify_value",
+          "page": "Demoblaze_Order",
+          "element": "monthInput",
+          "data": "12"
+        },
+        {
+          "action": "verify_value",
+          "page": "Demoblaze_Order",
+          "element": "yearInput",
+          "data": "2026"
         }
       ]
     },
@@ -263,11 +551,30 @@
       "testId": "DB_18",
       "testName": "[Checkout E2E] Complete the purchase flow",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "firstProduct" },
-        { "action": "click", "page": "Demoblaze_Product", "element": "addToCartBtn" },
-        { "action": "click", "page": "Demoblaze_Home", "element": "cartMenu" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "firstProduct"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Product",
+          "element": "addToCartBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Home",
+          "element": "cartMenu"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Order",
@@ -280,16 +587,31 @@
           "element": "cardInput",
           "data": "9876543210"
         },
-        { "action": "click", "page": "Demoblaze_Order", "element": "purchaseBtn" },
-        { "action": "verify_visible", "page": "Demoblaze_Order", "element": "successAlert" }
+        {
+          "action": "click",
+          "page": "Demoblaze_Order",
+          "element": "purchaseBtn"
+        },
+        {
+          "action": "verify_visible",
+          "page": "Demoblaze_Order",
+          "element": "successAlert"
+        }
       ]
     },
     {
       "testId": "DB_19",
       "testName": "[Checkout E2E] Purchase confirmation message is shown",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/cart.html"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Order",
@@ -302,7 +624,11 @@
           "element": "cardInput",
           "data": "9876543210"
         },
-        { "action": "click", "page": "Demoblaze_Order", "element": "purchaseBtn" },
+        {
+          "action": "click",
+          "page": "Demoblaze_Order",
+          "element": "purchaseBtn"
+        },
         {
           "action": "verify_text",
           "page": "Demoblaze_Order",
@@ -315,8 +641,15 @@
       "testId": "DB_20",
       "testName": "[Checkout E2E] Dismiss the confirmation popup",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/cart.html" },
-        { "action": "click", "page": "Demoblaze_Cart", "element": "placeOrderBtn" },
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/cart.html"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Cart",
+          "element": "placeOrderBtn"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Order",
@@ -329,8 +662,21 @@
           "element": "cardInput",
           "data": "9876543210"
         },
-        { "action": "click", "page": "Demoblaze_Order", "element": "purchaseBtn" },
-        { "action": "click", "page": "Demoblaze_Order", "element": "confirmOkBtn" }
+        {
+          "action": "click",
+          "page": "Demoblaze_Order",
+          "element": "purchaseBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Order",
+          "element": "confirmOkBtn"
+        },
+        {
+          "action": "verify_not_visible",
+          "page": "Demoblaze_Order",
+          "element": "successAlert"
+        }
       ]
     }
   ]

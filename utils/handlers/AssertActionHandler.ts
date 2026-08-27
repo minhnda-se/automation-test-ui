@@ -19,6 +19,7 @@ export class AssertActionHandler implements IActionHandler {
     'verify_checked',
     'verify_unchecked',
     'verify_attribute',
+    'verify_value',
     'verify_element_count',
     'verify_visual_snapshot',
   ]);
@@ -68,6 +69,9 @@ export class AssertActionHandler implements IActionHandler {
         break;
       case 'verify_url_contains':
         await this.assert.verifyUrlContains(resolvedData || step.url, stepDesc);
+        break;
+      case 'verify_value':
+        await this.assert.verifyValue(locatorStr, resolvedData, step.element, stepDesc);
         break;
       case 'verify_attribute':
         if (!step.attribute) {

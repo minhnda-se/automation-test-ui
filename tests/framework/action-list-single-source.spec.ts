@@ -56,6 +56,49 @@ function unionMembers(): string[] {
   );
 }
 
+/**
+ * Counts written into prose are the last hand-maintained derivative of the
+ * generated action list, and they have now drifted twice in two commits - 40 to
+ * 42 when `clear` and `verify_unchecked` landed, 42 to 43 the next day with
+ * `verify_value`. Generating them into five documents would be worse than the
+ * problem; failing loudly when they disagree costs nothing, which is what these
+ * tests already do for every other artifact.
+ */
+const DOCS_CLAIMING_A_TOTAL = [
+  'README.md',
+  '.claude/CLAUDE.md',
+  '.claude/rules/bdd.md',
+  '.claude/skills/write-bdd-feature/SKILL.md',
+];
+
+test.describe('Documented action counts', () => {
+  test('every prose total matches the generated action list', () => {
+    const total = JSON.parse(read('schema/actions.json')).names.length;
+    const wrong: string[] = [];
+
+    for (const doc of DOCS_CLAIMING_A_TOTAL) {
+      // "40 actions", "42 action keywords" - the shapes actually in use.
+      for (const match of read(doc).matchAll(/(\d+)\s+action(?:\s+keywords?|s)\b/g)) {
+        if (Number(match[1]) !== total) {
+          wrong.push(doc + ': claims ' + match[1] + ', actual ' + total);
+        }
+      }
+    }
+
+    expect(wrong, 'stale action counts: ' + wrong.join(', ')).toEqual([]);
+  });
+
+  test('the README per-handler table sums to the generated total', () => {
+    const total = JSON.parse(read('schema/actions.json')).names.length;
+    const rows = [...read('README.md').matchAll(/\|\s*`(\w+ActionHandler)`\s*\|\s*(\d+)\s*\|/g)];
+
+    expect(rows.length, 'the README documents a per-handler count table').toBeGreaterThan(0);
+
+    const sum = rows.reduce((acc, row) => acc + Number(row[2]), 0);
+    expect(sum, 'per-handler counts sum to ' + sum + ', generated list has ' + total).toBe(total);
+  });
+});
+
 test.describe('Action list single source', () => {
   test('actions.json and the schema enum agree, in the same order', () => {
     expect(schemaEnum()).toEqual(JSON.parse(read('schema/actions.json')).names);

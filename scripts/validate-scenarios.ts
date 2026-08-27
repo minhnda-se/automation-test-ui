@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { resolveSuiteStatus } from '../utils/core/SuiteStatus';
 import { checkAuthoredText } from './english-only';
+import { checkTestCaseAsserts } from './assertion-presence';
 
 const SCENARIOS_DIR = path.join(__dirname, '../data/scenarios');
 const FLOWS_DIR = path.join(__dirname, '../data/flows');
@@ -215,6 +216,12 @@ function validateAll() {
             totalErrors++;
           }
         }
+
+        const assertionError = checkTestCaseAsserts(tc, `${file} -> ${tcId}`);
+        if (assertionError) {
+          console.error(assertionError);
+          totalErrors++;
+        }
         const allSteps = [
           ...(Array.isArray(tc.preconditions) ? tc.preconditions : []),
           ...(Array.isArray(tc.steps) ? tc.steps : []),
@@ -263,7 +270,7 @@ function validateAll() {
           }
 
           if (
-            ['verify_text', 'verify_text_contains', 'verify_not_contains_text'].includes(
+            ['verify_text', 'verify_text_contains', 'verify_not_contains_text', 'verify_value'].includes(
               step.action
             )
           ) {

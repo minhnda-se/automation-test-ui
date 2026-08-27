@@ -6,34 +6,86 @@
   "testCases": [
     {
       "testId": "ADV_01",
-      "tags": ["@demoblaze"],
+      "tags": [
+        "@demoblaze"
+      ],
       "testName": "[Dynamic Data] Register an account with generated data",
       "steps": [
-        { "action": "goto", "data": "https://www.demoblaze.com/" },
-        { "action": "click", "page": "Demoblaze_Register", "element": "signupMenu" },
-
+        {
+          "action": "goto",
+          "data": "https://www.demoblaze.com/"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Register",
+          "element": "signupMenu"
+        },
         {
           "action": "fill",
           "page": "Demoblaze_Register",
           "element": "signupUsername",
-          "data": "AutoUser_{{TIMESTAMP}}"
+          "data": "AutoUser_{{TIMESTAMP}}",
+          "storeAs": "NEW_USERNAME"
         },
         {
           "action": "fill",
           "page": "Demoblaze_Register",
           "element": "signupPassword",
-          "data": "Pass_{{RANDOM_STRING}}"
+          "data": "Pass_{{RANDOM_STRING}}",
+          "storeAs": "NEW_PASSWORD"
         },
-
-        { "action": "click", "page": "Demoblaze_Register", "element": "signupBtn" }
-      ]
+        {
+          "action": "click",
+          "page": "Demoblaze_Register",
+          "element": "signupBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Register",
+          "element": "signupCloseBtn"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Register",
+          "element": "loginMenu"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Register",
+          "element": "loginUsername",
+          "data": "{{NEW_USERNAME}}"
+        },
+        {
+          "action": "fill",
+          "page": "Demoblaze_Register",
+          "element": "loginPassword",
+          "data": "{{NEW_PASSWORD}}"
+        },
+        {
+          "action": "click",
+          "page": "Demoblaze_Register",
+          "element": "loginBtn"
+        },
+        {
+          "action": "verify_text_contains",
+          "page": "Demoblaze_Register",
+          "element": "welcomeUser",
+          "data": "{{NEW_USERNAME}}"
+        }
+      ],
+      "description": "Registration is proved by logging in with the generated credentials: demoblaze reports the result of register() in a JS alert, and the framework has no dialog action to read it."
     },
     {
       "testId": "ADV_02",
-      "tags": ["@saucedemo"],
+      "tags": [
+        "@saucedemo"
+      ],
       "testName": "[State Sharing] Capture a product name on the listing and verify it in the cart",
       "steps": [
-        { "action": "goto", "data": "https://www.saucedemo.com/" },
+        {
+          "action": "goto",
+          "data": "https://www.saucedemo.com/"
+        },
         {
           "action": "fill",
           "page": "Sauce_Inventory",
@@ -46,18 +98,27 @@
           "element": "password",
           "data": "secret_sauce"
         },
-        { "action": "click", "page": "Sauce_Inventory", "element": "loginBtn" },
-
+        {
+          "action": "click",
+          "page": "Sauce_Inventory",
+          "element": "loginBtn"
+        },
         {
           "action": "store_text",
           "page": "Sauce_Inventory",
           "element": "firstProductName",
           "variable": "STORED_PRODUCT_NAME"
         },
-
-        { "action": "click", "page": "Sauce_Inventory", "element": "firstProductAddBtn" },
-        { "action": "click", "page": "Sauce_Inventory", "element": "cartIcon" },
-
+        {
+          "action": "click",
+          "page": "Sauce_Inventory",
+          "element": "firstProductAddBtn"
+        },
+        {
+          "action": "click",
+          "page": "Sauce_Inventory",
+          "element": "cartIcon"
+        },
         {
           "action": "verify_text",
           "page": "Sauce_Cart",

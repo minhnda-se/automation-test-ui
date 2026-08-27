@@ -123,6 +123,10 @@
     "fields": "`page`, `element`, `attribute`, `data`",
     "note": "`attribute` is required and throws at runtime if absent."
   },
+  "verify_value": {
+    "fields": "`page`, `element`, `data`",
+    "note": "Asserts the current value of an input. Use this rather than `verify_attribute` with `value`: typing never updates the HTML value attribute, so `verify_attribute` cannot see what a user entered."
+  },
   "verify_element_count": {
     "fields": "`page`, `element`, `data` (number)",
     "note": "Falls back to `count`, then to 0."

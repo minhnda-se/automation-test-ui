@@ -39,6 +39,7 @@ export type ActionType =
   | 'verify_text_contains'
   | 'verify_unchecked'
   | 'verify_url_contains'
+  | 'verify_value'
   | 'verify_visible'
   | 'verify_visual_snapshot'
   // API

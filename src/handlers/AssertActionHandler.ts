@@ -1,5 +1,5 @@
-import { IActionHandler } from '../../types/engine';
-import { IStep } from '../../types/scenario';
+import { IActionHandler } from '../types/engine';
+import { IStep } from '../types/scenario';
 import { AssertHelper } from '../helpers/AssertHelper';
 
 export class AssertActionHandler implements IActionHandler {

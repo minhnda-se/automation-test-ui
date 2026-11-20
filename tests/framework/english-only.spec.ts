@@ -28,7 +28,7 @@ const ROOT = path.join(__dirname, '../..');
 
 // Directories holding code and authored prose. data/ is covered by the
 // validator, which knows which fields are authored and which quote the app.
-const CODE_DIRS = ['utils', 'scripts', 'types', 'tests'];
+const CODE_DIRS = ['src', 'scripts', 'tests'];
 const CODE_EXTENSIONS = ['.ts'];
 
 /**

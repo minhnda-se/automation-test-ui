@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ActionType } from '../../types/actions.generated';
+import { ActionType } from '../../src/types/actions.generated';
 
 /**
  * Phase 11 - the action list has one source.
  *
- * The keyword list lives in utils/handlers/*.ts. Three artifacts are generated
+ * The keyword list lives in src/handlers/*.ts. Three artifacts are generated
  * from it by npm run actions:sync:
  *
- *   schema/actions.json           consumed by scripts/validate-scenarios.ts
- *   schema/scenario-schema.json   the `action` enum, for IDE autocomplete
- *   types/actions.generated.ts    the ActionType union
+ *   schema/actions.json             consumed by scripts/validate-scenarios.ts
+ *   schema/scenario-schema.json     the `action` enum, for IDE autocomplete
+ *   src/types/actions.generated.ts  the ActionType union
  *
  * Two of those were hand-maintained until now, and nothing checked they agreed.
  * `npm run actions:check` catches drift in CI; this suite catches it in a plain
@@ -51,7 +51,7 @@ function schemaEnum(): string[] {
 function unionMembers(): string[] {
   // Parsed from the generated file rather than reflected, because a TypeScript
   // union has no runtime representation to inspect.
-  return (read('types/actions.generated.ts').match(/\| '([a-z0-9_]+)'/g) || []).map((line) =>
+  return (read('src/types/actions.generated.ts').match(/\| '([a-z0-9_]+)'/g) || []).map((line) =>
     line.replace(/\| '|'/g, '')
   );
 }
@@ -118,7 +118,7 @@ test.describe('Action list single source', () => {
     for (const file of [
       'schema/actions.json',
       'schema/scenario-schema.json',
-      'types/actions.generated.ts',
+      'src/types/actions.generated.ts',
       'docs/ACTIONS.md',
     ]) {
       expect(fs.existsSync(path.join(ROOT, file)), `${file} exists`).toBe(true);

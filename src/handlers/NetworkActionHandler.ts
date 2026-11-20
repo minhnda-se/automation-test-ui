@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
-import { IActionHandler } from '../../types/engine';
-import { IStep } from '../../types/scenario';
+import { IActionHandler } from '../types/engine';
+import { IStep } from '../types/scenario';
 import { DataManager } from '../core/DataManager';
 
 export class NetworkActionHandler implements IActionHandler {

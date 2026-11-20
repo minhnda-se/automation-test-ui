@@ -20,7 +20,7 @@ jobs:
     - name: Typecheck
       run: npm run typecheck
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
     - name: Run framework guard tests (no network)
       # tests/framework/ drives page.setContent, not a live site, so it is safe to
       # gate on unconditionally - unlike the scenario suites below.
@@ -37,5 +37,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: playwright-report/
+        path: reports/playwright-html/
         retention-days: 30

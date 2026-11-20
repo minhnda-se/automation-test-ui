@@ -1,7 +1,7 @@
 {
   "name": "booking-errors",
   "baseUrl": "https://booking-appointment-system-psi.vercel.app/",
-  "output": "report/fix/probe-booking-errors.txt",
+  "output": "reports/probe/probe-booking-errors.txt",
   "auth": {
     "actions": [
       { "goto": "/auth/register" },

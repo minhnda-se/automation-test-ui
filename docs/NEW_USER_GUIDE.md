@@ -1,4 +1,4 @@
-# Playwright Hybrid Framework - New User Guide 🚀
+# Playwright Hybrid Framework - New User Guide
 
 Welcome to the **Playwright Hybrid Framework**! This guide is designed for QA Engineers, Manual Testers, SDETs, and Business Analysts to get up and running quickly without needing deep TypeScript knowledge.
 
@@ -16,8 +16,9 @@ Welcome to the **Playwright Hybrid Framework**! This guide is designed for QA En
 5. [Managing Locators (`data/locators/`)](#5-managing-locators-datalocators)
 6. [Dynamic Variables & Data-Driven Testing (DDT)](#6-dynamic-variables--data-driven-testing-ddt)
 7. [Running Tests & Viewing Reports](#7-running-tests--viewing-reports)
-8. [CLI Commands Cheat Sheet](#8-cli-commands-cheat-sheet)
-9. [Troubleshooting & FAQs](#9-troubleshooting--faqs)
+8. [Advanced Features for Faster Testing](#8-advanced-features-for-faster-testing)
+9. [CLI Commands Cheat Sheet](#9-cli-commands-cheat-sheet)
+10. [Troubleshooting & FAQs](#10-troubleshooting--faqs)
 
 ---
 
@@ -46,7 +47,7 @@ cp .env.example .env
 ```
 Then uncomment `OPENAI_API_KEY` in `.env` and set your key. Healing is also off per scenario file by default - a suite opts in with `"enableAutoHealing": true` in its `config` block.
 
-*(With no key set, tests run normally and healing is skipped with a warning. A heal never edits your locator files: proposals are written to `test-results/heal-report.json` for you to review.)*
+*(With no key set, tests run normally and healing is skipped with a warning. A heal never edits your locator files: proposals are written to `reports/test-results/heal-report.json` for you to review.)*
 
 ---
 
@@ -55,7 +56,7 @@ Then uncomment `OPENAI_API_KEY` in `.env` and set your key. Healing is also off 
 The framework separates test logic into three clean layers:
 1. **Scenarios (`data/scenarios/`)**: The *What* (actions, steps, data).
 2. **Locators (`data/locators/`)**: The *Where* (CSS/XPath selectors grouped by Page).
-3. **Engine (`utils/core/` & `utils/handlers/`)**: The *How* (Playwright execution engine).
+3. **Engine (`src/core/` & `src/handlers/`)**: The *How* (Playwright execution engine).
 
 ```mermaid
 flowchart LR
@@ -173,7 +174,7 @@ npm run compile-bdd
 ---
 
 ### Option C: CSV Spreadsheets
-Create a CSV file in `docs/test-cases.csv`:
+Create a CSV file in `data/csv/test-cases.csv`:
 ```csv
 Phase,TestId,TestName,Action,Page,Element,Data
 Setup,TC_01,Login Test,goto,,,https://www.saucedemo.com/
@@ -223,7 +224,7 @@ If you created a scenario JSON first and don't want to type all locator keys man
 ```bash
 npm run update-locators -- my-scenario.json
 ```
-This automatically inspects your scenario and adds empty keys (`""`) to your locator file so you only need to fill in the CSS selectors!
+This automatically inspects your scenario and adds `"TODO_LOCATOR"` stubs to your locator file so you can resolve them with `npm run probe-locators` or `npx playwright codegen`!
 
 ---
 
@@ -285,13 +286,21 @@ npx playwright test tests/hybrid-json/ -g "TC_001"
 npx playwright test --headed
 ```
 
-### Viewing Allure Reports
+### Viewing Reports
+All test outputs are written under `reports/`:
+- Playwright HTML report: `reports/playwright-html/`
+- Allure results and HTML report: `reports/allure-results/` and `reports/allure-html/`
+- Failure traces, screenshots, and heal proposals: `reports/test-results/`
+
 ```bash
 # Clean previous results and generate Allure report
 npm run report
 
 # Or serve live results
 npm run allure:report
+
+# Remove all generated reports
+npm run clean
 ```
 
 ---
@@ -355,22 +364,25 @@ Compare full pages or element screenshots against golden baselines:
 | Command | Description |
 | :--- | :--- |
 | `npm run validate` | Lints all JSON scenarios against framework rules and locator files. |
-| `npm test` | Cleans previous reports and executes all JSON test scenarios. |
+| `npm test` | Cleans previous Allure results and executes all JSON test scenarios. |
+| `npm run test:coded` | Executes hand-written Playwright specs in `tests/hybrid-coded/`. |
 | `npm run test-ui` | Opens Playwright's interactive visual runner. |
-| `npm run report` | Generates and opens the Allure HTML report. |
+| `npm run report` | Generates and opens the Allure HTML report in `reports/allure-html/`. |
+| `npm run clean` | Removes the entire `reports/` directory. |
 | `npm run compile-bdd` | Compiles `.feature` files in `data/features/` into JSON scenarios. |
-| `npm run csv2json -- <file.csv>` | Converts CSV test cases from `docs/` to JSON scenarios. |
-| `npm run update-locators -- <file.json>` | Auto-populates missing locator keys into the locator JSON file. |
+| `npm run csv2json -- <file.csv>` | Converts CSV test cases from `data/csv/` to JSON scenarios. |
+| `npm run update-locators -- <file.json>` | Auto-populates missing locator keys as `"TODO_LOCATOR"` in the locator JSON file. |
+| `npm run probe-locators -- <config.json>` | Probes live DOM attributes and writes evidence to `reports/probe/`. |
 
 ---
 
-## 9. Troubleshooting & FAQs
+## 10. Troubleshooting & FAQs
 
-**Q: Why is my step failing with `Page not found in locators repository`?**  
-👉 Ensure the `page` name in your step matches the key in your locator JSON file (case-sensitive).
+**Q: Why is my step failing with `Page not found in locators repository`?**
+- Ensure the `page` name in your step matches the key in your locator JSON file (case-sensitive).
 
-**Q: Can I combine API and UI in the same test?**  
-👉 Yes! Use `api_post` / `api_get` in `preconditions` to create test data, store the ID via `store_response`, and pass it to UI steps using `{{variable}}`.
+**Q: Can I combine API and UI in the same test?**
+- Yes. Use `api_post` / `api_get` in `preconditions` to create test data, store the ID via `store_response`, and pass it to UI steps using `{{variable}}`.
 
-**Q: How do I enable VS Code auto-completion for JSON scenarios?**  
-👉 Add `"$schema": "../../schema/scenario-schema.json"` at the top of your JSON file.
+**Q: How do I enable VS Code auto-completion for JSON scenarios?**
+- Add `"$schema": "../../schema/scenario-schema.json"` at the top of your JSON file.

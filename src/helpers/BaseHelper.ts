@@ -1,4 +1,4 @@
-// File: utils/helpers/BaseHelper.ts
+// File: src/helpers/BaseHelper.ts
 import { Page, TestInfo } from '@playwright/test';
 
 export class BaseHelper {

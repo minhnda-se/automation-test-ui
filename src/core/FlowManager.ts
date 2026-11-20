@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { IFlowDefinition } from '../../types/scenario';
+import { IFlowDefinition } from '../types/scenario';
 
 export class FlowManager {
   private static flowsCache: Map<string, IFlowDefinition> = new Map();

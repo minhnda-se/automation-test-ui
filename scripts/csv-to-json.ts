@@ -9,9 +9,16 @@ if (args.length === 0) {
   process.exit(1);
 }
 
-const csvFileName = args[0].endsWith('.csv') ? args[0] : `${args[0]}.csv`;
-const csvFilePath = path.join(__dirname, '../docs', csvFileName);
-const jsonFileName = csvFileName.replace('.csv', '.json');
+const rawArg = args[0];
+const normalizedArg = rawArg.endsWith('.csv') ? rawArg : `${rawArg}.csv`;
+const explicitPath = path.isAbsolute(normalizedArg)
+  ? normalizedArg
+  : path.resolve(process.cwd(), normalizedArg);
+const csvFilePath = fs.existsSync(explicitPath)
+  ? explicitPath
+  : path.join(__dirname, '../data/csv', normalizedArg);
+const csvFileName = path.basename(csvFilePath);
+const jsonFileName = csvFileName.replace(/\.csv$/i, '.json');
 const jsonFilePath = path.join(__dirname, '../data/scenarios', jsonFileName);
 
 // RFC 4180 CSV parser: handles commas inside quoted fields and the doubled "" escape
@@ -124,7 +131,7 @@ function compileCSVtoJSON() {
   // Map to array
   ultimateJson.testCases = Array.from(testCaseMap.values());
 
-  // Ghi ra file JSON
+  // Write the JSON output
   fs.writeFileSync(jsonFilePath, JSON.stringify(ultimateJson, null, 2), 'utf-8');
   console.log(`[Success] Compiled the CSV into a JSON scenario.`);
   console.log(`[Output] ${jsonFilePath}`);

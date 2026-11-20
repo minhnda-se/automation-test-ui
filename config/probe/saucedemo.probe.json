@@ -1,7 +1,7 @@
 {
   "name": "saucedemo",
   "baseUrl": "https://www.saucedemo.com/",
-  "output": "report/fix/probe-saucedemo.txt",
+  "output": "reports/probe/probe-saucedemo.txt",
   "auth": {
     "actions": [
       { "goto": "/" },

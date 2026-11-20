@@ -1,6 +1,6 @@
 # Clean Architecture
 
-`utils/core/` (`ActionEngine.ts`, `LocatorManager.ts`, `DataManager.ts`, `AutoHealer.ts`) is orchestration only. It must never call Playwright or HTTP APIs directly — every `page.*` / `request.*` call lives in `utils/helpers/` (`ElementHelper.ts`, `AssertHelper.ts`, `APIHelper.ts`, `BaseHelper.ts`).
+`src/core/` (`ActionEngine.ts`, `LocatorManager.ts`, `DataManager.ts`, `AutoHealer.ts`) is orchestration only. It must never call Playwright or HTTP APIs directly — every `page.*` / `request.*` call lives in `src/helpers/` (`ElementHelper.ts`, `AssertHelper.ts`, `APIHelper.ts`, `BaseHelper.ts`).
 
 This isn't SRP for its own sake — it's what lets `AutoHealer` intercept locator resolution and lets evidence capture (screenshots on every assertion) apply uniformly to every action, current and future. An action that bypasses a Helper loses both.
 

@@ -1,5 +1,5 @@
-import { IActionHandler } from '../../types/engine';
-import { IStep } from '../../types/scenario';
+import { IActionHandler } from '../types/engine';
+import { IStep } from '../types/scenario';
 import { FlowManager } from '../core/FlowManager';
 import { DataManager } from '../core/DataManager';
 

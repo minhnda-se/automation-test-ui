@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { resolveSuiteStatus } from '../utils/core/SuiteStatus';
+import { resolveSuiteStatus } from '../src/core/SuiteStatus';
 import { checkAuthoredText } from './english-only';
 import { checkTestCaseAsserts } from './assertion-presence';
 
@@ -11,7 +11,7 @@ const LOCATORS_DIR = path.join(__dirname, '../data/locators');
 const ACTIONS_REFERENCE_PATH = path.join(__dirname, '../schema/actions.json');
 
 /**
- * The valid action list is generated from utils/handlers/*.ts by
+ * The valid action list is generated from src/handlers/*.ts by
  * scripts/generate-action-reference.ts. It is never hand-maintained here:
  * a hand-copied list is how the action reference drifted from the engine before.
  * Run "npm run actions:sync" after adding or removing an action.

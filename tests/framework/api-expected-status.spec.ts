@@ -1,7 +1,7 @@
 import { test, expect, request as playwrightRequest } from '@playwright/test';
 import * as http from 'http';
 import { AddressInfo } from 'net';
-import { APIHelper } from '../../utils/helpers/APIHelper';
+import { APIHelper } from '../../src/helpers/APIHelper';
 
 /**
  * Phase 12 - `expected_status` on API actions.

@@ -21,7 +21,7 @@ If any of these is missing, ask for it rather than guessing — a selector fix b
 ## Phase 0: Ground yourself before diagnosing
 
 1. Read the relevant section of `data/locators/locators.json` (not just the single entry the user pasted) — check the naming convention for this page (`page`/`element` keys, per the project's convention) and whether other elements nearby give clues about the app's structure.
-2. If `utils/core/LocatorManager.ts` is available, check what selector syntax it actually expects (raw CSS passed to `page.locator()`, Playwright's `getByRole`/`getByTestId`-style locator DSL, or something custom). Match whatever format the existing locators in the file already use — don't introduce a different selector style than the rest of the file.
+2. If `src/core/LocatorManager.ts` is available, check what selector syntax it actually expects (raw CSS passed to `page.locator()`, Playwright's `getByRole`/`getByTestId`-style locator DSL, or something custom). Match whatever format the existing locators in the file already use — don't introduce a different selector style than the rest of the file.
 
 ## Phase 1: Diagnose before you fix
 

@@ -1,7 +1,7 @@
 {
   "name": "booking-slots",
   "baseUrl": "https://booking-appointment-system-psi.vercel.app/",
-  "output": "report/fix/probe-booking-slots.txt",
+  "output": "reports/probe/probe-booking-slots.txt",
   "auth": {
     "actions": [
       {

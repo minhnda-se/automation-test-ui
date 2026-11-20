@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { AssertHelper } from '../../utils/helpers/AssertHelper';
-import { ElementHelper } from '../../utils/helpers/ElementHelper';
+import { AssertHelper } from '../../src/helpers/AssertHelper';
+import { ElementHelper } from '../../src/helpers/ElementHelper';
 import { checkTestCaseAsserts, isAssertion } from '../../scripts/assertion-presence';
 
 /**

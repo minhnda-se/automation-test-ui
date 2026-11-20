@@ -1,4 +1,4 @@
-import { ILocatorStore } from '../../types/scenario';
+import { ILocatorStore } from '../types/scenario';
 
 export class LocatorManager {
   private currentLocators: ILocatorStore;

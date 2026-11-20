@@ -1,5 +1,5 @@
-import { IActionHandler } from '../../types/engine';
-import { IStep } from '../../types/scenario';
+import { IActionHandler } from '../types/engine';
+import { IStep } from '../types/scenario';
 import { APIHelper } from '../helpers/APIHelper';
 import { DataManager } from '../core/DataManager';
 

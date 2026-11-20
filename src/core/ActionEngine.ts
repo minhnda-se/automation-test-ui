@@ -1,6 +1,6 @@
 import { APIRequestContext, Page, TestInfo } from '@playwright/test';
-import { IStep, ILocatorStore, IDataRow } from '../../types/scenario';
-import { IActionHandler } from '../../types/engine';
+import { IStep, ILocatorStore, IDataRow } from '../types/scenario';
+import { IActionHandler } from '../types/engine';
 import { DataManager } from './DataManager';
 import { LocatorManager } from './LocatorManager';
 import { FlowManager } from './FlowManager';

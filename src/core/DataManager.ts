@@ -1,4 +1,4 @@
-import { IDataRow } from '../../types/scenario';
+import { IDataRow } from '../types/scenario';
 
 export class DataManager {
   private runtimeVariables: Record<string, string> = {};

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { NetworkActionHandler } from '../../utils/handlers/NetworkActionHandler';
-import { DataManager } from '../../utils/core/DataManager';
+import { NetworkActionHandler } from '../../src/handlers/NetworkActionHandler';
+import { DataManager } from '../../src/core/DataManager';
 
 /**
  * Phase 12 companion guard.

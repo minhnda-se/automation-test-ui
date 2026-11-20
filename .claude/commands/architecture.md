@@ -4,7 +4,7 @@ description: Check a proposed or existing change against this project's Clean Ar
 
 Check $ARGUMENTS against `.claude/rules/architecture.md`:
 
-- Does anything in `utils/core/` call Playwright or an HTTP API directly?
+- Does anything in `src/core/` or `src/handlers/` call Playwright or an HTTP API directly?
 - Does a new action delegate to the correct Helper (`ElementHelper`, `AssertHelper`, or `APIHelper`)?
 - Do element-based actions resolve through `LocatorManager` rather than an inline `page.locator()` call?
 

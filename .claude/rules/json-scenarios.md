@@ -29,7 +29,7 @@ paths:
 - Validate against `schema/scenario-schema.json` before considering a scenario file done.
 - `dataTable`, `preconditions`, `postconditions`, `description` are optional — omit rather than leaving them empty for padding.
 - `config.tags` must carry exactly one target-application tag: `@saucedemo`, `@demoblaze`, `@demoqa` or `@booking`. Tags are appended to the generated test title, and `--grep` is how a run is scoped to one site.
-- **`@ci` is tagged per test case, never at suite level.** It is a hand-picked 8-test smoke set, one test per critical path. The target sites rate-limit, so CI volume is itself a source of red builds - see `report/fix/phase-10a-pilot-saucedemo.md`. Adding a scenario does not add it to `@ci`; prefer swapping a smoke test for a better one over growing the set, and only on the evidence of a green run.
+- **`@ci` is tagged per test case, never at suite level.** It is a hand-picked 8-test smoke set, one test per critical path. The target sites rate-limit, so CI volume is itself a source of red builds - see `docs/internal/fix-reports/phase-10a-pilot-saucedemo.md`. Adding a scenario does not add it to `@ci`; prefer swapping a smoke test for a better one over growing the set, and only on the evidence of a green run.
 - A test case may carry its own `tags`, merged with the suite's. Use it only when one file genuinely spans two target sites (see `advanced-scenarios.json`); otherwise tag at suite level.
 
 ## Legacy format

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { IActionHandler } from '../../types/engine';
-import { IStep } from '../../types/scenario';
+import { IActionHandler } from '../types/engine';
+import { IStep } from '../types/scenario';
 import { ElementHelper } from '../helpers/ElementHelper';
 import { DataManager } from '../core/DataManager';
 

@@ -1,6 +1,6 @@
 ---
 paths:
-  - "utils/helpers/APIHelper.ts"
+  - "src/helpers/APIHelper.ts"
   - "data/scenarios/**/*.json"
 ---
 

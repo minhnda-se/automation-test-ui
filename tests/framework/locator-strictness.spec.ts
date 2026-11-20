@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { LocatorManager } from '../../utils/core/LocatorManager';
-import { ElementHelper } from '../../utils/helpers/ElementHelper';
-import { AssertHelper } from '../../utils/helpers/AssertHelper';
+import { LocatorManager } from '../../src/core/LocatorManager';
+import { ElementHelper } from '../../src/helpers/ElementHelper';
+import { AssertHelper } from '../../src/helpers/AssertHelper';
 
 /**
  * Guards the Phase 13a invariant: LocatorManager returns selectors verbatim.

@@ -8,7 +8,7 @@ import {
   WIP_TAG,
   isWipSuite,
   resolveSuiteStatus,
-} from '../../utils/core/SuiteStatus';
+} from '../../src/core/SuiteStatus';
 
 /**
  * config.status - a suite can be work in progress without failing the build.

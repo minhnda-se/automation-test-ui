@@ -1,9 +1,9 @@
 import { test } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ActionEngine } from '../../utils/core/ActionEngine';
-import { IScenario, ITestCase } from '../../types/scenario';
-import { isWipSuite, WIP_TAG } from '../../utils/core/SuiteStatus';
+import { ActionEngine } from '../../src/core/ActionEngine';
+import { IScenario, ITestCase } from '../../src/types/scenario';
+import { isWipSuite, WIP_TAG } from '../../src/core/SuiteStatus';
 
 const scenariosDirPath = path.join(__dirname, '../../data/scenarios');
 const jsonFiles = fs.readdirSync(scenariosDirPath).filter((file) => file.endsWith('.json'));

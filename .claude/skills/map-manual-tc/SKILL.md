@@ -55,7 +55,7 @@ You are a Senior SDET responsible for mapping manual test cases (from Excel, CSV
 
 ### Intent Translation Dictionary (Manual Action $\rightarrow$ Framework Keyword):
 
-The table below covers the common manual phrasings only. **`docs/ACTIONS.md` is the authoritative list of what the framework actually implements** — generated from `utils/handlers/*.ts`, never hand-maintained. Check any keyword not in the table below against that file before using it.
+The table below covers the common manual phrasings only. **`docs/ACTIONS.md` is the authoritative list of what the framework actually implements** — generated from `src/handlers/*.ts`, never hand-maintained. Check any keyword not in the table below against that file before using it.
 
 | Manual QA Phrasing in Excel | Framework `action` | Required Companion Properties |
 | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { ElementHelper } from '../../utils/helpers/ElementHelper';
-import { AssertHelper } from '../../utils/helpers/AssertHelper';
+import { ElementHelper } from '../../src/helpers/ElementHelper';
+import { AssertHelper } from '../../src/helpers/AssertHelper';
 
 /**
  * The two P2 actions added on evidence rather than on a list: `clear` and
@@ -57,8 +57,8 @@ test.describe('clear', () => {
     page,
   }, testInfo) => {
     await page.setContent(FORM);
-    const { UIActionHandler } = require('../../utils/handlers/UIActionHandler');
-    const { DataManager } = require('../../utils/core/DataManager');
+    const { UIActionHandler } = require('../../src/handlers/UIActionHandler');
+    const { DataManager } = require('../../src/core/DataManager');
 
     const handler = new UIActionHandler(new ElementHelper(page, testInfo), new DataManager({}));
 
@@ -109,7 +109,7 @@ test.describe('Generated artifacts', () => {
     const path = require('path');
     const root = path.join(__dirname, '../..');
 
-    const union = fs.readFileSync(path.join(root, 'types/actions.generated.ts'), 'utf-8');
+    const union = fs.readFileSync(path.join(root, 'src/types/actions.generated.ts'), 'utf-8');
     const docs = fs.readFileSync(path.join(root, 'docs/ACTIONS.md'), 'utf-8');
     const schema = JSON.parse(fs.readFileSync(path.join(root, 'schema/scenario-schema.json'), 'utf-8'));
     const schemaEnum = schema.definitions.Step.properties.action.enum;

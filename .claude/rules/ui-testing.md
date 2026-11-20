@@ -1,6 +1,6 @@
 ---
 paths:
-  - "utils/helpers/ElementHelper.ts"
+  - "src/helpers/ElementHelper.ts"
   - "data/locators/**/*.json"
 ---
 

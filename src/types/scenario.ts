@@ -1,8 +1,8 @@
-// ActionType is generated from the handler layer - see types/actions.generated.ts
+// ActionType is generated from the handler layer - see src/types/actions.generated.ts
 // and scripts/generate-action-reference.ts. It is re-exported here so consumers
-// keep importing it from types/scenario, the way they always have.
+// keep importing it from src/types/scenario.
 import { ActionType } from './actions.generated';
-import { SuiteStatus } from '../utils/core/SuiteStatus';
+import { SuiteStatus } from '../core/SuiteStatus';
 
 export type { ActionType, SuiteStatus };
 
@@ -64,7 +64,7 @@ export interface IScenarioConfig {
    */
   tags?: string[];
   /**
-   * Suite lifecycle status, default 'ready'. See utils/core/SuiteStatus.ts for
+   * Suite lifecycle status, default 'ready'. See src/core/SuiteStatus.ts for
    * what 'wip' exempts - and, more to the point, what it does not.
    */
   status?: SuiteStatus;

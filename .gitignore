@@ -10,64 +10,40 @@ pnpm-debug.log*
 .npm/
 
 # =========================================================
-# Playwright
+# Unified test, report, and probe outputs
 # =========================================================
-playwright-report/
-test-results/
+reports/
 blob-report/
 playwright/.cache/
 playwright/.auth/
 .auth/
 pw-results*.json
 
-# Allure
-allure-results/
-allure-report/
-
 # =========================================================
-# Generated reports, plans and documentation
+# Internal notes, plans, and archived specs
 # =========================================================
-report/
+docs/internal/
 plan/
 
-# docs/: ignore working notes, but keep the files the project depends on.
-# ACTIONS.md is generated and is the authoritative action reference - npm run
-# actions:check compares against it, so a checkout without it fails the CI
-# validate gate for a reason unrelated to any change.
-docs/*
-!docs/*.csv
-!docs/ACTIONS.md
-!docs/NEW_USER_GUIDE.md
-
 # =========================================================
-# Coverage
+# Coverage and build outputs
 # =========================================================
 coverage/
 .nyc_output/
-
-# =========================================================
-# Build Output
-# =========================================================
 dist/
 build/
 out/
 lib/
-
-# =========================================================
-# TypeScript
-# =========================================================
 *.tsbuildinfo
 
 # =========================================================
-# Environment Variables
+# Environment variables
 # =========================================================
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Keep sample environment
 !.env.example
 
 # =========================================================
@@ -83,30 +59,26 @@ logs/
 !.vscode/extensions.json
 !.vscode/settings.json
 !.vscode/launch.json
-
 .idea/
 *.iml
 
 # =========================================================
-# OS Files
+# OS files
 # =========================================================
 .DS_Store
 Thumbs.db
 Desktop.ini
 
 # =========================================================
-# Temporary / scratch
+# Temporary / scratch / archives
 # =========================================================
 tmp/
 temp/
 .cache/
-_to_delete/
 scripts/tmp-*.ts
 *.bak
 *.tmp
 *.swp
 *.swo
-
-# Archives
 *.tar.gz
 *.zip

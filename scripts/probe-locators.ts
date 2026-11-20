@@ -19,7 +19,7 @@
 import { chromium, Locator, Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
-import { DataManager } from '../utils/core/DataManager';
+import { DataManager } from '../src/core/DataManager';
 
 interface ProbeAction {
   goto?: string;
@@ -295,7 +295,7 @@ async function main(): Promise<void> {
   }
 
   const config = loadConfig(configPath);
-  const outputPath = path.join(ROOT, config.output || `report/fix/probe-${config.name}.txt`);
+  const outputPath = path.join(ROOT, config.output || `reports/probe/probe-${config.name}.txt`);
 
   const browser = await chromium.launch();
   const page = await browser.newPage();

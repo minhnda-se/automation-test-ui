@@ -1,19 +1,26 @@
 # Playwright Hybrid Keyword-Driven Framework
 
-TypeScript core engine; test execution runs off JSON scenario files and Gherkin `.feature` files compiled to JSON. QA/BAs write JSON/Gherkin without touching the TypeScript engine — that separation only holds if `utils/core/` never calls Playwright directly (see `.claude/rules/architecture.md`).
+TypeScript core engine; test execution runs off JSON scenario files and Gherkin `.feature` files compiled to JSON. QA/BAs write JSON/Gherkin without touching the TypeScript engine — that separation only holds if `src/core/` never calls Playwright directly (see `.claude/rules/architecture.md`).
 
 ## Directory layout
 
 ```
-data/locators/      # centralized locator files (page/element -> selector)
+src/core/            # ActionEngine, LocatorManager, DataManager, FlowManager, SuiteStatus, AutoHealer — orchestration only
+src/handlers/        # 5 strategy handlers (authoritative source of all action keywords)
+src/helpers/         # ElementHelper, AssertHelper, APIHelper, BaseHelper — actual Playwright/API calls
+src/types/           # scenario.ts, engine.ts, actions.generated.ts
+data/locators/       # centralized locator files (page/element -> selector)
 data/scenarios/      # JSON test suites, validated against schema/scenario-schema.json
-data/features/       # Gherkin .feature files, compiled by scripts/compile-bdd.ts   [confirm path — see Open Items]
+data/flows/          # reusable parameterized sub-flows
+data/csv/            # CSV spreadsheet test sources compiled by scripts/csv-to-json.ts
+data/features/       # Gherkin .feature files, compiled by scripts/compile-bdd.ts
 tests/hybrid-json/   # Playwright runner that executes JSON scenarios
-utils/core/          # ActionEngine, LocatorManager, DataManager, AutoHealer — orchestration only
-utils/helpers/       # ElementHelper, AssertHelper, APIHelper, BaseHelper — actual Playwright/API calls
-schema/              # scenario-schema.json
-scripts/             # compile-bdd.ts
-docs/                # requirement/spec documents
+tests/hybrid-coded/  # Traditional coded Playwright specs
+tests/framework/     # Offline framework contract guard tests
+schema/              # scenario-schema.json, actions.json, action-notes.json
+scripts/             # validation, action sync, locator probe/stub, CSV/BDD compilers
+docs/                # ACTIONS.md, NEW_USER_GUIDE.md (internal notes in gitignored docs/internal/)
+reports/             # unified gitignored outputs (playwright-html, allure-results, allure-html, test-results, probe)
 ```
 
 ## Build & test commands
@@ -37,10 +44,10 @@ npm run actions:sync                             # regenerate action reference a
 
 - **English only** in code, identifiers, comments — no exceptions.
 - **Zero icon policy** — no emojis/symbols in code, config, JSON, or terminal output.
-- **Clean Architecture** — `utils/core/` never calls Playwright/HTTP directly; always delegate to `utils/helpers/`.
+- **Clean Architecture** — `src/core/` never calls Playwright/HTTP directly; always delegate to `src/helpers/`.
 - **Locators are centralized** — never hardcode a CSS/XPath selector inside a scenario step; reference via `page`/`element` fields.
 - **Scenario JSON must validate** — run `npm run validate` before considering any scenario file done.
-- **Action keywords come from `docs/ACTIONS.md`** — generated from `utils/handlers/*.ts` by `npm run actions:sync`. Never generate an action that is not listed there, and never trust an action table written into a doc or skill.
+- **Action keywords come from `docs/ACTIONS.md`** — generated from `src/handlers/*.ts` by `npm run actions:sync`. Never generate an action that is not listed there, and never trust an action table written into a doc or skill.
 - **Atomic Steps & Non-Empty Assertions** — All manual steps must be decomposed into atomic actions; `fill`, `verify_text`, `verify_url_contains` must never have empty `data` (see `.claude/rules/step-decomposition.md` and `.claude/skills/map-manual-tc/`).
 
 ## Naming conventions
@@ -54,7 +61,7 @@ npm run actions:sync                             # regenerate action reference a
 - `.claude/rules/` — topic-specific conventions, some path-scoped (only load when relevant files are touched)
 - `docs/ACTIONS.md` — authoritative action keyword reference (generated, do not edit)
 - `schema/actions.json` — same list, machine-readable; consumed by `scripts/validate-scenarios.ts`
-- `types/actions.generated.ts` — the `ActionType` union, generated; re-exported by `types/scenario.ts`. The `action` enum in `schema/scenario-schema.json` is generated in place as well. All four artifacts come from `npm run actions:sync`, and `npm run actions:check` fails if any has drifted.
+- `src/types/actions.generated.ts` — the `ActionType` union, generated; re-exported by `src/types/scenario.ts`. The `action` enum in `schema/scenario-schema.json` is generated in place as well. All four artifacts come from `npm run actions:sync`, and `npm run actions:check` fails if any has drifted.
 - `schema/action-notes.json` — hand-maintained field descriptions merged into the generated reference
 - `.claude/skills/` — step-by-step playbooks for test generation, BDD, locator fixes, action extension, codegen mapping
 
@@ -65,6 +72,6 @@ The Gherkin compiler (`scripts/compile-bdd.ts`) is **frozen** at six step patter
 
 ## Open items
 
-- Auto-Healing is off by default and no longer writes to `data/locators/` (see `report/fix/phase-1-autohealer.md`). It still cannot distinguish a dead selector from a timing issue from a real behaviour change — treat any entry in `test-results/heal-report.json` as something to investigate, not a fix.
+- Auto-Healing is off by default and no longer writes to `data/locators/` (see `docs/internal/fix-reports/phase-1-autohealer.md`). It still cannot distinguish a dead selector from a timing issue from a real behaviour change — treat any entry in `reports/test-results/heal-report.json` as something to investigate, not a fix.
 
-Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`report/fix/phase-9-ci-trustworthy.md`). `expected_status` is now asserted by `APIHelper` on all five API actions - exact match when set, `response.ok()` when omitted - and `mock_route` no longer reads it, so the name means one thing (`report/fix/phase-12-expected-status.md`). `LocatorManager` no longer appends `>> nth=0`, so an ambiguous locator fails under strict mode (`report/fix/phase-13a-locator-strictness.md`). Adding an action now means editing the handler and `schema/action-notes.json` only - the schema enum and the `ActionType` union are generated and checked (`report/fix/phase-11-action-list-single-source.md`).
+Resolved: `.feature` files do live in `data/features/`; the BDD compiler is frozen (`.claude/rules/bdd.md`). CI no longer runs the full suite against four live sites - suites carry target tags and CI runs `npm run test:ci`, the `@ci` (SauceDemo) subset (`docs/internal/fix-reports/phase-9-ci-trustworthy.md`). `expected_status` is now asserted by `APIHelper` on all five API actions - exact match when set, `response.ok()` when omitted - and `mock_route` no longer reads it, so the name means one thing (`docs/internal/fix-reports/phase-12-expected-status.md`). `LocatorManager` no longer appends `>> nth=0`, so an ambiguous locator fails under strict mode (`docs/internal/fix-reports/phase-13a-locator-strictness.md`). Adding an action now means editing the handler and `schema/action-notes.json` only - the schema enum and the `ActionType` union are generated and checked (`docs/internal/fix-reports/phase-11-action-list-single-source.md`).

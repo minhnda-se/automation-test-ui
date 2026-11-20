@@ -105,7 +105,7 @@ Return ONLY the raw string of the new CSS selector. Do not include markdown form
     newLocator: string
   ): void {
     try {
-      const reportDir = path.join(__dirname, '../../test-results');
+      const reportDir = path.join(__dirname, '../../reports/test-results');
       const reportPath = path.join(reportDir, 'heal-report.json');
 
       if (!fs.existsSync(reportDir)) {
@@ -134,7 +134,7 @@ Return ONLY the raw string of the new CSS selector. Do not include markdown form
 
       fs.writeFileSync(reportPath, JSON.stringify(entries, null, 2));
       console.warn(
-        `[AutoHealer] Heal proposal recorded in test-results/heal-report.json for "${pageName}.${elementName}". Source locator file was NOT modified.`
+        `[AutoHealer] Heal proposal recorded in reports/test-results/heal-report.json for "${pageName}.${elementName}". Source locator file was NOT modified.`
       );
     } catch (error) {
       console.error('[AutoHealer Error] Could not write heal report:', error);
